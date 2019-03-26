@@ -39,6 +39,18 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>cc.kave</groupId>
+            <artifactId>cc.kave.commons</artifactId>
+            <version>0.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>cc.kave</groupId>
+            <artifactId>cc.kave.rsse.calls</artifactId>
+            <version>0.0.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
