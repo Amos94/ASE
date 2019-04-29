@@ -1,4 +1,4 @@
-package com.advanced.software.engineering.aseproject;
+package SimilarityMeasures;
 
 import java.util.HashSet;
 import java.util.Set;
