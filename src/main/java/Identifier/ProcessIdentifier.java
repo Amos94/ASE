@@ -16,12 +16,12 @@ public class ProcessIdentifier implements ProcessIdentifierInterface {
 
     @Override
     public List<String> SplitIdentifier(String identifier) {
-        List<String> identifierSplit = new LinkedList<>();
+        List<String> identifierSplitList = new LinkedList<>();
 
         for (String idf : identifier.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-            identifierSplit.add(idf);
+            identifierSplitList.add(idf);
         }
 
-        return identifierSplit;
+        return identifierSplitList;
     }
 }
