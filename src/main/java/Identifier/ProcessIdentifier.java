@@ -7,6 +7,8 @@ import opennlp.tools.stemmer.PorterStemmer;
 public class ProcessIdentifier implements ProcessIdentifierInterface {
 
 
+    public ProcessIdentifier(){}
+
     @Override
     public String StemIdentifier(String identifier) {
         PorterStemmer stemmer = new PorterStemmer();

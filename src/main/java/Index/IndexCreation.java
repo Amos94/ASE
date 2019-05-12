@@ -1,6 +1,7 @@
 package Index;
 
-import Context.Context;
+
+import Context.IdentifyContext;
 
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class IndexCreation implements IndexSharedMethods {
     }
 
     @Override
-    public Context determineContext() {
+    public IdentifyContext determineContext() {
         return null;
     }
 }

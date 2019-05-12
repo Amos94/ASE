@@ -97,6 +97,7 @@ public class IdentifyContext {
                 // ISSTNodeVisitor}
                 stmt.accept(new ExampleVisitor(), null);
             }
+
         }
 
         // all references to types or type elements are fully qualified and preserve

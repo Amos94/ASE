@@ -1,6 +1,6 @@
 package Index;
 
-import Context.Context;
+import Context.IdentifyContext;
 import Identifier.ProcessIdentifier;
 
 import java.util.Set;
@@ -23,7 +23,7 @@ public class IndexQuery implements IndexSharedMethods {
     }
 
     @Override
-    public Context determineContext() {
+    public IdentifyContext determineContext() {
         return null;
     }
 }
