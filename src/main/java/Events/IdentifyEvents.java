@@ -40,8 +40,11 @@ public class IdentifyEvents {
      * dataset from our website, please unzip the archive and point to the
      * containing folder here.
      */
-    private static final String DIR_USERDATA = "/Users/seb/Downloads/All-Clean/";
+    private static final String DIR_USERDATA = "/Users/amosneculau/Downloads/Events-170301-2";
 
+    public IdentifyEvents(){
+
+    }
     /**
      * 1: Find all users in the dataset.
      */
@@ -112,6 +115,7 @@ public class IdentifyEvents {
             CommandEvent ce = (CommandEvent) event;
             // ...and access the special context for this kind of event
             System.out.println(ce.CommandId);
+
         } else {
             // there a many different event types to process, it is recommended
             // that you browse the package to see all types and consult the

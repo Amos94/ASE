@@ -65,6 +65,7 @@ public class IdentifyContext {
 
                 // the events can then be processed individually
                 processContext(ctx);
+                process(ctx.getSST());
             }
         }
     }
@@ -72,13 +73,13 @@ public class IdentifyContext {
     private void processContext(Context ctx) {
         // a context is an abstract view on a single type declaration that contains of
         // two things:
-
         // 1) a simplified syntax tree of the type declaration
         process(ctx.getSST());
 
         // 2) a "type shape" that provides information about the hierarchy of the
         // declared type
         process(ctx.getTypeShape());
+        System.out.println(ctx.getTypeShape().getMethodHierarchies());
     }
 
     private void process(ISST sst) {
