@@ -12,12 +12,12 @@ Abstract—Reuse recommendation systems support the developer by suggesting usef
 Keywords-software reuse; recommendation system; identifier; data mining
 
 ### What did we use:
-* JAVA
-* SPRING BOOT
-* MAVEN
-* KAVE CC
-* TRAVIS CI
-* Coveralls
+* Programming language: [JAVA 8](https://www.java.com/en/)
+* Framework: [SPRING BOOT](https://spring.io/projects/spring-boot)
+* Framework: [MAVEN 3](https://maven.apache.org/)
+* Datasets: [KAVE CC](http://kave.cc/)
+* CI: [TRAVIS CI](https://travis-ci.org)
+* Code Coverage: [Coveralls](https://coveralls.io)
 
 ### How to use it:
 
