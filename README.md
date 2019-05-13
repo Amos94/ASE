@@ -1,4 +1,4 @@
-# ASE
+# Advanced Software Engineering project
 ## Implementation of Identifier-Based Context-Dependent API Method Recommendation system
 
 ### Project status:
@@ -9,7 +9,7 @@
 #### Paper abstract:
 Abstract—Reuse recommendation systems support the developer by suggesting useful API methods, classes or code snippets based on code edited in the IDE. Existing systems based on structural information, such as type and method usage, are not effective in case of general purpose types such as String. To alleviate this, we propose a recommendation system based on identifiers that utilizes the developer’s intention embodied in names of variables, types and methods. We investigate the impact of several variation points of our recommendation algorithm and evaluate the approach for recommending methods from the Java and Eclipse APIs in 9 open source systems. Furthermore, we compare our recommendations to those of a structure-based recommendation system and describe a metric for predicting the expected precision of a recommendation. Our findings indicate that our approach performs significantly better than the structure-based approach.
 
-Keywords-software reuse; recommendation system; identifier; data mining
+**Keywords:** software reuse; recommendation system; identifier; data mining
 
 ### What did we use:
 * Programming language: [JAVA 8](https://www.java.com/en/)
