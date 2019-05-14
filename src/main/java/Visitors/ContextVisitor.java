@@ -1,13 +1,17 @@
 package Visitors;
 
+import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.naming.codeelements.IParameterName;
+import cc.kave.commons.model.ssts.IExpression;
 import cc.kave.commons.model.ssts.blocks.*;
+import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
 import cc.kave.commons.model.ssts.expressions.assignable.ICastExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IIfElseExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.ITypeCheckExpression;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
+import cc.kave.commons.model.ssts.references.IEventReference;
 import cc.kave.commons.model.ssts.statements.*;
 
 import java.util.Set;
@@ -17,6 +21,35 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
     public Void visit(IVariableDeclaration stmt, Set<String> overallContext) {
         // Add the identifier of the variable to the overall context
         overallContext.add(stmt.getType().getName());
+        return null;
+    }
+
+    @Override
+    public Void visit(IEventDeclaration stmt, Set<String> overallContext) {
+        // Add the identifier of the variable to the overall context
+        overallContext.add(stmt.getName().getName());
+        return null;
+    }
+
+    @Override
+    public Void visit(IEventReference stmt, Set<String> overallContext) {
+        // Add the identifier of the variable to the overall context
+        overallContext.add(stmt.getReference().getIdentifier());
+        return null;
+    }
+
+    @Override
+    public Void visit(IAssignment stmt, Set<String> overallContext) {
+        // Add the identifier of the variable to the overall context
+        overallContext.add(stmt.getReference().toString());
+        overallContext.add(stmt.getExpression().toString());
+        return null;
+    }
+
+    @Override
+    public Void visit(IExpressionStatement stmt, Set<String> overallContext) {
+        // Add the identifier of the variable to the overall context
+        overallContext.add(stmt.getExpression().toString());
         return null;
     }
 
