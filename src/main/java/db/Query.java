@@ -34,11 +34,16 @@ public class Query {
      * @return				Returns the String to use for the db.
      * 
      */
- // TODO add control for wrong formates
     public static String insertIndexTable(String insertion, String indexTable){
-    	String[] parts = insertion.split(";");
     	
+    	//Split the String into parts to add to db
+    	String[] parts = insertion.split(";");
     	String part = parts[0]; 
+    	String nameOfDeclaringType = parts[1]; 
+    	String methodName = parts[2];
+    	String types = parts[3];
+    	
+    	//Split Lookback to add into db
     	StringBuilder str = new StringBuilder();
     	String[] look = part.split(",");
     	for (int i = 0; i < look.length; i++) {
@@ -49,11 +54,9 @@ public class Query {
     	}
     	String lookback = str.toString();
     	
-    	String nameOfDeclaringType = parts[1]; 
-    	String methodName = parts[2];
-    	
+
+    	//Split parameter type to add into db
     	StringBuilder builder = new StringBuilder();
-    	String types = parts[3];
     	String[] parameter = types.split(",");
     	for (int i = 0; i < parameter.length; i++) {
     		builder = builder.append("'" + parameter[i] + "'"); 
@@ -73,11 +76,15 @@ public class Query {
      * @param indexTable	A string with the name of the table.
      * @return 				returns the String to use for the db
      */
-    //TODO add to control right form
     public static String updateIndexTable(String update, String indexTable){
+    	//Split String into parts to update 
     	String[] parts = update.split(";|=");
-    	
     	String part = parts[0]; 
+    	String nameOfDeclaringType = parts[1]; 
+    	String methodName = parts[2];
+    	String types = parts[3];
+    	
+    	//Split Lookback to add into db
     	StringBuilder str = new StringBuilder();
     	String[] look = part.split(",");
     	for (int i = 0; i < look.length; i++) {
@@ -86,14 +93,11 @@ public class Query {
     			str.append(",");
     		}
     	}
-    	
     	String lookback = str.toString();
     	
-    	String nameOfDeclaringType = parts[1]; 
-    	String methodName = parts[2];
-    	
+
+    	//Split parameter type to add into db
     	StringBuilder builder = new StringBuilder();
-    	String types = parts[3];
     	String[] parameter = types.split(",");
     	for (int i = 0; i < parameter.length; i++) {
     		builder = builder.append("'" + parameter[i] + "'"); 
@@ -101,11 +105,10 @@ public class Query {
     			builder.append(",");
     		}
     	}
-    	
     	String parameterType = builder.toString();    	
 
          return "UPDATE " + indexTable +  " SET " + "Lookback=(" + lookback + "), NameOfDeclaringType='" +nameOfDeclaringType+ "', MethodName='"+ methodName +
-        		 "', ParameterType=("+ parameterType +") WHERE " +parts[4] +"='"+parts[5] +"';"; 
+        		 "', ParameterType=("+ parameterType +") WHERE " +parts[4] +"="+parts[5] +";"; 
     }
     
     /*
@@ -115,7 +118,7 @@ public class Query {
      */
     public static String deleteRow(String deletion, String indexTable) {
     	return "DELETE FROM " + indexTable + " WHERE " + deletion + ";"; 
-    } //TODO some problems with deleting array that are field with char   
+    }
     
     /*
      * A method to delete a table in a db.
