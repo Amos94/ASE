@@ -18,11 +18,11 @@ import cc.kave.commons.model.typeshapes.ITypeShape;
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
-public class IdentifyContext {
+public class ContextHelper {
 
     private String ctxsDir;
 
-    public IdentifyContext(String ctxsDir) {
+    public ContextHelper(String ctxsDir) {
         this.ctxsDir = ctxsDir;
     }
 
@@ -44,19 +44,18 @@ public class IdentifyContext {
 
         for (String slnZip : slnZips) {
             System.out.printf("\n#### processing solution zip: %s #####\n", slnZip);
-            processSlnZip(slnZip);
+            processZip(slnZip);
         }
     }
 
-    private void processSlnZip(String slnZip) {
-        int numProcessedContexts = 0;
+    public void processZip(String slnZip) {
 
         // open the .zip file ...
         try (IReadingArchive ra = new ReadingArchive(new File(ctxsDir, slnZip))) {
             // ... and iterate over content.
 
             // the iteration will stop after 10 contexts to speed things up in the example.
-            while (ra.hasNext() && (numProcessedContexts++ < 10)) {
+            while (ra.hasNext()) {
                 /*
                  * within the slnZip, each stored context is contained as a single file that
                  * contains the Json representation of a {@see Context}.
@@ -70,7 +69,15 @@ public class IdentifyContext {
         }
     }
 
-    private void processContext(Context ctx) {
+    public ISST getSST(Context ctx){
+        return ctx.getSST();
+    }
+
+    public ITypeShape getTypeShape(Context ctx){
+        return ctx.getTypeShape();
+    }
+
+    public void processContext(Context ctx) {
         // a context is an abstract view on a single type declaration that contains of
         // two things:
         // 1) a simplified syntax tree of the type declaration
@@ -79,10 +86,9 @@ public class IdentifyContext {
         // 2) a "type shape" that provides information about the hierarchy of the
         // declared type
         process(ctx.getTypeShape());
-        System.out.println(ctx.getTypeShape().getMethodHierarchies());
     }
 
-    private void process(ISST sst) {
+    public void process(ISST sst) {
         // SSTs represent a simplified meta model for source code. You can use the
         // various accessors to browse the contained information
 
@@ -122,7 +128,7 @@ public class IdentifyContext {
         }
     }
 
-    private void process(ITypeShape ts) {
+    public void process(ITypeShape ts) {
         // a type shape contains hierarchy info for the declared type
         ITypeHierarchy th = ts.getTypeHierarchy();
         // the type that is being declared in the SST
@@ -160,7 +166,7 @@ public class IdentifyContext {
         ts.getNestedTypes();
     }
 
-    private class ExampleVisitor extends AbstractTraversingNodeVisitor<Object, Object> {
+    public class ExampleVisitor extends AbstractTraversingNodeVisitor<Object, Object> {
         // empty implementation for the example, in reality, you will either reuse
         // existing {@see ISSTNodeVisitor} or build your own subclass.
     }

@@ -13,7 +13,6 @@ import cc.kave.commons.model.ssts.expressions.assignable.ITypeCheckExpression;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.references.IEventReference;
 import cc.kave.commons.model.ssts.statements.*;
-
 import java.util.Set;
 
 public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, Void> {
@@ -38,20 +37,20 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
         return null;
     }
 
-    @Override
-    public Void visit(IAssignment stmt, Set<String> overallContext) {
-        // Add the identifier of the variable to the overall context
-        overallContext.add(stmt.getReference().toString());
-        overallContext.add(stmt.getExpression().toString());
-        return null;
-    }
+//    @Override
+//    public Void visit(IAssignment stmt, Set<String> overallContext) {
+//        // Add the identifier of the variable to the overall context
+//        overallContext.add(stmt.getReference().toString());
+//        overallContext.add(stmt.getExpression().toString());
+//        return null;
+//    }
 
-    @Override
-    public Void visit(IExpressionStatement stmt, Set<String> overallContext) {
-        // Add the identifier of the variable to the overall context
-        overallContext.add(stmt.getExpression().toString());
-        return null;
-    }
+//    @Override
+//    public Void visit(IExpressionStatement stmt, Set<String> overallContext) {
+//        // Add the identifier of the variable to the overall context
+//        overallContext.add(stmt.getExpression().toString());
+//        return null;
+//    }
 
     @Override
     public Void visit(IMethodDeclaration decl, Set<String> overallContext) {
@@ -68,17 +67,17 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 
     @Override
     public Void visit(IReturnStatement stmt, Set<String> overallContext) {
-        overallContext.add("return");
+        overallContext.add("<return>");
         return null;
     }
 
     @Override
     public Void visit(ISwitchBlock block, Set<String> overallContext) {
-        overallContext.add("switch");
+        overallContext.add("<switch>");
         for (ICaseBlock caseBlock : block.getSections()) {
-            overallContext.add("case");
+            overallContext.add("<case>");
         }
-        overallContext.add("default");
+        overallContext.add("<default>");
         return null;
     }
 
@@ -91,45 +90,45 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 
     @Override
     public Void visit(IForLoop block, Set<String> overallContext) {
-        overallContext.add("for");
+        overallContext.add("<for>");
         return null;
     }
 
     @Override
     public Void visit(IContinueStatement stmt, Set<String> overallContext) {
-        overallContext.add("continue");
+        overallContext.add("<continue>");
         return null;
     }
 
     @Override
     public Void visit(IGotoStatement stmt, Set<String> overallContext) {
-        overallContext.add("goto");
+        overallContext.add("<goto>");
         return null;
     }
 
     @Override
     public Void visit(IBreakStatement stmt, Set<String> overallContext) {
-        overallContext.add("break");
+        overallContext.add("<break>");
         return null;
     }
 
     @Override
     public Void visit(IWhileLoop block, Set<String> overallContext) {
-        overallContext.add("while");
+        overallContext.add("<while>");
         return null;
     }
 
     @Override
     public Void visit(IIfElseBlock block, Set<String> overallContext) {
-        overallContext.add("if");
-        overallContext.add("else");
+        overallContext.add("<if>");
+        overallContext.add("<else>");
         return null;
     }
 
     @Override
     public Void visit(IIfElseExpression expr, Set<String> overallContext) {
-        overallContext.add("if");
-        overallContext.add("else");
+        overallContext.add("<if>");
+        overallContext.add("<else>");
         return null;
     }
 
@@ -149,9 +148,9 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 
     @Override
     public Void visit(ITryBlock block, Set<String> overallContext) {
-        overallContext.add("try");
-        overallContext.add("catch");
-        overallContext.add("finally");
+        overallContext.add("<try>");
+        overallContext.add("<catch>");
+        overallContext.add("<finally>");
         // Add the types of the parameters to the context
         for (ICatchBlock catchBlock : block.getCatchBlocks()) {
             overallContext.add(catchBlock.getParameter().getValueType().getName());
@@ -161,15 +160,15 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 
     @Override
     public Void visit(IDoLoop block, Set<String> overallContext) {
-        overallContext.add("do");
-        overallContext.add("while");
+        overallContext.add("<do>");
+        overallContext.add("<while>");
         return null;
     }
 
     @Override
     public Void visit(IForEachLoop block, Set<String> overallContext) {
-        overallContext.add("foreach");
-        overallContext.add("in");
+        overallContext.add("<foreach>");
+        overallContext.add("<in>");
         overallContext.add(block.getDeclaration().getType().getName());
         return null;
     }
