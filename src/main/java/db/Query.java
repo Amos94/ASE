@@ -1,6 +1,10 @@
 package db;
 
 public class Query {
+	
+	public Query () {
+		super();
+	}
 
 	/*
 	 * A method to create a schema in a db with a given name.
@@ -30,7 +34,7 @@ public class Query {
      * @return				Returns the String to use for the db.
      * 
      */
-    
+ // TODO add control for wrong formates
     public static String insertIndexTable(String insertion, String indexTable){
     	String[] parts = insertion.split(";");
     	
@@ -38,8 +42,11 @@ public class Query {
     	StringBuilder str = new StringBuilder();
     	String[] look = part.split(",");
     	for (int i = 0; i < look.length; i++) {
-    		str = str.append("'" + look[i] + "',");    
+    		str = str.append("'" + look[i] + "'");
+    		if (i<look.length-1) {
+    			str.append(",");
     		}
+    	}
     	String lookback = str.toString();
     	
     	String nameOfDeclaringType = parts[1]; 
@@ -49,8 +56,11 @@ public class Query {
     	String types = parts[3];
     	String[] parameter = types.split(",");
     	for (int i = 0; i < parameter.length; i++) {
-    		builder = builder.append("'" + parameter[i] + "',");    		  
+    		builder = builder.append("'" + parameter[i] + "'"); 
+    		if (i<parameter.length-1) {
+    			builder.append(",");
     		}
+    	}
     	String parameterType = builder.toString();    	
     	
         return "INSERT INTO " + indexTable + " VALUES "+
@@ -63,16 +73,20 @@ public class Query {
      * @param indexTable	A string with the name of the table.
      * @return 				returns the String to use for the db
      */
-
+    //TODO add to control right form
     public static String updateIndexTable(String update, String indexTable){
-    	String[] parts = update.split(";");
+    	String[] parts = update.split(";|=");
     	
     	String part = parts[0]; 
     	StringBuilder str = new StringBuilder();
     	String[] look = part.split(",");
     	for (int i = 0; i < look.length; i++) {
-    		str = str.append("'" + look[i] + "',");    		  
+    		str = str.append("'" + look[i] + "'"); 
+    		if (i<look.length-1) {
+    			str.append(",");
     		}
+    	}
+    	
     	String lookback = str.toString();
     	
     	String nameOfDeclaringType = parts[1]; 
@@ -82,14 +96,16 @@ public class Query {
     	String types = parts[3];
     	String[] parameter = types.split(",");
     	for (int i = 0; i < parameter.length; i++) {
-    		builder = builder.append("'" + parameter[i] + "',");    		  
+    		builder = builder.append("'" + parameter[i] + "'"); 
+    		if (i<parameter.length-1) {
+    			builder.append(",");
     		}
+    	}
+    	
     	String parameterType = builder.toString();    	
-    	
-    	String updateString = parts[4];
-    	
+
          return "UPDATE " + indexTable +  " SET " + "Lookback=(" + lookback + "), NameOfDeclaringType='" +nameOfDeclaringType+ "', MethodName='"+ methodName +
-        		 "', ParameterType=("+ parameterType +") WHERE " +updateString +";"; 
+        		 "', ParameterType=("+ parameterType +") WHERE " +parts[4] +"='"+parts[5] +"';"; 
     }
     
     /*
@@ -98,7 +114,7 @@ public class Query {
      * @param indexTable	A string with the name of the table to delete.
      */
     public static String deleteRow(String deletion, String indexTable) {
-    	return "DELETE FROM " + indexTable + " WHERE " + deletion; 
+    	return "DELETE FROM " + indexTable + " WHERE " + deletion + ";"; 
     } //TODO some problems with deleting array that are field with char   
     
     /*
@@ -106,7 +122,7 @@ public class Query {
      * @param indexTable	A string with the name of the table to delete.
      */
     public static String deleteIndexTable(String indexTable) {
-    	return "DROP TABLE IF EXISTS " + indexTable; 
+    	return "DROP TABLE IF EXISTS " + indexTable + ";"; 
     }
     
     /*
@@ -114,7 +130,7 @@ public class Query {
      * @param schemaName	A string with the name of the schema to create.
      */
     public static String deleteSchema(String schemaName) {
-    	return "DROP SCHEMA IF EXISTS " + schemaName; 
+    	return "DROP SCHEMA IF EXISTS " + schemaName + ";"; 
     }
     
     /*	A method to get the complete content of a table of a db.

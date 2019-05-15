@@ -9,13 +9,7 @@ public class DBConnection {
 
     private Connection conn;
     public DBConnection(String url, String user, String password){
-    	// Register JDBC driver 
-    	try {
-			Class.forName ("org.h2.Driver");
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
+
     	// Open a connection 
         try {
             this.conn = DriverManager.getConnection(url, user, password);
