@@ -1,8 +1,6 @@
 package Visitors;
 
-import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.naming.codeelements.IParameterName;
-import cc.kave.commons.model.ssts.IExpression;
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
@@ -40,8 +38,7 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 //    @Override
 //    public Void visit(IAssignment stmt, Set<String> overallContext) {
 //        // Add the identifier of the variable to the overall context
-//        overallContext.add(stmt.getReference().toString());
-//        overallContext.add(stmt.getExpression().toString());
+//
 //        return null;
 //    }
 

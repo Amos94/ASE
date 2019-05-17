@@ -30,37 +30,41 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                 }
                 if (expression instanceof IInvocationExpression) {
 
-                    final IMethodName methodName = ((IInvocationExpression) expression).getMethodName();
-                    final String methodNameStr = methodName.getName();
-                    String type = methodName.getDeclaringType().getFullName();
-                    type = normalizeType(type);
-
-                    // Don't index constructors
-                    if (!methodNameStr.equals("???") || !methodNameStr.equals("???")) {
-                        if (!methodName.isConstructor()) {
-
-                            // create contexts
-                            List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.LAST_N_CONSIDERED_STATEMENTS);
-                            Set<String> overallContextSet = new HashSet<>();
-                            lastNStatements.forEach(iStatement -> iStatement.accept(CONTEXT_VISITOR, overallContextSet));
-
-
-                            // create a new IndexDocument
-                            List<String> overallContext = new LinkedList<>();
-                            for(String identifier : overallContextSet) {
-                                if(identifierSanitization(identifier) != null)
-                                    overallContext.addAll(identifierSanitization(identifier));
-                                System.out.println(identifierSanitization(identifier));
-                            }
-                            IndexDocument indexDocument = new IndexDocument(methodNameStr, type, overallContext);
-                            index.indexDocument(indexDocument);
-                        }
-                    }
+                    doVisit(expression,body,statement,index);
                 }
             }
         }
 
         return super.visit(body, index);
+    }
+
+    public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, IInvertedIndex index){
+        final IMethodName methodName = ((IInvocationExpression) expression).getMethodName();
+        final String methodNameStr = methodName.getName();
+        String type = methodName.getDeclaringType().getFullName();
+        type = normalizeType(type);
+
+        // Don't index constructors
+        if (!methodNameStr.equals("???") || !methodNameStr.equals("???")) {
+            if (!methodName.isConstructor()) {
+
+                // create contexts
+                List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.LAST_N_CONSIDERED_STATEMENTS);
+                Set<String> overallContextSet = new HashSet<>();
+                lastNStatements.forEach(iStatement -> iStatement.accept(CONTEXT_VISITOR, overallContextSet));
+
+
+                // create a new IndexDocument
+                List<String> overallContext = new LinkedList<>();
+                for(String identifier : overallContextSet) {
+                    if(identifierSanitization(identifier) != null)
+                        overallContext.addAll(identifierSanitization(identifier));
+                    System.out.println(identifierSanitization(identifier));
+                }
+                IndexDocument indexDocument = new IndexDocument(methodNameStr, type, overallContext);
+                index.indexDocument(indexDocument);
+            }
+        }
     }
 
     /**

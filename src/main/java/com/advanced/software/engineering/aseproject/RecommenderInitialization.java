@@ -1,6 +1,5 @@
 package com.advanced.software.engineering.aseproject;
 
-import Context.ContextHelper;
 import Context.IoHelper;
 import Index.InvertedIndex;
 import Index.IInvertedIndex;
@@ -37,19 +36,15 @@ public class RecommenderInitialization {
     public void createIndex() {
         Set<String> zips = IoHelper.findAllZips(contextsPath);
         int numberOfZips = zips.size();
-        ContextHelper ctxHelper = new ContextHelper(contextsPath);
         long startTime = System.currentTimeMillis();
         IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
-        Model model = new Model(invertedIndex);
-
-        //try to create db if not exists
-
-
+        SSTProcessor sstProcessor = new SSTProcessor(invertedIndex);
 
         logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
-        model.startProcessSSTs();
-        //Here, add the creation index
+
+        sstProcessor.startProcessSSTs();
+
         for (String zip : zips) {
             logger.log(Level.INFO, "\n Starting to create index for "+zip);
             //read data in the zip
@@ -63,19 +58,15 @@ public class RecommenderInitialization {
                      * contains the Json representation of a {@see Context}.
                      */
                     Context ctx = ra.getNext(Context.class);
-                    //System.out.println(ctx.getSST());
-                    model.processSST(ctx);
 
-                    //given that we have the context, now we have access to hte SST and TypeShape
-//                    ISST sst = ctx.getSST();
-//                    ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
-//
-//                    sst.accept(indexDocumentExtractionVisitor, diskIndex);
+                    sstProcessor.processSST(ctx);
                 }
             }
             logger.log(Level.INFO, "\n Finishing to create index for "+zip);
         }
-        model.finishProcessSSTs();
+
+        sstProcessor.finishProcessSSTs();
+
         long endTime = System.currentTimeMillis();
 
         long timeElapsed = (endTime - startTime)/1000;
