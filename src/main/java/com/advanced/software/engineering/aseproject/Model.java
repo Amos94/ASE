@@ -1,7 +1,6 @@
 package com.advanced.software.engineering.aseproject;
 
 import Index.IInvertedIndex;
-import Index.IndexDocument;
 import Index.IndexDocumentExtractionVisitorNoList;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.ssts.ISST;

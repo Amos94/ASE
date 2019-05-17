@@ -19,5 +19,20 @@ Abstract—Reuse recommendation systems support the developer by suggesting usef
 * CI: [TRAVIS CI](https://travis-ci.org)
 * Code Coverage: [Coveralls](https://coveralls.io)
 
+
+### Installation 
+
+First you need to get the contexts and events, the ones the app is testet with are:
+
+**contexts**
+
+http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Contexts-170503.zip
+
+**events**
+
+http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Events-170301-2.zip
+
+Both of them are taken via the original source: http://www.kave.cc/datasets
+
 ### How to use it:
 
