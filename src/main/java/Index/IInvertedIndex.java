@@ -1,7 +1,5 @@
 package Index;
 
-import java.util.Set;
-
 /**
  * Interface for an index that can be used to index the documents needed for the model
  */
