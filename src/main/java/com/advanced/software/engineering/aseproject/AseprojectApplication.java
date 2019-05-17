@@ -4,13 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.HashSet;
 @SpringBootApplication
 public class AseprojectApplication {
 
+    /**
+     * Main class for starting the application which boots the recommenderInitalization and creates the index
+     * Caution: Creating the index can take a while
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         SpringApplication.run(AseprojectApplication.class, args);
 
