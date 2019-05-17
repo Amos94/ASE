@@ -19,7 +19,7 @@ Abstract—Reuse recommendation systems support the developer by suggesting usef
 * Framework: [MAVEN 3](https://maven.apache.org/)
 * Datasets: [KAVE CC](http://kave.cc/)
 * CI: [TRAVIS CI](https://travis-ci.org)
-* Code Coverage: [Coveralls](https://coveralls.io)
+* Test Coverage: [Coveralls](https://coveralls.io)
 
 
 ### Installation 
