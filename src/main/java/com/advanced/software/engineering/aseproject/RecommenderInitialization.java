@@ -21,13 +21,16 @@ public class RecommenderInitialization {
     private Logger logger;
 
     public RecommenderInitialization(String contextsPath, String eventsPath){
-        logger = Logger.getLogger(RecommenderInitialization.class.getName());
 
+        // process start
+        logger = Logger.getLogger(RecommenderInitialization.class.getName());
         logger.log(Level.INFO, "\nRecommenderInitialization initializing..." );
 
+        // set context and events path
         this.contextsPath = contextsPath;
         this.eventsPath = eventsPath;
 
+        // log the set paths
         logger.log(Level.INFO,
                 "\nContexts and Events directories were set."
                         .concat("\nContexts: "+contextsPath)
@@ -35,21 +38,28 @@ public class RecommenderInitialization {
     }
 
     public void createIndex() {
+        // finds all given zips by context path
         Set<String> zips = IoHelper.findAllZips(contextsPath);
         int numberOfZips = zips.size();
+
+        // instantiates a new contextHelper
         ContextHelper ctxHelper = new ContextHelper(contextsPath);
+
+        // persist start time
         long startTime = System.currentTimeMillis();
+
+        // create inverted index
         IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
         Model model = new Model(invertedIndex);
 
-        //try to create db if not exists
-
-
-
+        // log info about the start of the process
         logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
+
+        // start the SSTs process
         model.startProcessSSTs();
-        //Here, add the creation index
+
+        // Here, add the creation index
         for (String zip : zips) {
             logger.log(Level.INFO, "\n Starting to create index for "+zip);
             //read data in the zip
@@ -86,7 +96,7 @@ public class RecommenderInitialization {
     public void queryIndex(){
         Set<String> zips = IoHelper.findAllZips(eventsPath);
         int numberOfZips = zips.size();
-        //Here start query the index and get Similarity
+        // Here start query the index and get Similarity
         logger.log(Level.INFO, "\nStart to query the index out of the given events."
                 .concat("\nFound "+ numberOfZips +" zips in the events directory."));
     }

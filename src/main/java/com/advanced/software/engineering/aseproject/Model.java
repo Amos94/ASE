@@ -10,8 +10,11 @@ public class Model {
 
     private IInvertedIndex index = null;
 
+
     /**
-     * Create InvertedIndex
+     * Creates the InvertedIndex
+     *
+     * @param index
      */
     public Model(IInvertedIndex index) {
         this.index = index;
@@ -19,6 +22,8 @@ public class Model {
 
     /**
      * Takes a Context object from the KaVe datasets and create IndexDocument
+     *
+     * @param ctx context
      */
     public void processSST(Context ctx) {
         ISST sst = ctx.getSST();
@@ -28,10 +33,16 @@ public class Model {
         sst.accept(indexDocumentExtractionVisitor, index);
     }
 
+    /**
+     * Starts the indexing process
+     */
     public void startProcessSSTs() {
         index.startIndexing();
     }
 
+    /**
+     * finishes the indexing process
+     */
     public void finishProcessSSTs() {
         index.finishIndexing();
     }
