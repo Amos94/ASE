@@ -24,15 +24,21 @@ Abstract—Reuse recommendation systems support the developer by suggesting usef
 
 First you need to get the contexts and events, the ones the app is testet with are:
 
-**contexts**
+**Contexts dataset:**
 
 http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Contexts-170503.zip
 
-**events**
+**Events dataset:**
 
 http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Events-170301-2.zip
 
 Both of them are taken via the original source: http://www.kave.cc/datasets
+
+**Additional info:**
+
+  * **Contexts version:** May 3, 2017
+
+  * **Events version:** Jan 18, 2018
 
 ### How to use it:
 
