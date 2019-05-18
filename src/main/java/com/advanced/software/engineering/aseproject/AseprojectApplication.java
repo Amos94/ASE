@@ -21,7 +21,10 @@ public class AseprojectApplication {
         //IdentifyEvents ev = new IdentifyEvents();
 
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
-        recommenderInitialization.createIndex();
+        if(Configuration.REINDEX_DATABASE == true) {
+            recommenderInitialization.createIndex();
+        }
+
         recommenderInitialization.queryIndex();
     }
 }

@@ -18,6 +18,7 @@ package Events;
 import java.io.File;
 import java.util.List;
 
+import Utils.Configuration;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
@@ -53,7 +54,7 @@ public class IdentifyEvents {
         // .zip file in the dataset corresponds to one user.
 
         List<String> zips = Lists.newLinkedList();
-        for (File f : FileUtils.listFiles(new File(DIR_USERDATA), new String[] { "zip" }, true)) {
+        for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
             zips.add(f.getAbsolutePath());
         }
         return zips;

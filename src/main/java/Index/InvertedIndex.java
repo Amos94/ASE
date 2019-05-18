@@ -71,16 +71,14 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     @Override
     public void startIndexing() {
-        if(Configuration.REINDEX_DATABASE == true) {
-            super.startIndexing();
-            if (USE_SQLITE) {
-                openSQLConnection();
-                try {
-                    createDBSchemaIfNotExists(dbConn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    System.exit(1);
-                }
+        super.startIndexing();
+        if (USE_SQLITE) {
+            openSQLConnection();
+            try {
+                createDBSchemaIfNotExists(dbConn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.exit(1);
             }
         }
 
