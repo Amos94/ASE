@@ -40,7 +40,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         //get top 10 candidates
         for(Map.Entry<IndexDocument, Double> e:candidates.entrySet()) {
             result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
-            System.out.println(e.getKey().getMethod().getName());
+            System.out.println("Recommended: " + e.getKey().getMethod().getName());
         }
 
         return result;

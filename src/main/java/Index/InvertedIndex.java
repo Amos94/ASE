@@ -615,26 +615,28 @@ public class InvertedIndex extends AbstractInvertedIndex {
     private String splitContext(List<String> context) {
         StringBuilder sb = new StringBuilder();
         for (String s : context) {
-            sb.append(s);
+            sb.append(s.length());
             sb.append(",");
+            sb.append(s);
         }
-        if(sb.length()>0)
-            sb.deleteCharAt(sb.length()-1); //delete the last comma
         return sb.toString();
     }
 
     private List<String> deserializeContext(String context) {
         List<String> result = new LinkedList<>();
         int position = 0;
-        while (position < context.length()) {
-            int commaPos = position + context.substring(position).indexOf(",");
-            int wordLength = Integer.valueOf(context.substring(position, commaPos));
-            String s = context.substring(commaPos + 1, commaPos + 1 + wordLength);
-            result.add(s);
-            position = commaPos + wordLength + 1;
+        if(!context.isEmpty()) {
+            while (position < context.length()) {
+                int commaPosition = position + context.substring(position).indexOf(",");
+                int wordLength = Integer.valueOf(context.substring(position, commaPosition));
+                String s = context.substring(commaPosition + 1, commaPosition + 1 + wordLength);
+                result.add(s);
+                position = commaPosition + wordLength + 1;
+            }
         }
         return result;
     }
+
 
     private IndexDocument deserializeFromFile(String docID) throws IOException {
         IndexDocument doc = null;

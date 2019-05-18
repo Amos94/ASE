@@ -16,19 +16,24 @@
 package Events;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import Utils.Configuration;
 import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.CompletionEvent;
+import cc.kave.commons.model.events.completionevents.Context;
+import com.advanced.software.engineering.aseproject.RecommenderInitialization;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
 
-import cc.kave.commons.model.events.CommandEvent;
-import cc.kave.commons.model.events.IIDEEvent;
 import cc.kave.commons.utils.io.ReadingArchive;
 import cc.kave.commons.utils.io.json.JsonUtils;
+
+import static Utils.Configuration.MAX_EVENTS_CONSIDERED;
 
 /**
  * This class contains several code examples that explain how to read enriched
@@ -43,10 +48,12 @@ public class IdentifyEvents {
      * dataset from our website, please unzip the archive and point to the
      * containing folder here.
      */
-    private static final String DIR_USERDATA = "/Data/amosneculau/Downloads/Events-170301-2";
+    private List<Context> aggregatedContexts;
+    private static Logger logger;
 
     public IdentifyEvents(){
-        readAllEvents();
+        logger = Logger.getLogger(IdentifyEvents.class.getName());
+        aggregatedContexts = readAllEvents();
     }
     /**
      * 1: Find all users in the dataset.
@@ -54,20 +61,36 @@ public class IdentifyEvents {
     public static List<String> findAllUsers() {
         // This step is straight forward, as events are grouped by user. Each
         // .zip file in the dataset corresponds to one user.
-
+        int maxEv = MAX_EVENTS_CONSIDERED;
         List<String> zips = Lists.newLinkedList();
-        for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
-            zips.add(f.getAbsolutePath());
+
+        if(maxEv == -1){
+            for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
+                zips.add(f.getAbsolutePath());
+                logger.log(Level.INFO, f.getName()+" user folder added");
+            }
+        }else{
+            for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
+                zips.add(f.getAbsolutePath());
+
+                --maxEv;
+                if(maxEv == 0)
+                    break;
+
+                logger.log(Level.INFO, f.getName()+" user folder added. Left to add: "+maxEv);
+            }
         }
+
         return zips;
     }
 
     /**
      * 2: Reading events
      */
-    public static void readAllEvents() {
+    public static List<Context> readAllEvents() {
         // each .zip file corresponds to a user
         List<String> userZips = findAllUsers();
+        List<Context> aggregatedContexts = new LinkedList<>();
 
         for (String user : userZips) {
             // you can use our helper to open a file...
@@ -78,11 +101,13 @@ public class IdentifyEvents {
                 IDEEvent e = ra.getNext(IDEEvent.class);
                 // afterwards, you can process it as a Java object
                 //System.out.println(e.getContext());
-                process(e);
+                logger.log(Level.INFO, "Processing events for: "+user.toString());
+                aggregatedContexts.addAll(process(e));
 
             }
             ra.close();
         }
+        return aggregatedContexts;
     }
 
     /**
@@ -111,21 +136,22 @@ public class IdentifyEvents {
     /**
      * 4: Processing events
      */
-    private static void process(IDEEvent event) {
+    public static List<Context> process(IDEEvent event) {
         // once you have access to the instantiated event you can dispatch the
         // type. As the events are not nested, we did not implement the visitor
         // pattern, but resorted to instanceof checks.
+        List<Context> contexts = new LinkedList<>();
         if (event instanceof CompletionEvent) {
             // if the correct type is identified, you can cast it...
             CompletionEvent ce = (CompletionEvent) event;
-
-            // ...and access the special context for this kind of event
-            System.out.println(ce.getContext());
-
-        } else {
-            // there a many different event types to process, it is recommended
-            // that you browse the package to see all types and consult the
-            // website for the documentation of the semantics of each event...
+            contexts.add(ce.getContext());
+            logger.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
         }
+
+        return contexts;
+    }
+
+    public List<Context> getAggregatedContexts(){
+        return aggregatedContexts;
     }
 }

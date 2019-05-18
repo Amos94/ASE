@@ -75,33 +75,4 @@ public class RecommenderInitialization {
         logger.log(Level.INFO, "\nThe index was created in "+ timeElapsed + " seconds.");
     }
 
-
-    public List<Context> queryIndex() {
-        Set<String> zips = IoHelper.findAllZips(contextsPath);
-        int numberOfZips = zips.size();
-        IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
-        SSTProcessor sstProcessor = new SSTProcessor(invertedIndex);
-        List<Context> ctxs = new LinkedList<>();
-        //Here start query the index and get Similarity
-        logger.log(Level.INFO, "\nStart to query the index out of the given events."
-                .concat("\nFound " + numberOfZips + " zips in the events directory."));
-        //sstProcessor.startProcessSSTs();
-        int max = 10;
-        for (String zip : zips) {
-            logger.log(Level.INFO, "\n Starting to create index for " + zip);
-            //read data in the zip
-            // open the .zip file ...
-            try (IReadingArchive ra = new ReadingArchive(new File(contextsPath, zip))) {
-                // ... and iterate over content.
-                // the iteration will stop after 10 contexts to speed things up in the example.
-                while (ra.hasNext()) {
-                    ctxs.add(ra.getNext(Context.class));
-                }
-            }
-            if(--max == 0)
-                break;
-        }
-        return ctxs;
-    }
-
 }

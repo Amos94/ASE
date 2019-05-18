@@ -18,4 +18,7 @@ public class Configuration {
     //Maximum number of candidates
     public static final int MAX_CANDIDATES = 10;
 
+    //Maximum number if queries for the demo
+    public static final int MAX_EVENTS_CONSIDERED = 1; //to disable this set it to -1
+
 }
