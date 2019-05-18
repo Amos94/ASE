@@ -18,6 +18,9 @@ package Events;
 import java.io.File;
 import java.util.List;
 
+import Utils.Configuration;
+import cc.kave.commons.model.events.IDEEvent;
+import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
@@ -40,10 +43,10 @@ public class IdentifyEvents {
      * dataset from our website, please unzip the archive and point to the
      * containing folder here.
      */
-    private static final String DIR_USERDATA = "/Users/amosneculau/Downloads/Events-170301-2";
+    private static final String DIR_USERDATA = "/Data/amosneculau/Downloads/Events-170301-2";
 
     public IdentifyEvents(){
-
+        readAllEvents();
     }
     /**
      * 1: Find all users in the dataset.
@@ -53,7 +56,7 @@ public class IdentifyEvents {
         // .zip file in the dataset corresponds to one user.
 
         List<String> zips = Lists.newLinkedList();
-        for (File f : FileUtils.listFiles(new File(DIR_USERDATA), new String[] { "zip" }, true)) {
+        for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
             zips.add(f.getAbsolutePath());
         }
         return zips;
@@ -72,9 +75,11 @@ public class IdentifyEvents {
             // ...iterate over it...
             while (ra.hasNext()) {
                 // ... and desrialize the IDE event.
-                IIDEEvent e = ra.getNext(IIDEEvent.class);
+                IDEEvent e = ra.getNext(IDEEvent.class);
                 // afterwards, you can process it as a Java object
+                //System.out.println(e.getContext());
                 process(e);
+
             }
             ra.close();
         }
@@ -93,7 +98,7 @@ public class IdentifyEvents {
                 // ... sometimes it is easier to just read the JSON...
                 String json = ra.getNextPlain();
                 // .. and call the deserializer yourself.
-                IIDEEvent e = JsonUtils.fromJson(json, IIDEEvent.class);
+                IDEEvent e = JsonUtils.fromJson(json, IDEEvent.class);
                 process(e);
 
                 // Not all event bindings are very stable already, reading the
@@ -106,16 +111,16 @@ public class IdentifyEvents {
     /**
      * 4: Processing events
      */
-    private static void process(IIDEEvent event) {
+    private static void process(IDEEvent event) {
         // once you have access to the instantiated event you can dispatch the
         // type. As the events are not nested, we did not implement the visitor
         // pattern, but resorted to instanceof checks.
-        if (event instanceof CommandEvent) {
+        if (event instanceof CompletionEvent) {
             // if the correct type is identified, you can cast it...
-            CommandEvent ce = (CommandEvent) event;
+            CompletionEvent ce = (CompletionEvent) event;
 
             // ...and access the special context for this kind of event
-            System.out.println(ce.CommandId);
+            System.out.println(ce.getContext());
 
         } else {
             // there a many different event types to process, it is recommended
