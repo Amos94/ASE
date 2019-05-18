@@ -24,9 +24,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     private final IInvertedIndex index;
     private List<IndexDocument> documents;
-    private Map<IndexDocument, Double>  scoredDocuments;
     private Map<IndexDocument, Double>  candidates;
-    private Evaluator evaluator;
 
 
     public Recommender(IInvertedIndex index) {
@@ -41,13 +39,8 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         getScoredDocuments(query);
         //get top 10 candidates
         for(Map.Entry<IndexDocument, Double> e:candidates.entrySet()) {
-
-            result.add(Pair.of(new MemberName(e.getKey().getMethodCall()) {
-                @Override
-                public boolean isUnknown() {
-                    return false;
-                }
-            }, e.getValue()));
+            result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
+            System.out.println(e.getKey().getMethod().getName());
         }
 
         return result;
@@ -95,11 +88,11 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private void getScoredDocuments(IndexDocument queryDoc){
         getIndexes(); //first let's retrieve all indexes from db
 
-        scoredDocuments = new HashMap<>();
+        Map<IndexDocument, Double> scoredDocuments = new HashMap<>();
 
         //score documents using jaccard similarity score
         for(IndexDocument doc:documents){
-            evaluator = new Evaluator(doc,queryDoc);
+            Evaluator evaluator = new Evaluator(doc, queryDoc);
             double similarityScore = evaluator.calculateJaccard();
             scoredDocuments.put(doc,similarityScore);
         }

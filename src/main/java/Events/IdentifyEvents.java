@@ -113,6 +113,7 @@ public class IdentifyEvents {
         if (event instanceof CommandEvent) {
             // if the correct type is identified, you can cast it...
             CommandEvent ce = (CommandEvent) event;
+
             // ...and access the special context for this kind of event
             System.out.println(ce.CommandId);
 

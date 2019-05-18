@@ -2,10 +2,8 @@ package Index;
 
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import com.github.tomtung.jsimhash.SimHashBuilder;
-import com.github.tomtung.jsimhash.Util;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.text.similarity.LevenshteinDistance;
-import org.apache.commons.text.similarity.LongestCommonSubsequence;
+
 
 import java.io.Serializable;
 import java.util.*;
@@ -72,6 +70,15 @@ public class IndexDocument implements Serializable {
      */
     public IndexDocument(String docId, String methodCall, String type, Collection<String> overallContext, long overallContextSimhash) {
         id = docId;
+        this.methodCall = methodCall;
+        this.type = type;
+        this.overallContext = new TreeSet<>(overallContext);
+        this.overallContextSimhash = overallContextSimhash;
+    }
+
+    public IndexDocument(String docId, IMemberName method, Collection<String> overallContext, long overallContextSimhash) {
+        id = docId;
+        this.method = method;
         this.methodCall = methodCall;
         this.type = type;
         this.overallContext = new TreeSet<>(overallContext);

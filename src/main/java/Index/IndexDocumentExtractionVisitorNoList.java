@@ -102,7 +102,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                 for(String identifier : overallContextSet) {
                     if(identifierSanitization(identifier) != null)
                         overallContext.addAll(identifierSanitization(identifier));
-                    System.out.println(identifierSanitization(identifier));
+                    //System.out.println(identifierSanitization(identifier));
                 }
                 IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
                 index.indexDocument(indexDocument);

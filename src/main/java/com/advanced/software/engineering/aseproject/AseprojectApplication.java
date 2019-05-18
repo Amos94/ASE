@@ -1,5 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
+import Index.InvertedIndex;
+import cc.kave.commons.model.events.completionevents.Context;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
@@ -19,7 +21,12 @@ public class AseprojectApplication {
         //IdentifyEvents ev = new IdentifyEvents();
 
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
-        recommenderInitialization.createIndex();
-        recommenderInitialization.queryIndex();
+        //recommenderInitialization.createIndex();
+        //recommenderInitialization.queryIndex();
+
+        Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
+
+        for(Context ctx:recommenderInitialization.queryIndex())
+            recommender.query(ctx);
     }
 }
