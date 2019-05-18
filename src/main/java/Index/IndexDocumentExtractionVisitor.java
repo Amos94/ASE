@@ -161,8 +161,14 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
     }
 
     public List<String> identifierSanitization(String identifier){
-        if(identifier.length() != 1)
+        if(Configuration.REMOVE_STOP_WORDS) {
+            if (identifier.length() != 1) {
+                return removeStopWords(stemIdentifiers(splitCamelCase(identifier)));
+            }
+        }
+        else{
             return stemIdentifiers(splitCamelCase(identifier));
+        }
         return null;
     }
 
@@ -180,10 +186,24 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         PorterStemmer stemmer = new PorterStemmer();
         List<String> stemmedIdentifiers = new LinkedList<>();
 
-        for(String identifier:identifiers)
+        for(String identifier:identifiers) {
+            //System.out.println("Unstemmed: " + identifier + "\nStemmed: " + stemmer.stem(identifier)); //Making sure it stemms well
             stemmedIdentifiers.add(stemmer.stem(identifier));
+        }
 
         return stemmedIdentifiers;
+    }
+
+    public List<String> removeStopWords(List<String> identifiers){
+        identifiers.removeIf(i -> isStopWord(i));
+
+        return identifiers;
+    }
+
+    public boolean isStopWord(String identifier){
+        if(Configuration.STOP_WORDS.contains(identifier))
+            return true;
+        return false;
     }
 }
 

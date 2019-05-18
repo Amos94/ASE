@@ -52,6 +52,12 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         ISSTNodeVisitor visitor = new IndexDocumentExtractionVisitor();
         List<IndexDocument> methodInvocations = new LinkedList<>();
         sst.accept(visitor, methodInvocations);
+
+//        for(IndexDocument mi : methodInvocations){
+//            System.out.println("Context:" + mi.getOverallContext());
+//            System.out.println("Type:" + mi.getType());
+//        }
+
         IndexDocument queryDocument = combineContexts(methodInvocations);
 
         return query(queryDocument);
