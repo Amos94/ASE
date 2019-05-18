@@ -1,5 +1,6 @@
 package Index;
 
+import Utils.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -70,16 +71,19 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     @Override
     public void startIndexing() {
-        super.startIndexing();
-        if (USE_SQLITE) {
-            openSQLConnection();
-            try {
-                createDBSchemaIfNotExists(dbConn);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(1);
+        if(Configuration.REINDEX_DATABASE == true) {
+            super.startIndexing();
+            if (USE_SQLITE) {
+                openSQLConnection();
+                try {
+                    createDBSchemaIfNotExists(dbConn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             }
         }
+
     }
 
     private void openSQLConnection() {
@@ -118,7 +122,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
     /**
-     * Check if indexed in the db
+     * Check if index is in the db
      *
      * @param doc
      * @return
