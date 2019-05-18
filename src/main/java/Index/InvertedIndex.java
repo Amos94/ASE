@@ -162,7 +162,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         prepStmt.setString(1, doc.getId());
         prepStmt.setString(2, doc.getType());
         prepStmt.setString(3, doc.getMethodCall());
-        prepStmt.setString(4, serializeContext(doc.getOverallContext()));
+        prepStmt.setString(4, splitContext(doc.getOverallContext()));
         prepStmt.setLong(5, doc.getOverallContextSimhash());
         prepStmt.executeUpdate();
         prepStmt.close();
@@ -194,6 +194,32 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
+    @Override
+    public List<IndexDocument> deserializeAll() {
+        List<IndexDocument> documents = new LinkedList<>();
+        String sqlSelect = "SELECT * FROM " + this.SQL_TABLE_NAME;
+        try {
+            Statement stmt = dbConn.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlSelect);
+            boolean hasItems = rs.isBeforeFirst();
+            if (hasItems) {
+                String docID = rs.getString("docid");
+                String methodCall = rs.getString("method");
+                String type = rs.getString("type");
+                List<String> overallContext = deserializeContext(rs.getString("overallcontext"));
+                long overallContextSimhash = rs.getLong("overallcontextsimhash");
+                IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext, overallContextSimhash);
+                documents.add(doc);
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
+    }
+
+
     private IndexDocument deserializeFromSQLite(String docID) {
         String sqlSelect = "SELECT * FROM " + this.SQL_TABLE_NAME + " WHERE docid=\"" + docID + "\"";
         try {
@@ -216,13 +242,14 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return null;
     }
 
-    private String serializeContext(List<String> context) {
+    private String splitContext(List<String> context) {
         StringBuilder sb = new StringBuilder();
         for (String s : context) {
-            sb.append(s.length());
-            sb.append("~");
             sb.append(s);
+            sb.append(",");
         }
+        if(sb.length()>0)
+            sb.deleteCharAt(sb.length()-1); //delete the last comma
         return sb.toString();
     }
 
@@ -230,11 +257,11 @@ public class InvertedIndex extends AbstractInvertedIndex {
         List<String> result = new LinkedList<>();
         int position = 0;
         while (position < context.length()) {
-            int tildePosition = position + context.substring(position).indexOf("~");
-            int wordLength = Integer.valueOf(context.substring(position, tildePosition));
-            String s = context.substring(tildePosition + 1, tildePosition + 1 + wordLength);
+            int commaPos = position + context.substring(position).indexOf(",");
+            int wordLength = Integer.valueOf(context.substring(position, commaPos));
+            String s = context.substring(commaPos + 1, commaPos + 1 + wordLength);
             result.add(s);
-            position = tildePosition + wordLength + 1;
+            position = commaPos + wordLength + 1;
         }
         return result;
     }

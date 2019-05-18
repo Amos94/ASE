@@ -2,7 +2,9 @@ package Index;
 
 import Utils.Configuration;
 import Visitors.ContextVisitor;
+import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.codeelements.IMethodName;
+import cc.kave.commons.model.naming.types.ITypeName;
 import cc.kave.commons.model.ssts.IStatement;
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
@@ -39,6 +41,47 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
     }
 
     public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, IInvertedIndex index){
+        final IMemberName method = new IMemberName() {
+            @Override
+            public String getIdentifier() {
+                return ((IInvocationExpression) expression).getMethodName().getIdentifier();
+            }
+
+            @Override
+            public boolean isUnknown() {
+                return ((IInvocationExpression) expression).getMethodName().isUnknown();
+            }
+
+            @Override
+            public boolean isHashed() {
+                return ((IInvocationExpression) expression).getMethodName().isHashed();
+            }
+
+            @Override
+            public ITypeName getDeclaringType() {
+                return ((IInvocationExpression) expression).getMethodName().getDeclaringType();
+            }
+
+            @Override
+            public ITypeName getValueType() {
+                return ((IInvocationExpression) expression).getMethodName().getValueType();
+            }
+
+            @Override
+            public boolean isStatic() {
+                return ((IInvocationExpression) expression).getMethodName().isStatic();
+            }
+
+            @Override
+            public String getName() {
+                return ((IInvocationExpression) expression).getMethodName().getName();
+            }
+
+            @Override
+            public String getFullName() {
+                return ((IInvocationExpression) expression).getMethodName().getFullName();
+            }
+        };
         final IMethodName methodName = ((IInvocationExpression) expression).getMethodName();
         final String methodNameStr = methodName.getName();
         String type = methodName.getDeclaringType().getFullName();
@@ -61,7 +104,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                         overallContext.addAll(identifierSanitization(identifier));
                     System.out.println(identifierSanitization(identifier));
                 }
-                IndexDocument indexDocument = new IndexDocument(methodNameStr, type, overallContext);
+                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
                 index.indexDocument(indexDocument);
             }
         }

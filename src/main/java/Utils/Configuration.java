@@ -15,4 +15,7 @@ public class Configuration {
     // Number of statements to consider for overall context
     public static final int LAST_N_CONSIDERED_STATEMENTS = 4;
 
+    //Maximum number of candidates
+    public static final int MAX_CANDIDATES = 10;
+
 }
