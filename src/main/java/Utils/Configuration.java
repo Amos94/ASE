@@ -16,7 +16,7 @@ public class Configuration {
     public static final int LAST_N_CONSIDERED_STATEMENTS = 4;
 
     // ReIndex the Database
-    public static final boolean REINDEX_DATABASE = true;
+    public static final boolean REINDEX_DATABASE = false;
 
     // Verbose Output
     public static final boolean VERBOSE_OUTPUT = false;
