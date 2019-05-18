@@ -44,3 +44,17 @@ Both of them are taken via the original source: http://www.kave.cc/datasets
 
 ### How to use it:
 
+
+### Run Sonarqube Tests
+
+Run locally the following maven script
+
+mvn sonar:sonar \
+  -Dsonar.projectKey=ase \
+  -Dsonar.host.url=http://144.76.28.184:9001 \
+  -Dsonar.login=25046cbf54d572a8df8a73f8bb63d9a73d343b94
+  
+The Server is reachable by: http://144.76.28.184:9001
+  
+  
+
