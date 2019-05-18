@@ -58,7 +58,13 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     private IndexDocument combineContexts(List<IndexDocument> contexts) {
-        String lastType = contexts.get(contexts.size() - 1).getType();
+        String lastType;
+
+        if(contexts.size() > 0 && contexts.get((contexts.size()-1)).getType() != "")
+            lastType = contexts.get(contexts.size() - 1).getType();
+        else
+            lastType = "unknown";
+
         List<String> combinedOverallContext = new LinkedList<>();
         for (IndexDocument doc : contexts) {
             combinedOverallContext.addAll(doc.getOverallContext());
