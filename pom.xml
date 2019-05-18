@@ -124,14 +124,6 @@
     </distributionManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>Data</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
