@@ -21,16 +21,14 @@ import java.util.logging.Logger;
 
 public class InvertedIndex extends AbstractInvertedIndex {
 
-    /*
-      CLASS & INSTANCE VARIABLES
-     */
-
+    // CLASS & INSTANCE VARIABLES
     private static final String SQL_TABLE_NAME = "indexdocuments";
     private static final String INDEX_ROOT_DIR_NAME = "IndexStorage";
     private static final String SERIALIZED_INDEX_DOCUMENTS_DIR_NAME = "IndexDocuments";
     private static final String SERIALIZED_INDEX_DOCUMENTS_SQLITE_FILE_NAME = "IndexDocuments.db";
     private static final String INVERTED_INDEX_STRUCTURES_DIR_NAME = "InvertedIndexStructures_Lucene";
     private final Logger LOGGER = Logger.getLogger(InvertedIndex.class.getName());
+
     // directory where the Lucene index is persisted on disk
     private String indexRootDir;
 
@@ -41,13 +39,35 @@ public class InvertedIndex extends AbstractInvertedIndex {
     // false: we serialize IndexDocuments to disk as files with .ser ending
     private boolean USE_SQLITE = true;
 
-    /*
-      CONSTRUCTOR METHODS
+    /**
+     * Gets the path to file for the IndexDocument
+     *
+     * @param docID
+     * @return
      */
+    private String getPathToFileForIndexDocument(String docID) {
+        return indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_DIR_NAME + "/" + docID + ".ser";
+    }
+
+    /**
+     * Method to get the IndexDirectory
+     *
+     * @return
+     * @throws IOException
+     */
+    @Override
+    Directory getIndexDirectory() throws IOException {
+        String luceneIndexDirPath = indexRootDir + "/" + INVERTED_INDEX_STRUCTURES_DIR_NAME;
+        FSDirectory fileDirectory = FSDirectory.open(new File(luceneIndexDirPath).toPath());
+        return fileDirectory;
+    }
+
 
     /**
      * Create InvertedIndex
      * Uses an SQLite database to store the IndexDocument objects.
+     *
+     * @param indexDir
      */
     public InvertedIndex(String indexDir) {
         this(indexDir, true);
@@ -56,6 +76,9 @@ public class InvertedIndex extends AbstractInvertedIndex {
     /**
      * Create InvertedIndex
      * Uses an SQLite database to store the IndexDocument objects.
+     *
+     * @param indexDir
+     * @param useRelationalDatabase
      */
     public InvertedIndex(String indexDir, boolean useRelationalDatabase) {
         indexRootDir = indexDir + "/" + INDEX_ROOT_DIR_NAME;
@@ -63,12 +86,16 @@ public class InvertedIndex extends AbstractInvertedIndex {
         this.USE_SQLITE = useRelationalDatabase;
     }
 
+    /**
+     * Creates the basic schema if it is not already there
+     *
+     * @param sqlConnection
+     * @throws SQLException
+     */
     private void createDBSchemaIfNotExists(Connection sqlConnection) throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + this.SQL_TABLE_NAME
                 + "("
                 + "   docid               CHAR(64) PRIMARY KEY,"
-//                + "   type                   VARCHAR(1) NOT NULL," // SQLite does not enforce length of VARCHAR
-//                + "   method                 VARCHAR(1) NOT NULL,"
                 + "declaringtype          VARCHAR(1) NOT NULL,"
                 + "valuetype              VARCHAR(1) NOT NULL,"
                 + "isstatic               SMALLINT   NOT NULL,"
@@ -85,6 +112,27 @@ public class InvertedIndex extends AbstractInvertedIndex {
         stmt.close();
     }
 
+    /**
+     * Create a directory for the output if nothing exists already
+     *
+     * @param dir
+     */
+    private void createDirectoryIfNotExists(File dir) {
+        if (!dir.exists()) {
+            System.out.println("'" + dir + "' does not exist yet. Creating it... ");
+            try {
+                FileUtils.forceMkdir(dir);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1); // exit on IOException
+            }
+        }
+    }
+
+    /**
+     * Method to start indexing
+     *
+     */
     @Override
     public void startIndexing() {
         super.startIndexing();
@@ -100,6 +148,9 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     }
 
+    /**
+     * Method to open the sql connection via sqlite
+     */
     private void openSQLConnection() {
         String sqlUrl = "jdbc:sqlite:" + indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_SQLITE_FILE_NAME;
         try {
@@ -110,22 +161,12 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
-    @Override
-    public void finishIndexing() {
-        super.finishIndexing();
-        if (USE_SQLITE && dbConn != null) {
-            try {
-                dbConn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /*
-      AbstractInvertedIndex IMPLEMENTATIONS
+    /**
+     * Method to distinguish between indexing in file and in db
+     *
+     * @param doc
+     * @return
      */
-
     @Override
     boolean isIndexed(IndexDocument doc) {
         if (USE_SQLITE) {
@@ -134,6 +175,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             return isIndexedAsFile(doc);
         }
     }
+
 
     /**
      * Check if index is in the db
@@ -167,16 +209,12 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return f.exists();
     }
 
-    /**
-     * Gets the path to file for the IndexDocument
-     *
-     * @param docID
-     * @return
-     */
-    private String getPathToFileForIndexDocument(String docID) {
-        return indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_DIR_NAME + "/" + docID + ".ser";
-    }
 
+    /**
+     * Serializes the content to a document
+     * @param doc
+     * @throws IOException
+     */
     @Override
     void serializeIndexDocument(IndexDocument doc) throws IOException {
         if (USE_SQLITE) {
@@ -192,7 +230,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
     /**
-     * Serialize to SQLite
+     * Serialize to SQLite with a prepared statement.
      *
      * @param doc
      * @throws SQLException
@@ -201,8 +239,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
         String sqlInsert = "INSERT INTO " + this.SQL_TABLE_NAME + " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement prepStmt = dbConn.prepareStatement(sqlInsert);
         prepStmt.setString(1, doc.getId());
-//        prepStmt.setString(2, doc.getType());
-//        prepStmt.setString(3, doc.getMethodCall());
         prepStmt.setString(2, doc.getMethod().getDeclaringType().getName());
         prepStmt.setString(3, doc.getMethod().getValueType().getName());
         prepStmt.setInt(4, booleanToInt(doc.getMethod().isStatic()));
@@ -217,19 +253,14 @@ public class InvertedIndex extends AbstractInvertedIndex {
         prepStmt.close();
     }
 
-    private int booleanToInt(boolean b){
-        if(b == true)
-            return 1;
-        return 0;
-    }
-  
+
+
     /**
      * Serialize to file
      *
      * @param doc
      * @throws IOException
      */
-
     private void serializeToFile(IndexDocument doc) throws IOException {
         String contextsDirPath = indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_DIR_NAME;
         createDirectoryIfNotExists(new File(contextsDirPath));
@@ -240,13 +271,15 @@ public class InvertedIndex extends AbstractInvertedIndex {
         fileOut.close();
     }
 
-    @Override
-    Directory getIndexDirectory() throws IOException {
-        String luceneIndexDirPath = indexRootDir + "/" + INVERTED_INDEX_STRUCTURES_DIR_NAME;
-        FSDirectory fileDirectory = FSDirectory.open(new File(luceneIndexDirPath).toPath());
-        return fileDirectory;
-    }
 
+
+    /**
+     * Method to deserialize the indexed Document
+     *
+     * @param docID
+     * @return
+     * @throws IOException
+     */
     @Override
     IndexDocument deserializeIndexDocument(String docID) throws IOException {
         if (USE_SQLITE) {
@@ -257,6 +290,11 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
 
+    /**
+     * Method to deserialze everything
+     *
+     * @return
+     */
     @Override
     public List<IndexDocument> deserializeAll() {
         List<IndexDocument> documents = new LinkedList<>();
@@ -269,8 +307,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
             if (hasItems) {
 
                 String docID = rs.getString("docid");
-                //String methodCall = rs.getString("method");
-                //String type = rs.getString("type");
                 String methodName = rs.getString("methodname");
                 String methodFullName = rs.getString("methodfullname");
                 String declaringTypeName = rs.getString("declaringtype");
@@ -655,26 +691,10 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
 
     /**
-     * Split the context
-     *
-     * @param context
-     * @return
-     */
-    private String splitContext(List<String> context) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : context) {
-            sb.append(s.length());
-            sb.append(",");
-            sb.append(s);
-        }
-        return sb.toString();
-    }
-
-    /**
      * Deserialize the Context
      *
      * @param context
-     * @return
+     * @return result
      */
     private List<String> deserializeContext(String context) {
         List<String> result = new LinkedList<>();
@@ -695,7 +715,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
      * Deserialization from File
      *
      * @param docID
-     * @return
+     * @return doc
      * @throws IOException
      */
     private IndexDocument deserializeFromFile(String docID) throws IOException {
@@ -713,25 +733,54 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return doc;
     }
 
-
     /**
-     * Create a directory for the output if nothing exists already
-     *
-     * @param dir
+     * Method to finish Indexing and close the db connection properly
      */
-    private void createDirectoryIfNotExists(File dir) {
-        if (!dir.exists()) {
-            System.out.println("'" + dir + "' does not exist yet. Creating it... ");
+    @Override
+    public void finishIndexing() {
+        super.finishIndexing();
+        if (USE_SQLITE && dbConn != null) {
             try {
-                FileUtils.forceMkdir(dir);
-            } catch (IOException e) {
+                dbConn.close();
+            } catch (SQLException e) {
                 e.printStackTrace();
-                System.exit(1); // exit on IOException
             }
         }
     }
 
+    /**
+     * Helper method to split the context
+     *
+     * @param context
+     * @return string
+     */
+    private String splitContext(List<String> context) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : context) {
+            sb.append(s.length());
+            sb.append(",");
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Helper function to create a bool out of an integer
+     * @param i
+     * @return
+     */
     private boolean intToBool(int i){
         return i == 1;
+    }
+
+    /**
+     * Helper function to create an int out of a boolean representation
+     * @param b
+     * @return
+     */
+    private int booleanToInt(boolean b){
+        if(b == true)
+            return 1;
+        return 0;
     }
 }
