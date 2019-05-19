@@ -28,6 +28,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     public Recommender(IInvertedIndex index) {
         this.index = index;
+        getIndexes(); //first let's retrieve all indexes from db
     }
 
     /**
@@ -40,11 +41,10 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
         getScoredDocuments(query);
-
         //get top 10 candidates
         for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
             result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
-            System.out.println("Recommended: " + e.getKey().getMethod().getName());
+            System.out.println("For "+ query +" our recommendation is: " + e.getKey().getMethod().getName() + " confident: "+e.getValue());
         }
 
         return result;
@@ -74,17 +74,22 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
      */
     private IndexDocument combineContexts(List<IndexDocument> contexts) {
         String lastType;
+        String lastMethod;
 
-        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "")
+        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "") {
             lastType = contexts.get(contexts.size() - 1).getType();
-        else
+            lastMethod = contexts.get(contexts.size() - 1).getMethod().getName();
+        }
+        else {
             lastType = "unknown";
+            lastMethod = "unknown";
+        }
 
         List<String> combinedOverallContext = new LinkedList<>();
         for (IndexDocument doc : contexts) {
             combinedOverallContext.addAll(doc.getOverallContext());
         }
-        return new IndexDocument(null, lastType, combinedOverallContext);
+        return new IndexDocument(lastMethod, lastType, combinedOverallContext);
     }
 
     /**
@@ -125,22 +130,21 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
      * @param queryDoc
      */
     private void getScoredDocuments(IndexDocument queryDoc) {
-        getIndexes(); //first let's retrieve all indexes from db
-
         Map<IndexDocument, Double> scoredDocuments = new HashMap<>();
 
         //score documents using jaccard similarity score
         for (IndexDocument doc : documents) {
             Evaluator evaluator = new Evaluator(doc, queryDoc);
+
             double similarityScore = evaluator.calculateJaccard();
             scoredDocuments.put(doc, similarityScore);
         }
 
         candidates = scoredDocuments.entrySet()
                 .stream()
-                .limit(Configuration.MAX_CANDIDATES)
                 .distinct()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .limit(Configuration.MAX_CANDIDATES)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, HashMap::new));
 
     }

@@ -45,10 +45,10 @@ public class Configuration {
     public static final boolean REMOVE_STOP_WORDS = false;
 
     // ReIndex the Database
-    public static final boolean REINDEX_DATABASE = true;
+    public static final boolean REINDEX_DATABASE = false;
 
     // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
-    public static final boolean EVALUATION = false;
+    public static final boolean EVALUATION = true;
 
     // Verbose Output
     public static final boolean VERBOSE_OUTPUT = false;

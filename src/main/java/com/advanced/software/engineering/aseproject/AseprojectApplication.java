@@ -38,10 +38,7 @@ public class AseprojectApplication {
 
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:e.getAggregatedContexts()) {
-                Set<Pair<IMemberName, Double>> output = recommender.query(ctx);
-                for(Pair<IMemberName, Double> mr : output) {
-                    System.out.println("Recommended: " +mr.getLeft().getFullName() + ". Jaccard Similarity measure: "+ mr.getRight() + "\nIdentifier: " + mr.getLeft().getIdentifier());
-                }
+                recommender.query(ctx);
             }
         }
 
