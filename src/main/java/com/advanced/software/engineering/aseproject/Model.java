@@ -6,6 +6,9 @@ import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.ssts.ISST;
 import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
 
+/**
+ * Basic model class which works upon the IInvertedIndex created earlier
+ */
 public class Model {
 
     private IInvertedIndex index = null;
@@ -27,9 +30,7 @@ public class Model {
      */
     public void processSST(Context ctx) {
         ISST sst = ctx.getSST();
-
         ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
-
         sst.accept(indexDocumentExtractionVisitor, index);
     }
 
