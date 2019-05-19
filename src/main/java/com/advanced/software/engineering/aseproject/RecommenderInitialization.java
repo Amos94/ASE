@@ -18,17 +18,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RecommenderInitialization {
+
     private String contextsPath;
     private String eventsPath;
     private Logger logger;
-
-    public String getContextsPath() {
-        return contextsPath;
-    }
-
-    public String getEventsPath() {
-        return eventsPath;
-    }
 
     public RecommenderInitialization(String contextsPath, String eventsPath){
 
