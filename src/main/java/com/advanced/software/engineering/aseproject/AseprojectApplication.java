@@ -3,8 +3,14 @@ package com.advanced.software.engineering.aseproject;
 import Events.IdentifyEvents;
 import Events.IdentifyTestContexts;
 import Index.InvertedIndex;
+import cc.kave.commons.model.events.IDEEvent;
+import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
+import cc.kave.commons.model.ssts.IStatement;
+import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
+import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
+import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -54,14 +60,19 @@ public class AseprojectApplication {
         if(Configuration.EVALUATION == true) {
             // New ContextIdentifier
             IdentifyTestContexts tc = new IdentifyTestContexts();
+            int noMethodsToMaleRecomenationsFor = 0;
 
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:tc.getAggregatedContexts()) {
-                logger.log(Level.INFO, "\nCreating recommendations for "+tc.getAggregatedContextsSize()+" methods");
                 recommender.query(ctx);
+                for(IMethodDeclaration method: ctx.getSST().getMethods()) {
+                    for(IStatement stmt : method.getBody())
+                        if(stmt instanceof IInvocationExpression)
+                            noMethodsToMaleRecomenationsFor++;
+                }
             }
-
-            recommendationRate = recommender.getNumberOfCorrectRecommendations()/tc.getAggregatedContextsSize();
+            System.out.println(noMethodsToMaleRecomenationsFor);
+            recommendationRate = recommender.getNumberOfCorrectRecommendations()/noMethodsToMaleRecomenationsFor;
             logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 

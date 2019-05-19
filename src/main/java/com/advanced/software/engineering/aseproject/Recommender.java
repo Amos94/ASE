@@ -99,7 +99,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         String lastMethod;
         List<String> overallContext = new LinkedList<>();
 
-        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "" && (contexts.get((contexts.size() -1)).getOverallContext().size() > 0)) {
+        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "" && (contexts.get((contexts.size() - 1)).getOverallContext().size() > 0)) {
             lastType = contexts.get(contexts.size() - 1).getType();
             lastMethod = contexts.get(contexts.size() - 1).getMethod().getName();
             overallContext.addAll(contexts.get(contexts.size() - 1).getOverallContext());
