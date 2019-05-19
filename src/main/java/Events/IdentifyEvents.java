@@ -113,29 +113,6 @@ public class IdentifyEvents {
     }
 
     /**
-     * 3: Reading the plain JSON representation
-     */
-    public static void readPlainEvents() {
-        // the example is basically the same as before, but...
-        List<String> userZips = findAllUsers();
-
-        for (String user : userZips) {
-            ReadingArchive ra = new ReadingArchive(new File(user));
-            while (ra.hasNext()) {
-                // ... sometimes it is easier to just read the JSON...
-                String json = ra.getNextPlain();
-                // .. and call the deserializer yourself.
-                IDEEvent e = JsonUtils.fromJson(json, IDEEvent.class);
-                process(e);
-
-                // Not all event bindings are very stable already, reading the
-                // JSON helps debugging possible bugs in the bindings
-            }
-            ra.close();
-        }
-    }
-
-    /**
      * 4: Processing events
      */
     public static List<Context> process(IDEEvent event) {

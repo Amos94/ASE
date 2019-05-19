@@ -1,6 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
 import Events.IdentifyEvents;
+import Events.IdentifyTestContexts;
 import Index.InvertedIndex;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
@@ -23,6 +24,7 @@ public class AseprojectApplication {
      * @param args
      */
     public static void main(String[] args) {
+        double recommendationRate;
         SpringApplication.run(AseprojectApplication.class, args);
         Logger logger = Logger.getLogger(AseprojectApplication.class.getName());
 
@@ -35,15 +37,32 @@ public class AseprojectApplication {
             recommenderInitialization.createIndex();
         }
 
+//        if(Configuration.EVALUATION == true) {
+//            // New EventIndentifier
+//            IdentifyEvents e = new IdentifyEvents();
+//
+//            // Aggregate through all events (Currently only jaccard)
+//            for(Context ctx:e.getAggregatedContexts()) {
+//                logger.log(Level.INFO, "\nCreating recommendations for "+e.getAggregatedContextsSize()+" methods");
+//                recommender.query(ctx);
+//            }
+//
+//            recommendationRate = recommender.getNumberOfCorrectRecommendations()/e.getAggregatedContextsSize();
+//            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
+//        }
+
         if(Configuration.EVALUATION == true) {
-            // New EventIndentifier
-            IdentifyEvents e = new IdentifyEvents();
+            // New ContextIdentifier
+            IdentifyTestContexts tc = new IdentifyTestContexts();
 
             // Aggregate through all events (Currently only jaccard)
-            for(Context ctx:e.getAggregatedContexts()) {
-                logger.log(Level.INFO, "\nCreating recommendations for "+e.getAggregatedContextsSize()+" methods");
+            for(Context ctx:tc.getAggregatedContexts()) {
+                logger.log(Level.INFO, "\nCreating recommendations for "+tc.getAggregatedContextsSize()+" methods");
                 recommender.query(ctx);
             }
+
+            recommendationRate = recommender.getNumberOfCorrectRecommendations()/tc.getAggregatedContextsSize();
+            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");

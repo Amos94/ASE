@@ -31,6 +31,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private Logger logger = Logger.getLogger(Recommender.class.getName());
 
     private Map<IndexDocument, Double> candidates;
+    private int numberOfCorrectRecommendations;
 
 
     public Recommender(IInvertedIndex index) {
@@ -38,6 +39,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         this.index = index;
         logger.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
+        numberOfCorrectRecommendations = 0;
     }
 
     /**
@@ -50,13 +52,20 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
 
-        if(query.getMethodCall() != "" || query.getMethodCall() != null || query.getMethodCall() != "unknown") {
+        if(
+                (query.getMethodCall() != "" || query.getMethodCall() != null || query.getMethodCall() != "unknown") &&
+                (query.getOverallContext().size() > 0)
+        ) {
             getScoredDocuments(query);
+            //System.out.println(query.getMethodCall());
 
             for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
                 result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
                 logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
 
+                if(e.getKey().getMethod().getName().equals(query.getMethodCall()))
+                    ++numberOfCorrectRecommendations;
+                //System.out.println(numberOfCorrectRecommendations);
             }
         }
 
@@ -88,21 +97,22 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private IndexDocument combineContexts(List<IndexDocument> contexts) {
         String lastType;
         String lastMethod;
+        List<String> overallContext = new LinkedList<>();
 
-        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "") {
+        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "" && (contexts.get((contexts.size() -1)).getOverallContext().size() > 0)) {
             lastType = contexts.get(contexts.size() - 1).getType();
             lastMethod = contexts.get(contexts.size() - 1).getMethod().getName();
+            overallContext.addAll(contexts.get(contexts.size() - 1).getOverallContext());
         }
         else {
             lastType = "unknown";
             lastMethod = "unknown";
         }
 
-        List<String> combinedOverallContext = new LinkedList<>();
-        for (IndexDocument doc : contexts) {
-            combinedOverallContext.addAll(doc.getOverallContext());
-        }
-        return new IndexDocument(lastMethod, lastType, combinedOverallContext);
+//        for (IndexDocument doc : contexts) {
+//            combinedOverallContext.addAll(doc.getOverallContext());
+//        }
+        return new IndexDocument(lastMethod, lastType, overallContext);
     }
 
     /**
@@ -168,8 +178,8 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         return t -> seen.add(keyExtractor.apply(t));
     }
 
-    public double calculateRecommendationRate(){
-        return 0.0;
+    public int getNumberOfCorrectRecommendations(){
+        return numberOfCorrectRecommendations;
     }
 
 
