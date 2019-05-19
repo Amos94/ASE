@@ -16,6 +16,11 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -23,11 +28,15 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     private final IInvertedIndex index;
     private List<IndexDocument> documents;
+    private Logger logger = Logger.getLogger(Recommender.class.getName());
+
     private Map<IndexDocument, Double> candidates;
 
 
     public Recommender(IInvertedIndex index) {
+        logger.log(Level.INFO, "Initializing the recommender.");
         this.index = index;
+        logger.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
     }
 
@@ -40,11 +49,15 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     @Override
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
-        getScoredDocuments(query);
-        //get top 10 candidates
-        for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
-            result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
-            System.out.println("For "+ query +" our recommendation is: " + e.getKey().getMethod().getName() + " confident: "+e.getValue());
+
+        if(query.getMethodCall() != "" || query.getMethodCall() != null || query.getMethodCall() != "unknown") {
+            getScoredDocuments(query);
+
+            for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
+                result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
+                logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
+
+            }
         }
 
         return result;
@@ -143,10 +156,20 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         candidates = scoredDocuments.entrySet()
                 .stream()
                 .distinct()
+                .filter(distinctByKey(p->p.getKey().getMethod().getName()))
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .limit(Configuration.MAX_CANDIDATES)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, HashMap::new));
 
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
+    public double calculateRecommendationRate(){
+        return 0.0;
     }
 
 
