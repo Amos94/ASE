@@ -31,7 +31,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private Logger logger = Logger.getLogger(Recommender.class.getName());
 
     private Map<IndexDocument, Double> candidates;
-    private int numberOfCorrectRecommendations;
+    private int numberOfCorrectRecommendations = 0;
 
 
     public Recommender(IInvertedIndex index) {
@@ -39,7 +39,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         this.index = index;
         logger.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
-        numberOfCorrectRecommendations = 0;
     }
 
     /**
@@ -64,7 +63,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
                 logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
 
                 if(e.getKey().getMethod().getName().equals(query.getMethodCall()))
-                    ++numberOfCorrectRecommendations;
+                    incrementNumberOfRecommendations();
                 //System.out.println(numberOfCorrectRecommendations);
             }
         }
@@ -179,7 +178,12 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     public int getNumberOfCorrectRecommendations(){
-        return numberOfCorrectRecommendations;
+        return this.numberOfCorrectRecommendations;
+    }
+
+    public void incrementNumberOfRecommendations()
+    {
+        this.numberOfCorrectRecommendations = this.numberOfCorrectRecommendations+1;
     }
 
 

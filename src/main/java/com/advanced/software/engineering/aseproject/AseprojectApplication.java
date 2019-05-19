@@ -10,7 +10,10 @@ import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.ssts.IStatement;
 import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
+import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
+import cc.kave.commons.model.ssts.statements.IAssignment;
+import cc.kave.commons.model.ssts.statements.IExpressionStatement;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -64,19 +67,36 @@ public class AseprojectApplication {
 
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:tc.getAggregatedContexts()) {
+                noMethodsToMaleRecomenationsFor = getNoOfInvocations(ctx);
                 recommender.query(ctx);
-                for(IMethodDeclaration method: ctx.getSST().getMethods()) {
-                    for(IStatement stmt : method.getBody())
-                        if(stmt instanceof IInvocationExpression)
-                            noMethodsToMaleRecomenationsFor++;
-                }
             }
-            System.out.println(noMethodsToMaleRecomenationsFor);
+            //System.out.println(noMethodsToMaleRecomenationsFor);
             recommendationRate = recommender.getNumberOfCorrectRecommendations()/noMethodsToMaleRecomenationsFor;
             logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");
 
+    }
+    public static int getNoOfInvocations(Context ctx) {
+        int noMethodsToMaleRecomenationsFor = 0;
+
+        for (IMethodDeclaration method : ctx.getSST().getMethods()) {
+            for (IStatement statement : method.getBody()) {
+                if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
+                    IAssignableExpression expression;
+                    if (statement instanceof IExpressionStatement) {
+                        expression = ((IExpressionStatement) statement).getExpression();
+                    } else {
+                        expression = ((IAssignment) statement).getExpression();
+                    }
+                    if (expression instanceof IInvocationExpression) {
+                        noMethodsToMaleRecomenationsFor++;
+                    }
+                }
+            }
+
+        }
+        return noMethodsToMaleRecomenationsFor;
     }
 }
