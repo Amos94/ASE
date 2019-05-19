@@ -7,3 +7,4 @@ deploy:
     tags: true
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
+  - mvn clean test saga:coverage cobertura:cobertura coveralls:report

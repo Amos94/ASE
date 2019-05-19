@@ -1,6 +1,5 @@
 package com.advanced.software.engineering.aseproject;
 
-import Context.ContextHelper;
 import Context.IoHelper;
 import Index.InvertedIndex;
 import Index.IInvertedIndex;
@@ -10,6 +9,9 @@ import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import Context.ContextHelper;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,16 +52,16 @@ public class RecommenderInitialization {
 
         // create inverted index
         IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
-        Model model = new Model(invertedIndex);
+
+        SSTProcessor sstProcessor = new SSTProcessor(invertedIndex);
 
         // log info about the start of the process
         logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
+        
+      // start the SSTs process
+        sstProcessor.startProcessSSTs();
 
-        // start the SSTs process
-        model.startProcessSSTs();
-
-        // Here, add the creation index
         for (String zip : zips) {
             logger.log(Level.INFO, "\n Starting to create index for "+zip);
             //read data in the zip
@@ -73,32 +75,18 @@ public class RecommenderInitialization {
                      * contains the Json representation of a {@see Context}.
                      */
                     Context ctx = ra.getNext(Context.class);
-                    //System.out.println(ctx.getSST());
-                    model.processSST(ctx);
 
-                    //given that we have the context, now we have access to hte SST and TypeShape
-//                    ISST sst = ctx.getSST();
-//                    ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
-//
-//                    sst.accept(indexDocumentExtractionVisitor, diskIndex);
+                    sstProcessor.processSST(ctx);
                 }
             }
             logger.log(Level.INFO, "\n Finishing to create index for "+zip);
         }
-        model.finishProcessSSTs();
+
+        sstProcessor.finishProcessSSTs();
+
         long endTime = System.currentTimeMillis();
 
         long timeElapsed = (endTime - startTime)/1000;
         logger.log(Level.INFO, "\nThe index was created in "+ timeElapsed + " seconds.");
     }
-
-
-    public void queryIndex(){
-        Set<String> zips = IoHelper.findAllZips(eventsPath);
-        int numberOfZips = zips.size();
-        // Here start query the index and get Similarity
-        logger.log(Level.INFO, "\nStart to query the index out of the given events."
-                .concat("\nFound "+ numberOfZips +" zips in the events directory."));
-    }
-
 }
