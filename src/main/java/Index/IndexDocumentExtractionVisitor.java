@@ -24,8 +24,15 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
 
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
+    /**
+     * Create a list to visit
+     *
+     * @param body
+     * @param index
+     * @return
+     */
     @Override
-    protected List<Void> visit(List<IStatement> body, List<IndexDocument>  index) {
+    protected List<Void> visit(List<IStatement> body, List<IndexDocument> index) {
         for (IStatement statement : body) {
             if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
                 IAssignableExpression expression;
@@ -36,7 +43,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
                 }
                 if (expression instanceof IInvocationExpression) {
 
-                    doVisit(expression,body,statement,index);
+                    doVisit(expression, body, statement, index);
                 }
             }
         }
@@ -44,7 +51,15 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         return super.visit(body, index);
     }
 
-    public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, List<IndexDocument> indexDocuments){
+    /**
+     * Main Code for the Visitor, which overrides all method identifiers
+     *
+     * @param expression
+     * @param body
+     * @param statement
+     * @param indexDocuments
+     */
+    public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, List<IndexDocument> indexDocuments) {
         final IMemberName method = new IMemberName() {
             @Override
             public String getIdentifier() {
@@ -104,8 +119,8 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
 
                 // create a new IndexDocument
                 List<String> overallContext = new LinkedList<>();
-                for(String identifier : overallContextSet) {
-                    if(identifierSanitization(identifier) != null)
+                for (String identifier : overallContextSet) {
+                    if (identifierSanitization(identifier) != null)
                         overallContext.addAll(identifierSanitization(identifier));
                     //System.out.println(identifierSanitization(identifier));
                 }
@@ -117,6 +132,9 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
 
     /**
      * Removes the generic part of generic parts, which contains a lot of special symbols.
+     *
+     * @param type
+     * @return
      */
     private String normalizeType(String type) {
         return type.split("`")[0];
@@ -125,6 +143,11 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
     /**
      * If the list doesn't contain enough elements, i.e (indexOfStatement - lastNConsideredStatements < 0),
      * then the return value is just a list statements up to the start of the list.
+     *
+     * @param statements
+     * @param indexOfStatement
+     * @param lastNConsideredStatements
+     * @return array of statements
      */
     private List<IStatement> getLastNStatementsBeforeStatement(List<IStatement> statements, int indexOfStatement, int lastNConsideredStatements) {
 
@@ -132,8 +155,8 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
             lastNConsideredStatements = indexOfStatement;
         }
         int startIndex = 0;
-        IStatement lastStatement = statements.get(statements.size()-1);
-        if(
+        IStatement lastStatement = statements.get(statements.size() - 1);
+        if (
                 !(
                         (lastStatement instanceof IBreakStatement)
                                 && (lastStatement instanceof IForLoop)
@@ -148,7 +171,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
                                 && (lastStatement instanceof IReturnStatement)
                                 && (lastStatement instanceof ISwitchBlock)
                 )
-        ){
+        ) {
             startIndex = indexOfStatement - lastNConsideredStatements;
         }
 
@@ -160,19 +183,29 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         return Arrays.asList(res);
     }
 
-    public List<String> identifierSanitization(String identifier){
-        if(Configuration.REMOVE_STOP_WORDS) {
+    /**
+     * Sanitize the identifier
+     *
+     * @param identifier
+     * @return
+     */
+    public List<String> identifierSanitization(String identifier) {
+        if (Configuration.REMOVE_STOP_WORDS) {
             if (identifier.length() != 1) {
                 return removeStopWords(stemIdentifiers(splitCamelCase(identifier)));
             }
-        }
-        else{
+        } else {
             return stemIdentifiers(splitCamelCase(identifier));
         }
         return null;
     }
 
-    public List<String> splitCamelCase(String identifier){
+    /**
+     * Method to split in CamelCase
+     * @param identifier
+     * @return identifierSplitList
+     */
+    public List<String> splitCamelCase(String identifier) {
         List<String> identifierSplitList = new LinkedList<>();
 
         for (String idf : identifier.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])|_")) {
@@ -182,11 +215,17 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         return identifierSplitList;
     }
 
+    /**
+     * Method to stem the identifiers
+     *
+     * @param identifiers
+     * @return stemmedIdentifiers
+     */
     public List<String> stemIdentifiers(List<String> identifiers) {
         PorterStemmer stemmer = new PorterStemmer();
         List<String> stemmedIdentifiers = new LinkedList<>();
 
-        for(String identifier:identifiers) {
+        for (String identifier : identifiers) {
             //System.out.println("Unstemmed: " + identifier + "\nStemmed: " + stemmer.stem(identifier)); //Making sure it stemms well
             stemmedIdentifiers.add(stemmer.stem(identifier));
         }
@@ -194,14 +233,26 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         return stemmedIdentifiers;
     }
 
-    public List<String> removeStopWords(List<String> identifiers){
+    /**
+     * Method to remove stopwords
+     *
+     * @param identifiers
+     * @return identifiers
+     */
+    public List<String> removeStopWords(List<String> identifiers) {
         identifiers.removeIf(i -> isStopWord(i));
 
         return identifiers;
     }
 
-    public boolean isStopWord(String identifier){
-        if(Configuration.STOP_WORDS.contains(identifier))
+    /**
+     * Method to destinguish if it is a stopword or not
+     *
+     * @param identifier
+     * @return boolean
+     */
+    public boolean isStopWord(String identifier) {
+        if (Configuration.STOP_WORDS.contains(identifier))
             return true;
         return false;
     }
