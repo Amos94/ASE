@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.Map.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -170,6 +171,8 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
                 .limit(Configuration.MAX_CANDIDATES)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, HashMap::new));
 
+        //candidates.putAll(findGreatest(candidates,Configuration.MAX_CANDIDATES));
+
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
@@ -187,4 +190,37 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
 
+    private static <K, V extends Comparable<? super V>> HashMap<K, V> findGreatest(Map<K, V> map, int n)
+    {
+        Comparator<? super Entry<K, V>> comparator =
+                new Comparator<Entry<K, V>>()
+                {
+                    @Override
+                    public int compare(Entry<K, V> e0, Entry<K, V> e1)
+                    {
+                        V v0 = e0.getValue();
+                        V v1 = e1.getValue();
+                        return v0.compareTo(v1);
+                    }
+                };
+
+        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<Entry<K,V>>(n, comparator);
+        //highest.stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+
+        for (Entry<K, V> entry : map.entrySet())
+        {
+            highest.offer(entry);
+            while (highest.size() > n)
+            {
+                highest.poll();
+            }
+        }
+
+        HashMap<K, V> result = new HashMap<K,V>();
+        while (highest.size() > 0)
+        {
+            result.put(highest.poll().getKey(), highest.poll().getValue());
+        }
+        return result;
+    }
 }
