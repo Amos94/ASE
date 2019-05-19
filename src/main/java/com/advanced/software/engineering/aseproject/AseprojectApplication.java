@@ -24,13 +24,23 @@ public class AseprojectApplication {
         SpringApplication.run(AseprojectApplication.class, args);
 
         if(args.length != 0) {
-            System.out.println("Non default configuration is used, 3 parameters expected");
             try {
                 Configuration.REMOVE_STOP_WORDS = Boolean.parseBoolean(args[0]);
                 Configuration.REINDEX_DATABASE = Boolean.parseBoolean(args[1]);
                 Configuration.EVALUATION = Boolean.parseBoolean(args[2]);
 
-                System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
+                if (args.length > 3) {
+                    Configuration.LAST_N_CONSIDERED_STATEMENTS = Integer.parseInt(args[3]);
+                    Configuration.MAX_EVENTS_CONSIDERED = Integer.parseInt(args[4]);
+                    System.out.println("Non default configuration is used, 5 parameters expected");
+                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
+                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.LAST_N_CONSIDERED_STATEMENTS + " MAX_EVENTS_CONSIDERED: " + Configuration.MAX_EVENTS_CONSIDERED);
+                } else {
+                    System.out.println("Non default configuration is used, 3 parameters expected:");
+                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
+                }
+                System.out.println("*********************************************************");
+
             }
             catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("ArrayIndexOutOfBoundsException caught");
@@ -62,6 +72,6 @@ public class AseprojectApplication {
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");
-
+        System.out.println("*********************************************************");
     }
 }
