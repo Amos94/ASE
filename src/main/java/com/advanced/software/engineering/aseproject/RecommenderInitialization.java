@@ -15,17 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RecommenderInitialization {
+
     private String contextsPath;
     private String eventsPath;
     private Logger logger;
-
-    public String getContextsPath() {
-        return contextsPath;
-    }
-
-    public String getEventsPath() {
-        return eventsPath;
-    }
 
     public RecommenderInitialization(String contextsPath, String eventsPath){
 
@@ -80,10 +73,8 @@ public class RecommenderInitialization {
                      * contains the Json representation of a {@see Context}.
                      */
                     Context ctx = ra.getNext(Context.class);
-//                    System.out.println(ctx.getSST());
-//                    System.out.println("-------------------------------------------");
+                    //System.out.println(ctx.getSST());
                     model.processSST(ctx);
-                    System.out.println("c------------------------------------------");
 
                     //given that we have the context, now we have access to hte SST and TypeShape
 //                    ISST sst = ctx.getSST();
