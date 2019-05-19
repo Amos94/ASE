@@ -71,7 +71,7 @@ public class AseprojectApplication {
                 recommender.query(ctx);
             }
             //System.out.println(noMethodsToMaleRecomenationsFor);
-            recommendationRate = recommender.getNumberOfCorrectRecommendations()/noMethodsToMaleRecomenationsFor;
+            recommendationRate = recommender.getNumberOfCorrectRecommendations()/(noMethodsToMaleRecomenationsFor / 100);
             logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 
