@@ -40,17 +40,14 @@ public class Configuration {
             "don", "should", "now"
     );
 
-    //Experiments
+    //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
-    public static final boolean REMOVE_STOP_WORDS = false;
+    public static boolean REMOVE_STOP_WORDS = true;
 
     // ReIndex the Database
-    public static final boolean REINDEX_DATABASE = true;
+    public static boolean REINDEX_DATABASE = false;
 
     // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
-    public static final boolean EVALUATION = false;
-
-    // Verbose Output
-    public static final boolean VERBOSE_OUTPUT = false;
+    public static boolean EVALUATION = true;
 
 }
