@@ -19,6 +19,9 @@ public class Configuration {
     //Maximum number of candidates
     public static final int MAX_CANDIDATES = 10;
 
+    //Maximum number if queries for the demo
+    public static final int RECOMMENDATION_ZIPS = 5; //to disable this set it to -1
+
 
     //English stopwords added for making the experiments described in the paper
     public static final List<String> STOP_WORDS = Arrays.asList(

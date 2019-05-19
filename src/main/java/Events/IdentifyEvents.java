@@ -26,16 +26,14 @@ import Utils.Configuration;
 import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import cc.kave.commons.model.events.completionevents.Context;
-import com.advanced.software.engineering.aseproject.RecommenderInitialization;
 
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
 
 import cc.kave.commons.utils.io.ReadingArchive;
-import cc.kave.commons.utils.io.json.JsonUtils;
 
-import static Utils.Configuration.MAX_EVENTS_CONSIDERED;
+import static Utils.Configuration.RECOMMENDATION_ZIPS;
 
 /**
  * This class contains several code examples that explain how to read enriched
@@ -63,7 +61,7 @@ public class IdentifyEvents {
     public static List<String> findAllUsers() {
         // This step is straight forward, as events are grouped by user. Each
         // .zip file in the dataset corresponds to one user.
-        int maxEv = MAX_EVENTS_CONSIDERED;
+        int maxEv = RECOMMENDATION_ZIPS;
         List<String> zips = Lists.newLinkedList();
 
         if(maxEv == -1){
@@ -113,29 +111,6 @@ public class IdentifyEvents {
     }
 
     /**
-     * 3: Reading the plain JSON representation
-     */
-    public static void readPlainEvents() {
-        // the example is basically the same as before, but...
-        List<String> userZips = findAllUsers();
-
-        for (String user : userZips) {
-            ReadingArchive ra = new ReadingArchive(new File(user));
-            while (ra.hasNext()) {
-                // ... sometimes it is easier to just read the JSON...
-                String json = ra.getNextPlain();
-                // .. and call the deserializer yourself.
-                IDEEvent e = JsonUtils.fromJson(json, IDEEvent.class);
-                process(e);
-
-                // Not all event bindings are very stable already, reading the
-                // JSON helps debugging possible bugs in the bindings
-            }
-            ra.close();
-        }
-    }
-
-    /**
      * 4: Processing events
      */
     public static List<Context> process(IDEEvent event) {
@@ -155,5 +130,9 @@ public class IdentifyEvents {
 
     public List<Context> getAggregatedContexts(){
         return aggregatedContexts;
+    }
+
+    public long getAggregatedContextsSize(){
+        return aggregatedContexts.size();
     }
 }

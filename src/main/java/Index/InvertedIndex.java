@@ -299,7 +299,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             Statement stmt = dbConn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlSelect);
             boolean hasItems = rs.isBeforeFirst();
-            if (hasItems) {
+            while(!rs.isAfterLast()) {
 
                 String docID = rs.getString("docid");
                 String methodName = rs.getString("methodname");
@@ -647,6 +647,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 long overallContextSimhash = rs.getLong("overallcontextsimhash");
                 IndexDocument doc = new IndexDocument(docID, method, overallContext, overallContextSimhash);
                 documents.add(doc);
+                rs.next();
             }
             rs.close();
             stmt.close();
@@ -681,6 +682,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 

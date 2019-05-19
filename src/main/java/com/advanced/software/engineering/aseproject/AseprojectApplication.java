@@ -1,15 +1,27 @@
 package com.advanced.software.engineering.aseproject;
 
 import Events.IdentifyEvents;
+import Events.IdentifyTestContexts;
 import Index.InvertedIndex;
+import cc.kave.commons.model.events.IDEEvent;
+import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
+import cc.kave.commons.model.ssts.IStatement;
+import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
+import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
+import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
+import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
+import cc.kave.commons.model.ssts.statements.IAssignment;
+import cc.kave.commons.model.ssts.statements.IExpressionStatement;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
 
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 public class AseprojectApplication {
@@ -21,7 +33,9 @@ public class AseprojectApplication {
      * @param args
      */
     public static void main(String[] args) {
+        double recommendationRate;
         SpringApplication.run(AseprojectApplication.class, args);
+        Logger logger = Logger.getLogger(AseprojectApplication.class.getName());
 
         if(args.length != 0) {
             try {
@@ -58,20 +72,57 @@ public class AseprojectApplication {
             recommenderInitialization.createIndex();
         }
 
+//        if(Configuration.EVALUATION == true) {
+//            // New EventIndentifier
+//            IdentifyEvents e = new IdentifyEvents();
+//
+//            // Aggregate through all events (Currently only jaccard)
+//            for(Context ctx:e.getAggregatedContexts()) {
+//                logger.log(Level.INFO, "\nCreating recommendations for "+e.getAggregatedContextsSize()+" methods");
+//                recommender.query(ctx);
+//            }
+//
+//            recommendationRate = recommender.getNumberOfCorrectRecommendations()/e.getAggregatedContextsSize();
+//            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
+//        }
+
         if(Configuration.EVALUATION == true) {
-            // New EventIndentifier
-            IdentifyEvents e = new IdentifyEvents();
+            // New ContextIdentifier
+            IdentifyTestContexts tc = new IdentifyTestContexts();
+            double noMethodsToMaleRecomenationsFor = 0.00;
 
             // Aggregate through all events (Currently only jaccard)
-            for(Context ctx:e.getAggregatedContexts()) {
-                Set<Pair<IMemberName, Double>> output = recommender.query(ctx);
-                for(Pair<IMemberName, Double> mr : output) {
-                    System.out.println("Recommended: " +mr.getLeft().getFullName() + ". Jaccard Similarity measure: "+ mr.getRight() + "\nIdentifier: " + mr.getLeft().getIdentifier());
-                }
+            for(Context ctx:tc.getAggregatedContexts()) {
+                noMethodsToMaleRecomenationsFor = getNoOfInvocations(ctx);
+                recommender.query(ctx);
             }
+            //System.out.println(noMethodsToMaleRecomenationsFor);
+            recommendationRate = recommender.getNumberOfCorrectRecommendations()/(noMethodsToMaleRecomenationsFor / 100);
+            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");
         System.out.println("*********************************************************");
+    }
+    public static int getNoOfInvocations(Context ctx) {
+        int noMethodsToMaleRecomenationsFor = 0;
+
+        for (IMethodDeclaration method : ctx.getSST().getMethods()) {
+            for (IStatement statement : method.getBody()) {
+                if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
+                    IAssignableExpression expression;
+                    if (statement instanceof IExpressionStatement) {
+                        expression = ((IExpressionStatement) statement).getExpression();
+                    } else {
+                        expression = ((IAssignment) statement).getExpression();
+                    }
+                    if (expression instanceof IInvocationExpression) {
+                        noMethodsToMaleRecomenationsFor++;
+                    }
+                }
+            }
+
+        }
+        return noMethodsToMaleRecomenationsFor;
     }
 }
