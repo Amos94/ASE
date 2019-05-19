@@ -23,8 +23,8 @@ public class AseprojectApplication {
         //ctx.run();
         //IdentifyEvents ev = new IdentifyEvents();
 
-//        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
-//        recommenderInitialization.createIndex();
+        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
+        recommenderInitialization.createIndex();
         //recommenderInitialization.queryIndex();
 //
         Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));

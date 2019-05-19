@@ -28,6 +28,13 @@
     </repositories>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.github.mpkorstanje/simmetrics -->
+        <dependency>
+            <groupId>com.github.mpkorstanje</groupId>
+            <artifactId>simmetrics</artifactId>
+            <version>4.1.1</version>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
