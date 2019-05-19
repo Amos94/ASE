@@ -23,6 +23,22 @@ public class AseprojectApplication {
     public static void main(String[] args) {
         SpringApplication.run(AseprojectApplication.class, args);
 
+        if(args.length != 0) {
+            System.out.println("Non default configuration is used, 3 parameters expected");
+            try {
+                Configuration.REMOVE_STOP_WORDS = Boolean.parseBoolean(args[0]);
+                Configuration.REINDEX_DATABASE = Boolean.parseBoolean(args[1]);
+                Configuration.EVALUATION = Boolean.parseBoolean(args[2]);
+
+                System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("ArrayIndexOutOfBoundsException caught");
+            }
+        }
+
+
+
         // Initalize the recommender
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
         Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
