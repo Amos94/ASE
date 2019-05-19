@@ -15,14 +15,13 @@ public class Configuration {
     // Location where the index should be stored
     public static final String INDEX_STORAGE = "IndexStorage";
 
-    // Number of statements to consider for overall context
-    public static final int LAST_N_CONSIDERED_STATEMENTS = 4;
 
     //Maximum number of candidates
     public static final int MAX_CANDIDATES = 10;
 
     //Maximum number if queries for the demo
     public static final int RECOMMENDATION_ZIPS = 5; //to disable this set it to -1
+
 
     //English stopwords added for making the experiments described in the paper
     public static final List<String> STOP_WORDS = Arrays.asList(
@@ -40,17 +39,20 @@ public class Configuration {
             "don", "should", "now"
     );
 
-    //Experiments
+    //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
-    public static final boolean REMOVE_STOP_WORDS = false;
+    public static boolean REMOVE_STOP_WORDS = true;
 
     // ReIndex the Database
-    public static final boolean REINDEX_DATABASE = false;
+    public static boolean REINDEX_DATABASE = false;
 
     // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
-    public static final boolean EVALUATION = true;
+    public static boolean EVALUATION = true;
 
-    // Verbose Output
-    public static final boolean VERBOSE_OUTPUT = false;
+    // Number of statements to consider for overall context
+    public static int LAST_N_CONSIDERED_STATEMENTS = 4;
+
+    //Maximum number if queries for the demo
+    public static int MAX_EVENTS_CONSIDERED = -1; //to disable this set it to -1
 
 }
