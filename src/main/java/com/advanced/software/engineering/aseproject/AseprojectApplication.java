@@ -32,16 +32,20 @@ public class AseprojectApplication {
             recommenderInitialization.createIndex();
         }
 
-        // New EventIndentifier
-        IdentifyEvents e = new IdentifyEvents();
+        if(Configuration.EVALUATION == true) {
+            // New EventIndentifier
+            IdentifyEvents e = new IdentifyEvents();
 
-        // Aggregate through all events (Currently only jaccard)
-        for(Context ctx:e.getAggregatedContexts()) {
-            Set<Pair<IMemberName, Double>> output = recommender.query(ctx);
-            for(Pair<IMemberName, Double> mr : output) {
-                System.out.println("Recommended: " +mr.getLeft().getFullName() + ". Jaccard Similarity measure: "+ mr.getRight() + "\nIdentifier: " + mr.getLeft().getIdentifier());
+            // Aggregate through all events (Currently only jaccard)
+            for(Context ctx:e.getAggregatedContexts()) {
+                Set<Pair<IMemberName, Double>> output = recommender.query(ctx);
+                for(Pair<IMemberName, Double> mr : output) {
+                    System.out.println("Recommended: " +mr.getLeft().getFullName() + ". Jaccard Similarity measure: "+ mr.getRight() + "\nIdentifier: " + mr.getLeft().getIdentifier());
+                }
             }
         }
+
+        System.out.println("The program has ended gracefully - thanks for using :) ");
 
     }
 }

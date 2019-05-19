@@ -2,10 +2,22 @@ package SimilarityMeasures;
 
 public class EuclideanDistance {
 
+    /**
+     * Additional Constructor
+     *
+     * @param array1
+     * @param array2
+     */
     public EuclideanDistance(double[] array1, double[] array2){
         calculateEuclideanDistance(array1, array2);
     }
 
+    /**
+     * Get the euclidean distance out of two arrays
+     * @param array1
+     * @param array2
+     * @return
+     */
     public static double calculateEuclideanDistance(double[] array1, double[] array2)
     {
         double Sum = 0.0;

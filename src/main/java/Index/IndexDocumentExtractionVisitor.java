@@ -22,6 +22,7 @@ import java.util.*;
  */
 public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisitor<List<IndexDocument>, Void> {
 
+    // Context Visitor
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
     /**

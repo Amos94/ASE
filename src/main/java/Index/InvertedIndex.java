@@ -2,12 +2,9 @@ package Index;
 
 
 import cc.kave.commons.model.naming.codeelements.IMemberName;
-import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.*;
 import cc.kave.commons.model.naming.types.organization.IAssemblyName;
 import cc.kave.commons.model.naming.types.organization.INamespaceName;
-
-import Utils.Configuration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.store.Directory;
@@ -131,7 +128,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     /**
      * Method to start indexing
-     *
      */
     @Override
     public void startIndexing() {
@@ -212,6 +208,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     /**
      * Serializes the content to a document
+     *
      * @param doc
      * @throws IOException
      */
@@ -254,7 +251,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
 
-
     /**
      * Serialize to file
      *
@@ -270,7 +266,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
         out.close();
         fileOut.close();
     }
-
 
 
     /**
@@ -699,7 +694,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
     private List<String> deserializeContext(String context) {
         List<String> result = new LinkedList<>();
         int position = 0;
-        if(!context.isEmpty()) {
+        if (!context.isEmpty()) {
             while (position < context.length()) {
                 int commaPosition = position + context.substring(position).indexOf(",");
                 int wordLength = Integer.valueOf(context.substring(position, commaPosition));
@@ -766,20 +761,22 @@ public class InvertedIndex extends AbstractInvertedIndex {
 
     /**
      * Helper function to create a bool out of an integer
+     *
      * @param i
      * @return
      */
-    private boolean intToBool(int i){
+    private boolean intToBool(int i) {
         return i == 1;
     }
 
     /**
      * Helper function to create an int out of a boolean representation
+     *
      * @param b
      * @return
      */
-    private int booleanToInt(boolean b){
-        if(b == true)
+    private int booleanToInt(boolean b) {
+        if (b == true)
             return 1;
         return 0;
     }

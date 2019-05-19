@@ -1,8 +1,6 @@
 package Utils;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -48,6 +46,9 @@ public class Configuration {
 
     // ReIndex the Database
     public static final boolean REINDEX_DATABASE = true;
+
+    // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
+    public static final boolean EVALUATION = false;
 
     // Verbose Output
     public static final boolean VERBOSE_OUTPUT = false;
