@@ -156,4 +156,8 @@ public class IdentifyEvents {
     public List<Context> getAggregatedContexts(){
         return aggregatedContexts;
     }
+
+    public long getAggregatedContextsSize(){
+        return aggregatedContexts.size();
+    }
 }

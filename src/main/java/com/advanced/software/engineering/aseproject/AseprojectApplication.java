@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
 
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 public class AseprojectApplication {
@@ -22,6 +24,7 @@ public class AseprojectApplication {
      */
     public static void main(String[] args) {
         SpringApplication.run(AseprojectApplication.class, args);
+        Logger logger = Logger.getLogger(AseprojectApplication.class.getName());
 
         // Initalize the recommender
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
@@ -38,6 +41,7 @@ public class AseprojectApplication {
 
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:e.getAggregatedContexts()) {
+                logger.log(Level.INFO, "\nCreating recommendations for "+e.getAggregatedContextsSize()+" methods");
                 recommender.query(ctx);
             }
         }
