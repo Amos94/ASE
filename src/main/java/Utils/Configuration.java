@@ -19,7 +19,7 @@ public class Configuration {
     public static final int LAST_N_CONSIDERED_STATEMENTS = 4;
 
     //Maximum number of candidates
-    public static final int MAX_CANDIDATES = 10;
+    public static final int MAX_CANDIDATES = 1;
 
     //Maximum number if queries for the demo
     public static final int RECOMMENDATION_ZIPS = 5; //to disable this set it to -1

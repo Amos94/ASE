@@ -63,7 +63,7 @@ public class AseprojectApplication {
         if(Configuration.EVALUATION == true) {
             // New ContextIdentifier
             IdentifyTestContexts tc = new IdentifyTestContexts();
-            int noMethodsToMaleRecomenationsFor = 0;
+            double noMethodsToMaleRecomenationsFor = 0.00;
 
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:tc.getAggregatedContexts()) {
