@@ -9,13 +9,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.HashSet;
 @SpringBootApplication
 public class AseprojectApplication {
 
+    /**
+     * Main class for starting the application which boots the recommenderInitalization and creates the index
+     * Caution: Creating the index can take a while
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         SpringApplication.run(AseprojectApplication.class, args);
 
@@ -24,13 +26,17 @@ public class AseprojectApplication {
         //IdentifyEvents ev = new IdentifyEvents();
 
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
-        recommenderInitialization.createIndex();
+        //recommenderInitialization.createIndex();
         //recommenderInitialization.queryIndex();
 //
         Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 //
 //        for(Context ctx:recommenderInitialization.queryIndex())
 //            recommender.query(ctx);
+
+        if(Configuration.REINDEX_DATABASE == true) {
+            recommenderInitialization.createIndex();
+        }
 
         IdentifyEvents e = new IdentifyEvents();
 
@@ -41,7 +47,6 @@ public class AseprojectApplication {
                 System.out.println("Recommended: " +mr.getLeft().getFullName() + ". Jaccard Similarity measure: "+ mr.getRight() + "\nIdentifier: " + mr.getLeft().getIdentifier());
             }
         }
-
 
     }
 }

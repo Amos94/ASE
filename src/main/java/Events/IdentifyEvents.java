@@ -18,6 +18,7 @@ package Events;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import cc.kave.commons.model.events.completionevents.Context;
 import com.advanced.software.engineering.aseproject.RecommenderInitialization;
+
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;

@@ -4,7 +4,6 @@ import cc.kave.commons.model.naming.codeelements.IMemberName;
 import com.github.tomtung.jsimhash.SimHashBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -92,7 +91,6 @@ public class IndexDocument implements Serializable {
     public String getId() {
         return id;
     }
-
     public String getMethodCall() {
         return methodCall;
     }
@@ -102,21 +100,32 @@ public class IndexDocument implements Serializable {
     public String getType() {
         return type;
     }
-
     public List<String> getOverallContext() {
         return setToList(overallContext);
     }
-
     public long getOverallContextSimhash() {
         return overallContextSimhash;
     }
 
+    /**
+     * Generic setToList
+     *
+     * @param set
+     * @param <T>
+     * @return
+     */
     private <T> List<T> setToList(Set<T> set) {
         List<T> result = new LinkedList<>();
         result.addAll(set);
         return result;
     }
 
+    /**
+     * Creates a SimHash from strings
+     *
+     * @param strings
+     * @return
+     */
     private long createSimhashFromStrings(List<String> strings) {
         String concatenatedString = concatenate(strings);
         simHashBuilder.reset();
@@ -124,6 +133,12 @@ public class IndexDocument implements Serializable {
         return (long) simHashBuilder.computeResult();
     }
 
+    /**
+     * Helper method to concatenate
+     *
+     * @param strings
+     * @return
+     */
     private String concatenate(List<String> strings) {
         StringBuilder concatenatedString = new StringBuilder();
         for (String s : strings) {

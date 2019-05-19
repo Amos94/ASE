@@ -43,7 +43,9 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
     }
 
     /**
-     * Puts an IndexDocument in the index.
+     * Start to create an indexed document
+     *
+     * @param doc
      */
     public void indexDocument(IndexDocument doc) {
         if (isIndexed(doc)) {

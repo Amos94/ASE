@@ -1,10 +1,14 @@
 package Index;
 
+
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.*;
 import cc.kave.commons.model.naming.types.organization.IAssemblyName;
 import cc.kave.commons.model.naming.types.organization.INamespaceName;
+
+import Utils.Configuration;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -93,6 +97,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 System.exit(1);
             }
         }
+
     }
 
     private void openSQLConnection() {
@@ -130,13 +135,18 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
+    /**
+     * Check if index is in the db
+     *
+     * @param doc
+     * @return
+     */
     private boolean isIndexedInDB(IndexDocument doc) {
         String sqlSelect = "SELECT docid FROM " + this.SQL_TABLE_NAME + " WHERE docid=\"" + doc.getId() + "\"";
         try {
             Statement stmt = dbConn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlSelect);
             boolean hasItems = rs.isBeforeFirst();
-//            System.out.println(doc.getId() + " already indexed? " + hasItems);
             rs.close();
             stmt.close();
             return hasItems;
@@ -146,11 +156,23 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return false;
     }
 
+    /**
+     * Check if indexed as file
+     *
+     * @param doc
+     * @return
+     */
     private boolean isIndexedAsFile(IndexDocument doc) {
         File f = new File(getPathToFileForIndexDocument(doc.getId()));
         return f.exists();
     }
 
+    /**
+     * Gets the path to file for the IndexDocument
+     *
+     * @param docID
+     * @return
+     */
     private String getPathToFileForIndexDocument(String docID) {
         return indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_DIR_NAME + "/" + docID + ".ser";
     }
@@ -169,6 +191,12 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
+    /**
+     * Serialize to SQLite
+     *
+     * @param doc
+     * @throws SQLException
+     */
     private void serializeToSQLite(IndexDocument doc) throws SQLException {
         String sqlInsert = "INSERT INTO " + this.SQL_TABLE_NAME + " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement prepStmt = dbConn.prepareStatement(sqlInsert);
@@ -194,6 +222,13 @@ public class InvertedIndex extends AbstractInvertedIndex {
             return 1;
         return 0;
     }
+  
+    /**
+     * Serialize to file
+     *
+     * @param doc
+     * @throws IOException
+     */
 
     private void serializeToFile(IndexDocument doc) throws IOException {
         String contextsDirPath = indexRootDir + "/" + SERIALIZED_INDEX_DOCUMENTS_DIR_NAME;
@@ -220,6 +255,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             return deserializeFromFile(docID);
         }
     }
+
 
     @Override
     public List<IndexDocument> deserializeAll() {
@@ -589,7 +625,12 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return documents;
     }
 
-
+    /**
+     * Deserialize from SQLite
+     *
+     * @param docID
+     * @return
+     */
     private IndexDocument deserializeFromSQLite(String docID) {
         String sqlSelect = "SELECT * FROM " + this.SQL_TABLE_NAME + " WHERE docid=\"" + docID + "\"";
         try {
@@ -612,6 +653,13 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return null;
     }
 
+
+    /**
+     * Split the context
+     *
+     * @param context
+     * @return
+     */
     private String splitContext(List<String> context) {
         StringBuilder sb = new StringBuilder();
         for (String s : context) {
@@ -622,6 +670,12 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return sb.toString();
     }
 
+    /**
+     * Deserialize the Context
+     *
+     * @param context
+     * @return
+     */
     private List<String> deserializeContext(String context) {
         List<String> result = new LinkedList<>();
         int position = 0;
@@ -637,7 +691,13 @@ public class InvertedIndex extends AbstractInvertedIndex {
         return result;
     }
 
-
+    /**
+     * Deserialization from File
+     *
+     * @param docID
+     * @return
+     * @throws IOException
+     */
     private IndexDocument deserializeFromFile(String docID) throws IOException {
         IndexDocument doc = null;
         FileInputStream fileIn = new FileInputStream(getPathToFileForIndexDocument(docID));
@@ -654,10 +714,11 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
 
-    /*
-      FILE HANDLING METHODS
+    /**
+     * Create a directory for the output if nothing exists already
+     *
+     * @param dir
      */
-
     private void createDirectoryIfNotExists(File dir) {
         if (!dir.exists()) {
             System.out.println("'" + dir + "' does not exist yet. Creating it... ");

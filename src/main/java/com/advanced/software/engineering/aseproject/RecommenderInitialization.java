@@ -22,13 +22,16 @@ public class RecommenderInitialization {
     private Logger logger;
 
     public RecommenderInitialization(String contextsPath, String eventsPath){
-        logger = Logger.getLogger(RecommenderInitialization.class.getName());
 
+        // process start
+        logger = Logger.getLogger(RecommenderInitialization.class.getName());
         logger.log(Level.INFO, "\nRecommenderInitialization initializing..." );
 
+        // set context and events path
         this.contextsPath = contextsPath;
         this.eventsPath = eventsPath;
 
+        // log the set paths
         logger.log(Level.INFO,
                 "\nContexts and Events directories were set."
                         .concat("\nContexts: "+contextsPath)
@@ -36,15 +39,26 @@ public class RecommenderInitialization {
     }
 
     public void createIndex() {
+        // finds all given zips by context path
         Set<String> zips = IoHelper.findAllZips(contextsPath);
         int numberOfZips = zips.size();
+
+        // instantiates a new contextHelper
+        ContextHelper ctxHelper = new ContextHelper(contextsPath);
+
+        // persist start time
         long startTime = System.currentTimeMillis();
+
+        // create inverted index
         IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
+
         SSTProcessor sstProcessor = new SSTProcessor(invertedIndex);
 
+        // log info about the start of the process
         logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
-
+        
+      // start the SSTs process
         sstProcessor.startProcessSSTs();
 
         for (String zip : zips) {
@@ -74,5 +88,4 @@ public class RecommenderInitialization {
         long timeElapsed = (endTime - startTime)/1000;
         logger.log(Level.INFO, "\nThe index was created in "+ timeElapsed + " seconds.");
     }
-
 }

@@ -46,4 +46,10 @@ public class Configuration {
     //Do you want to remove the stopwords from the stemmed identifiers?
     public static final boolean REMOVE_STOP_WORDS = false;
 
+    // ReIndex the Database
+    public static final boolean REINDEX_DATABASE = false;
+
+    // Verbose Output
+    public static final boolean VERBOSE_OUTPUT = false;
+
 }
