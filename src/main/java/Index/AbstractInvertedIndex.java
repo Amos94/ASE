@@ -31,6 +31,9 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
     private IndexWriter indexWriter;
     private IndexSearcher searcher;
 
+    /**
+     * Method to initialize the directories
+     */
     private void initializeDirectory() {
         try {
             indexDirectory = getIndexDirectory();
@@ -45,7 +48,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
     /**
      * Start to create an indexed document
      *
-     * @param doc
+     * @param doc the document to be indexed
      */
     public void indexDocument(IndexDocument doc) {
         if (isIndexed(doc)) {
@@ -77,7 +80,10 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
 
     /**
      * Stores docID and the overall context in the Lucene index. The overall context will be what we search for at
-     * retrieval time, the docID will be the result of the retrieval.
+     * retrieval time, the docID will be the result of the retrieval
+     *
+     * @param doc the initalized document
+     * @throws IOException
      */
     void addDocToLuceneIndex(IndexDocument doc) throws IOException {
         Document luceneDoc = new Document();
@@ -119,14 +125,12 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
                         public void setScorer(Scorer scorer) throws IOException {
 
                         }
-
                         @Override
                         public void collect(int doc) throws IOException {
                             docs.add(doc);
                         }
                     };
                 }
-
                 @Override
                 public boolean needsScores() {
                     return false;
@@ -152,10 +156,12 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
 
     /**
      * deserialize IndexDocument object with the given docID
-
      */
     abstract IndexDocument deserializeIndexDocument(String docID) throws IOException;
 
+    /**
+     * Method to start the indexWriting and instantiate the indexWriter properly
+     */
     @Override
     public void startIndexing() {
         initializeDirectory();
@@ -168,6 +174,9 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         }
     }
 
+    /**
+     * Method to close the indexWriter properly
+     */
     @Override
     public void finishIndexing() {
         try {
