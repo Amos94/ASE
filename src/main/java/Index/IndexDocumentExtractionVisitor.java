@@ -16,12 +16,16 @@ import opennlp.tools.stemmer.PorterStemmer;
 
 import java.util.*;
 
-public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNodeVisitor<IInvertedIndex, Void> {
+
+/**
+ * Visitor that takes a body of statements into the visit method and returns a list of IndexDocuments
+ */
+public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisitor<List<IndexDocument>, Void> {
 
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
     @Override
-    protected List<Void> visit(List<IStatement> body, IInvertedIndex index) {
+    protected List<Void> visit(List<IStatement> body, List<IndexDocument>  index) {
         for (IStatement statement : body) {
             if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
                 IAssignableExpression expression;
@@ -40,7 +44,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
         return super.visit(body, index);
     }
 
-    public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, IInvertedIndex index){
+    public void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, List<IndexDocument> indexDocuments){
         final IMemberName method = new IMemberName() {
             @Override
             public String getIdentifier() {
@@ -82,6 +86,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                 return ((IInvocationExpression) expression).getMethodName().getFullName();
             }
         };
+
         final IMethodName methodName = ((IInvocationExpression) expression).getMethodName();
         final String methodNameStr = methodName.getName();
         String type = methodName.getDeclaringType().getFullName();
@@ -105,7 +110,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                     //System.out.println(identifierSanitization(identifier));
                 }
                 IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
-                index.indexDocument(indexDocument);
+                indexDocuments.add(indexDocument);
             }
         }
     }
@@ -130,18 +135,18 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
         IStatement lastStatement = statements.get(statements.size()-1);
         if(
                 !(
-                    (lastStatement instanceof IBreakStatement)
-                    && (lastStatement instanceof IForLoop)
-                    && (lastStatement instanceof IForEachLoop)
-                    && (lastStatement instanceof IIfElseExpression)
-                    && (lastStatement instanceof IIfElseBlock)
-                    && (lastStatement instanceof IContinueStatement)
-                    && (lastStatement instanceof IGotoStatement)
-                    && (lastStatement instanceof IWhileLoop)
-                    && (lastStatement instanceof ITryBlock)
-                    && (lastStatement instanceof IDoLoop)
-                    && (lastStatement instanceof IReturnStatement)
-                    && (lastStatement instanceof ISwitchBlock)
+                        (lastStatement instanceof IBreakStatement)
+                                && (lastStatement instanceof IForLoop)
+                                && (lastStatement instanceof IForEachLoop)
+                                && (lastStatement instanceof IIfElseExpression)
+                                && (lastStatement instanceof IIfElseBlock)
+                                && (lastStatement instanceof IContinueStatement)
+                                && (lastStatement instanceof IGotoStatement)
+                                && (lastStatement instanceof IWhileLoop)
+                                && (lastStatement instanceof ITryBlock)
+                                && (lastStatement instanceof IDoLoop)
+                                && (lastStatement instanceof IReturnStatement)
+                                && (lastStatement instanceof ISwitchBlock)
                 )
         ){
             startIndex = indexOfStatement - lastNConsideredStatements;
@@ -201,3 +206,4 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
         return false;
     }
 }
+

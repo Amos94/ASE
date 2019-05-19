@@ -1,5 +1,7 @@
 package Index;
 
+import java.util.List;
+
 /**
  * Interface for an index that can be used to index the documents needed for the model
  */
@@ -20,6 +22,12 @@ public interface IInvertedIndex {
      * Call this when you're done with indexing.
      */
     void finishIndexing();
+
+    /**
+     *
+     *  get all documents from db
+     */
+    List<IndexDocument> deserializeAll();
 
 
 }

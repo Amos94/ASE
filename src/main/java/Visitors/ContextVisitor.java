@@ -1,8 +1,8 @@
 package Visitors;
 
-import cc.kave.commons.model.events.IDEEvent;
+import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.codeelements.IParameterName;
-import cc.kave.commons.model.ssts.IExpression;
+import cc.kave.commons.model.naming.types.ITypeName;
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
@@ -40,8 +40,7 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
 //    @Override
 //    public Void visit(IAssignment stmt, Set<String> overallContext) {
 //        // Add the identifier of the variable to the overall context
-//        overallContext.add(stmt.getReference().toString());
-//        overallContext.add(stmt.getExpression().toString());
+//
 //        return null;
 //    }
 
@@ -58,6 +57,13 @@ public class ContextVisitor extends AbstractTraversingNodeVisitor<Set<String>, V
         overallContext.add(decl.getName().getReturnType().getName());
         // Add the method name itself to the overall context
         overallContext.add(decl.getName().getName());
+//        overallContext.add(decl.getName().getDeclaringType().getName());
+//        overallContext.add(decl.getName().getValueType().getName());
+//        overallContext.add(""+decl.getName().isStatic());
+//        overallContext.add(decl.getName().getName());
+//        overallContext.add(decl.getName().getFullName());
+
+
         // Add the types of the parameters to the overall context
         for (IParameterName iParameterName : decl.getName().getParameters()) {
             overallContext.add(iParameterName.getValueType().getName());

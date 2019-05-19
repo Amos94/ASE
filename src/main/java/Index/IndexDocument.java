@@ -1,5 +1,6 @@
 package Index;
 
+import cc.kave.commons.model.naming.codeelements.IMemberName;
 import com.github.tomtung.jsimhash.SimHashBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -18,6 +19,7 @@ public class IndexDocument implements Serializable {
     private transient SimHashBuilder simHashBuilder;
     private String id;
     private String methodCall;
+    private IMemberName method;
     private String type;
     private Set<String> overallContext;
     private long overallContextSimhash;
@@ -30,6 +32,25 @@ public class IndexDocument implements Serializable {
             throw new IllegalArgumentException("Parameter 'type' of IndexDocument must not be null or empty!");
         }
         this.methodCall = methodCall;
+        this.type = type;
+
+        this.overallContext = new TreeSet<>(overallContext);
+        this.simHashBuilder = new SimHashBuilder();
+        this.overallContextSimhash = createSimhashFromStrings(setToList(this.overallContext));
+
+        String uniqueDeterministicId = type + "_" + (methodCall == null ? "-" : methodCall) + "_" + concatenate(setToList(this.overallContext));
+        this.id = DigestUtils.sha256Hex(uniqueDeterministicId);
+    }
+
+
+    /**
+     * Creates a new IndexDocument storing the given information and assigns it an id.
+     */
+    public IndexDocument(String methodCall, IMemberName method, String type, Collection<String> overallContext) {
+        if (type == null || type.equals("")) {
+            throw new IllegalArgumentException("Parameter 'type' of IndexDocument must not be null or empty!");
+        }
+        this.method = method;
         this.type = type;
 
         this.overallContext = new TreeSet<>(overallContext);
@@ -54,6 +75,15 @@ public class IndexDocument implements Serializable {
         this.overallContextSimhash = overallContextSimhash;
     }
 
+    public IndexDocument(String docId, IMemberName method, Collection<String> overallContext, long overallContextSimhash) {
+        id = docId;
+        this.method = method;
+        this.methodCall = methodCall;
+        this.type = type;
+        this.overallContext = new TreeSet<>(overallContext);
+        this.overallContextSimhash = overallContextSimhash;
+    }
+
     /*
       Getters
      */
@@ -64,6 +94,9 @@ public class IndexDocument implements Serializable {
     public String getMethodCall() {
         return methodCall;
     }
+
+    public IMemberName getMethod() {return method;}
+
     public String getType() {
         return type;
     }
