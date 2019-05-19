@@ -4,21 +4,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class RecommenderTest {
+public class SSTProcessorTest {
 
     @Test
-    public void query() {
+    public void processSST() {
     }
 
     @Test
-    public void query1() {
+    public void startProcessSSTs() {
     }
 
     @Test
-    public void getLastModelSize() {
-    }
-
-    @Test
-    public void query2() {
+    public void finishProcessSSTs() {
     }
 }

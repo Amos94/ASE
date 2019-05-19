@@ -7,11 +7,11 @@ import static org.junit.Assert.*;
 public class InvertedIndexTest {
 
     @Test
-    public void startIndexing() {
+    public void getIndexDirectory() {
     }
 
     @Test
-    public void finishIndexing() {
+    public void startIndexing() {
     }
 
     @Test
@@ -23,10 +23,14 @@ public class InvertedIndexTest {
     }
 
     @Test
-    public void getIndexDirectory() {
+    public void deserializeIndexDocument() {
     }
 
     @Test
-    public void deserializeIndexDocument() {
+    public void deserializeAll() {
+    }
+
+    @Test
+    public void finishIndexing() {
     }
 }

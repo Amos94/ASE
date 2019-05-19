@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class IndexDocumentExtractionVisitorNoListTest {
+public class IndexDocumentExtractionVisitorTest {
 
     @Test
     public void visit() {

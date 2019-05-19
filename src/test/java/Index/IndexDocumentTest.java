@@ -15,6 +15,10 @@ public class IndexDocumentTest {
     }
 
     @Test
+    public void getMethod() {
+    }
+
+    @Test
     public void getType() {
     }
 

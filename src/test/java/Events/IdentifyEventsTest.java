@@ -17,4 +17,12 @@ public class IdentifyEventsTest {
     @Test
     public void readPlainEvents() {
     }
+
+    @Test
+    public void process() {
+    }
+
+    @Test
+    public void getAggregatedContexts() {
+    }
 }

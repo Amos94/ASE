@@ -1,9 +1,6 @@
 package com.advanced.software.engineering.aseproject;
 
 import Index.IndexDocument;
-import Index.IndexDocumentExtractionVisitorNoList;
-import cc.kave.commons.model.ssts.ISST;
-import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -25,9 +22,6 @@ public class ModelTest {
         String type = "java.util.StringJoiner";
         long overallContextSimhash = 30896187;
         IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext, overallContextSimhash);
-//        ISST sst = ctx.getSST();
-//        ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
-//        sst.accept(indexDocumentExtractionVisitor, index);
     }
 
     @Test

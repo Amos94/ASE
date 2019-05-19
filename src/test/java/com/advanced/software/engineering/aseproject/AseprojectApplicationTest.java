@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AseprojectApplicationTests {
+public class AseprojectApplicationTest {
 
     @Test
     public void contextLoads() {
@@ -20,5 +20,4 @@ public class AseprojectApplicationTests {
 //        assertEquals(Configuration.CONTEXTS_DIR, contextsPath);
 //        assertEquals(Configuration.EVENTS_DIR, eventsPath);
     }
-
 }
