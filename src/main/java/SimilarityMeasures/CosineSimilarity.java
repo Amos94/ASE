@@ -38,13 +38,13 @@ public class CosineSimilarity {
         for (final Integer value : rightVector.values()) {
             d2 += Math.pow(value, 2);
         }
-        double cosSimilarity;
+        double cosineSimilarity ;
         if (d1 <= 0.0 || d2 <= 0.0) {
-            cosSimilarity = 0.0;
+            cosineSimilarity  = 0.0;
         } else {
-            cosSimilarity = (double) (dotProduct / (double) (Math.sqrt(d1) * Math.sqrt(d2)));
+            cosineSimilarity  = (double) (dotProduct / (double) (Math.sqrt(d1) * Math.sqrt(d2)));
         }
-        return cosSimilarity;
+        return cosineSimilarity ;
     }
 
     /**
@@ -54,8 +54,8 @@ public class CosineSimilarity {
      * @param rightVector right vector map
      * @return common strings
      */
-    private Set<CharSequence> getIntersection(final Map<CharSequence, Integer> leftVector,
-                                              final Map<CharSequence, Integer> rightVector) {
+    Set<CharSequence> getIntersection(final Map<CharSequence, Integer> leftVector,
+                                      final Map<CharSequence, Integer> rightVector) {
         final Set<CharSequence> intersection = new HashSet<>(leftVector.keySet());
         intersection.retainAll(rightVector.keySet());
         return intersection;
@@ -71,8 +71,8 @@ public class CosineSimilarity {
      * @param intersection common elements
      * @return the dot product
      */
-    private double dot(final Map<CharSequence, Integer> leftVector, final Map<CharSequence, Integer> rightVector,
-                       final Set<CharSequence> intersection) {
+    double dot(final Map<CharSequence, Integer> leftVector, final Map<CharSequence, Integer> rightVector,
+               final Set<CharSequence> intersection) {
         long dotProduct = 0;
         for (final CharSequence key : intersection) {
             dotProduct += leftVector.get(key) * rightVector.get(key);
