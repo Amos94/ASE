@@ -2,6 +2,7 @@ package SimilarityMeasures;
 
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,25 +12,23 @@ public class JaccardSimilarityTest {
 
     @Test
     public void computeSimilarity() {
-        int[] a = new int[]{ 1,2,3,4,5,6,7,8,9,10 };
-        int[] b = new int[]{ 1,2,3,4,5,6 };
+        String[] a = new String[]{"file", "input", "read"};
+        String[] b = new String[]{"file", "write"};
 
-        Set<Integer> indexSet = new HashSet<>();
-        for (int value : a) {
-            indexSet.add(value);
-        }
-        Set<Integer> querySet = new HashSet<>();
-        for (int value : b) {
-            querySet.add(value);
-        }
+        Set<String> indexSet = new HashSet<>();
+        Collections.addAll(indexSet, a);
+        Set<String> querySet = new HashSet<>();
+        Collections.addAll(querySet, b);
 
-        Set<Integer> intersection = new HashSet<>(indexSet);
+        Set<String> intersection = new HashSet<>(indexSet);
         intersection.retainAll(querySet);
+        assertEquals("[file]",intersection.toString());
 
-        Set<Integer> union = new HashSet<>(indexSet);
+        Set<String> union = new HashSet<>(indexSet);
         union.addAll(querySet);
+        assertEquals("[file, input, read, write]",union.toString());
 
-        assertEquals((double) b.length/a.length,(double) intersection.size() / (double) union.size(), 0);
-
+        JaccardSimilarity jSim = new JaccardSimilarity(indexSet, querySet);
+        assertEquals(0.25,jSim.computeSimilarity(), 0);
     }
 }
