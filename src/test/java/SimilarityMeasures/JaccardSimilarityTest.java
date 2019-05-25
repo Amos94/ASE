@@ -26,7 +26,7 @@ public class JaccardSimilarityTest {
 
         Set<String> union = new HashSet<>(indexSet);
         union.addAll(querySet);
-        assertEquals("[file, input, read, write]",union.toString());
+        assertEquals("[input, file, read, write]",union.toString());
 
         JaccardSimilarity jSim = new JaccardSimilarity(indexSet, querySet);
         assertEquals(0.25,jSim.computeSimilarity(), 0);
