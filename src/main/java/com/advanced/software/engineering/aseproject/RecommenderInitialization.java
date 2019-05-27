@@ -4,27 +4,23 @@ import Context.IoHelper;
 import Index.InvertedIndex;
 import Index.IInvertedIndex;
 import Utils.Configuration;
-import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.Context;
-import cc.kave.commons.model.events.visualstudio.BuildEvent;
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 import Context.ContextHelper;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RecommenderInitialization {
+class RecommenderInitialization {
 
     private String contextsPath;
     private String eventsPath;
     private Logger logger;
 
-    public RecommenderInitialization(String contextsPath, String eventsPath){
+    RecommenderInitialization(String contextsPath, String eventsPath){
 
         // process start
         logger = Logger.getLogger(RecommenderInitialization.class.getName());
@@ -41,7 +37,7 @@ public class RecommenderInitialization {
                         .concat("\nEvents: "+eventsPath));
     }
 
-    public void createIndex() {
+    void createIndex() {
         // finds all given zips by context path
         Set<String> zips = IoHelper.findAllZips(contextsPath);
         int numberOfZips = zips.size();

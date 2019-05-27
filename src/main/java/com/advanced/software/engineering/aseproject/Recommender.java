@@ -38,30 +38,30 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private String projectName;
 
 
-    public Recommender(IInvertedIndex index) {
+    Recommender(IInvertedIndex index) {
         logger.log(Level.INFO, "Initializing the recommender.");
         this.index = index;
         logger.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
     }
 
-    public Recommender(IInvertedIndex index, String projectName) {
+    Recommender(IInvertedIndex index, String projectName) {
         this.projectName = projectName;
 
         this.index = index;
         getIndexes(projectName); //first let's retrieve all indexes from db
     }
 
-    public void setProjectName(String projectName){
-        this.projectName = projectName;
-    }
+//    public void setProjectName(String projectName){
+//        this.projectName = projectName;
+//    }
 
 
     /**
      * Method to process a certain query to the recommender
      *
-     * @param query
-     * @return
+     * @param query - query
+     * @return - return pair of member and score
      */
     @Override
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
@@ -90,8 +90,8 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     /**
      *
      *
-     * @param ctx
-     * @return
+     * @param ctx - context
+     * @return - return member and score
      */
     @Override
     public Set<Pair<IMemberName, Double>> query(Context ctx) {
@@ -105,15 +105,15 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     /**
      *
-     * @param contexts
-     * @return
+     * @param contexts - contexts
+     * @return - return document
      */
     private IndexDocument combineContexts(List<IndexDocument> contexts) {
         String lastType;
         String lastMethod;
         List<String> overallContext = new LinkedList<>();
 
-        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "" && (contexts.get((contexts.size() - 1)).getOverallContext().size() > 0)) {
+        if (contexts.size() > 0 && !contexts.get((contexts.size() - 1)).getType().equals("") && (contexts.get((contexts.size() - 1)).getOverallContext().size() > 0)) {
             lastType = contexts.get(contexts.size() - 1).getType();
             lastMethod = contexts.get(contexts.size() - 1).getMethod().getName();
             overallContext.addAll(contexts.get(contexts.size() - 1).getOverallContext());
@@ -131,7 +131,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     /**
      *
-     * @return
+     * @return - return model size
      */
     @Override
     public int getLastModelSize() {
@@ -146,9 +146,9 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     /**
      *
      *
-     * @param ctx
-     * @param ideProposals
-     * @return
+     * @param ctx - context
+     * @param ideProposals - proposals
+     * @return - return member name and score
      */
     @Override
     public Set<Pair<IMemberName, Double>> query(Context ctx, List<IName> ideProposals) {
@@ -168,7 +168,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     /**
      *
-     * @param queryDoc
+     * @param queryDoc - query document
      */
     private void getScoredDocuments(IndexDocument queryDoc) {
         Map<IndexDocument, Double> scoredDocuments = new HashMap<>();
@@ -193,50 +193,45 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     }
 
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
 
-    public int getNumberOfCorrectRecommendations(){
+    int getNumberOfCorrectRecommendations(){
         return correctRecommendations.size();
     }
-    public int getNumberMethodCalls(){
+    int getNumberMethodCalls(){
         return methodCalls.size();
     }
 
 
-    private static <K, V extends Comparable<? super V>> HashMap<K, V> findGreatest(Map<K, V> map, int n)
-    {
-        Comparator<? super Entry<K, V>> comparator =
-                new Comparator<Entry<K, V>>()
-                {
-                    @Override
-                    public int compare(Entry<K, V> e0, Entry<K, V> e1)
-                    {
-                        V v0 = e0.getValue();
-                        V v1 = e1.getValue();
-                        return v0.compareTo(v1);
-                    }
-                };
-
-        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<Entry<K,V>>(n, comparator);
-        //highest.stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-
-        for (Entry<K, V> entry : map.entrySet())
-        {
-            highest.offer(entry);
-            while (highest.size() > n)
-            {
-                highest.poll();
-            }
-        }
-
-        HashMap<K, V> result = new HashMap<K,V>();
-        while (highest.size() > 0)
-        {
-            result.put(highest.poll().getKey(), highest.poll().getValue());
-        }
-        return result;
-    }
+//    private static <K, V extends Comparable<? super V>> HashMap<K, V> findGreatest(Map<K, V> map, int n)
+//    {
+//        Comparator<? super Entry<K, V>> comparator =
+//                (Comparator<Entry<K, V>>) (e0, e1) -> {
+//                    V v0 = e0.getValue();
+//                    V v1 = e1.getValue();
+//                    return v0.compareTo(v1);
+//                };
+//
+//        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(n, comparator);
+//        //highest.stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+//
+//        for (Entry<K, V> entry : map.entrySet())
+//        {
+//            highest.offer(entry);
+//            while (highest.size() > n)
+//            {
+//                highest.poll();
+//            }
+//        }
+//
+//        HashMap<K, V> result = new HashMap<>();
+//        while (highest.size() > 0)
+//        {
+//            result.put(highest.poll().getKey(), Objects.requireNonNull(highest.poll()).getValue());
+//        }
+//        return result;
+//    }
 }
