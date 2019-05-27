@@ -25,7 +25,7 @@ public class IdentifyTestContexts {
         run();
     }
 
-    public void run() {
+    private void run() {
 
 //        System.out.printf("looking (recursively) for solution zips in folder %s\n",
 //                new File(ctxsDir).getAbsolutePath());
@@ -52,7 +52,7 @@ public class IdentifyTestContexts {
         }
     }
 
-    public List<Context> processZip(String slnZip) {
+    private List<Context> processZip(String slnZip) {
         
         String[] zipName = slnZip.split("/");
         int pnSize = zipName.length;
@@ -74,10 +74,6 @@ public class IdentifyTestContexts {
 
     public List<Context> getAggregatedContexts(){
         return aggregatedContexts;
-    }
-
-    public long getAggregatedContextsSize(){
-        return aggregatedContexts.size();
     }
 
     public String getProjectName(){
