@@ -4,7 +4,9 @@ import Context.IoHelper;
 import Index.InvertedIndex;
 import Index.IInvertedIndex;
 import Utils.Configuration;
+import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.Context;
+import cc.kave.commons.model.events.visualstudio.BuildEvent;
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
@@ -70,13 +72,19 @@ public class RecommenderInitialization {
                 // ... and iterate over content.
                 // the iteration will stop after 10 contexts to speed things up in the example.
                 while (ra.hasNext()) {
+
+                    //Project name for index
+                    String[] zipName = zip.split("/");
+                    int pnSize = zipName.length;
+                    String projectName = zipName[pnSize-1].replace(".zip","");
+
                     /*
                      * within the slnZip, each stored context is contained as a single file that
                      * contains the Json representation of a {@see Context}.
                      */
-                    Context ctx = ra.getNext(Context.class);
 
-                    sstProcessor.processSST(ctx);
+                    Context ctx = ra.getNext(Context.class);
+                    sstProcessor.processSST(ctx, projectName);
                 }
             }
             logger.log(Level.INFO, "\n Finishing to create index for "+zip);

@@ -25,6 +25,12 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
     // Context Visitor
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
+    private String projectName;
+    public IndexDocumentExtractionVisitor(){
+    }
+    public IndexDocumentExtractionVisitor(String projectName){
+        this.projectName = projectName;
+    }
     /**
      * Create a list to visit
      *
@@ -125,7 +131,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
                         overallContext.addAll(identifierSanitization(identifier));
                     //System.out.println(identifierSanitization(identifier));
                 }
-                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
+                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext, projectName);
                 indexDocuments.add(indexDocument);
             }
         }

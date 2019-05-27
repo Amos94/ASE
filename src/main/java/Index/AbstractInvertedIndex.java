@@ -56,7 +56,6 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         }
         try {
             serializeIndexDocument(doc);
-            addDocToLuceneIndex(doc);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -78,25 +77,6 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
      * */
     abstract Directory getIndexDirectory() throws IOException;
 
-    /**
-     * Stores docID and the overall context in the Lucene index. The overall context will be what we search for at
-     * retrieval time, the docID will be the result of the retrieval
-     *
-     * @param doc the initalized document
-     * @throws IOException
-     */
-    void addDocToLuceneIndex(IndexDocument doc) throws IOException {
-        Document luceneDoc = new Document();
-        docIdField.setStringValue(doc.getId());
-        luceneDoc.add(docIdField);
-        typeField.setStringValue(doc.getType());
-        luceneDoc.add(typeField);
-        for (String term : doc.getOverallContext()) {
-            StringField overallContextField = new StringField(OVERALL_CONTEXT_FIELD, term, Field.Store.NO);
-            luceneDoc.add(overallContextField);
-        }
-        indexWriter.updateDocument(new Term(DOC_ID_FIELD, doc.getId()), luceneDoc); // don't index docs with same docID twice
-    }
 
     /**
      * Searches the Lucene index for documents which match doc's type and which contain similar terms in the overall

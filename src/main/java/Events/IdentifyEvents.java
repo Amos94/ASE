@@ -27,6 +27,8 @@ import cc.kave.commons.model.events.IDEEvent;
 import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import cc.kave.commons.model.events.completionevents.Context;
 
+import cc.kave.commons.model.events.visualstudio.BuildEvent;
+import cc.kave.commons.model.events.visualstudio.BuildTarget;
 import org.apache.commons.io.FileUtils;
 
 import com.google.common.collect.Lists;
@@ -102,6 +104,7 @@ public class IdentifyEvents {
                 // afterwards, you can process it as a Java object
                 //System.out.println(e.getContext());
                 logger.log(Level.INFO, "Processing events for: "+user.toString());
+                //System.out.println(ra.getNextPlain());
                 aggregatedContexts.addAll(process(e));
 
             }
@@ -118,9 +121,11 @@ public class IdentifyEvents {
         // type. As the events are not nested, we did not implement the visitor
         // pattern, but resorted to instanceof checks.
         List<Context> contexts = new LinkedList<>();
+
         if (event instanceof CompletionEvent) {
             // if the correct type is identified, you can cast it...
             CompletionEvent ce = (CompletionEvent) event;
+            //ce.ActiveDocument.getFileName();
             contexts.add(ce.getContext());
             logger.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
         }

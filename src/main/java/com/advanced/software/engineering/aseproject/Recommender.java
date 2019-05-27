@@ -32,7 +32,9 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private Logger logger = Logger.getLogger(Recommender.class.getName());
 
     private Map<IndexDocument, Double> candidates;
-    private int numberOfCorrectRecommendations = 0;
+    private List<Integer> correctRecommendations = new LinkedList<>();
+
+    private String projectName;
 
 
     public Recommender(IInvertedIndex index) {
@@ -41,6 +43,18 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         logger.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
     }
+
+    public Recommender(IInvertedIndex index, String projectName) {
+        this.projectName = projectName;
+
+        this.index = index;
+        getIndexes(projectName); //first let's retrieve all indexes from db
+    }
+
+    public void setProjectName(String projectName){
+        this.projectName = projectName;
+    }
+
 
     /**
      * Method to process a certain query to the recommender
@@ -64,8 +78,8 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
                 logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
 
                 if(e.getKey().getMethod().getName().equals(query.getMethodCall()))
-                    incrementNumberOfRecommendations();
-                //System.out.println(numberOfCorrectRecommendations);
+                    correctRecommendations.add(1);
+                //System.out.println(correctRecommendations.size());
             }
         }
 
@@ -148,6 +162,10 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         documents = index.deserializeAll();
     }
 
+    private void getIndexes(String projectName) {
+        documents = index.deserializeByProject(projectName);
+    }
+
     /**
      *
      * @param queryDoc
@@ -181,12 +199,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     public int getNumberOfCorrectRecommendations(){
-        return this.numberOfCorrectRecommendations;
-    }
-
-    public void incrementNumberOfRecommendations()
-    {
-        this.numberOfCorrectRecommendations = this.numberOfCorrectRecommendations+1;
+        return correctRecommendations.size();
     }
 
 

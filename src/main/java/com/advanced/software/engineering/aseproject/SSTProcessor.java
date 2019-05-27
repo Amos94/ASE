@@ -20,10 +20,10 @@ public class SSTProcessor {
     /**
      * Takes a Context object from the KaVe datasets and create IndexDocument
      */
-    public void processSST(Context ctx) {
+    public void processSST(Context ctx, String projectName) {
         ISST sst = ctx.getSST();
 
-        ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
+        ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList(projectName);
 
         sst.accept(indexDocumentExtractionVisitor, index);
     }

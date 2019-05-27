@@ -20,7 +20,7 @@ public class Configuration {
     public static final int MAX_CANDIDATES = 10;
 
     //Maximum number if queries for the demo
-    public static final int RECOMMENDATION_ZIPS = 5; //to disable this set it to -1
+    public static final int RECOMMENDATION_ZIPS = 1; //to disable this set it to -1
 
 
     //English stopwords added for making the experiments described in the paper
@@ -41,7 +41,7 @@ public class Configuration {
 
     //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
-    public static boolean REMOVE_STOP_WORDS = true;
+    public static boolean REMOVE_STOP_WORDS = false;
 
     // ReIndex the Database
     public static boolean REINDEX_DATABASE = false;
@@ -50,9 +50,18 @@ public class Configuration {
     public static boolean EVALUATION = true;
 
     // Number of statements to consider for overall context
-    public static int LAST_N_CONSIDERED_STATEMENTS = 4;
+    public static int LAST_N_CONSIDERED_STATEMENTS = 3;
 
     //Maximum number if queries for the demo
-    public static int MAX_EVENTS_CONSIDERED = -1; //to disable this set it to -1
+    public static int MAX_EVENTS_CONSIDERED = 1; //to disable this set it to -1
+
+    //use events and query against the whole indexed database for recommendations
+    public static boolean USE_EVENTS = false;
+
+    //use contexts and query against the filtered by project indexes for recommendations => as described in the paper
+    //Due to we could not fetch project info from Events and match it to Projects in Contexts
+    public static boolean USE_TEST_CONTEXTS = true;
+
+    public static String DELIMITER = "*********************************************************";
 
 }

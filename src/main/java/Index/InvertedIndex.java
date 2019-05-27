@@ -92,7 +92,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
     private void createDBSchemaIfNotExists(Connection sqlConnection) throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + this.SQL_TABLE_NAME
                 + "("
-                + "   docid               CHAR(64) PRIMARY KEY,"
+                + "docid                  CHAR(64) PRIMARY KEY,"
                 + "declaringtype          VARCHAR(1) NOT NULL,"
                 + "valuetype              VARCHAR(1) NOT NULL,"
                 + "isstatic               SMALLINT   NOT NULL,"
@@ -102,7 +102,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 + "isunknown              SMALLINT   NOT NULL,"
                 + "ishashed               SMALLINT   NOT NULL,"
                 + "overallcontext         VARCHAR(1),"
-                + "overallcontextsimhash  BIGINT"
+                + "projectname            VARCHAR(1)"
                 + ")";
         Statement stmt = sqlConnection.createStatement();
         stmt.execute(sqlCreate);
@@ -245,7 +245,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         prepStmt.setInt(8, booleanToInt(doc.getMethod().isUnknown()));
         prepStmt.setInt(9, booleanToInt(doc.getMethod().isHashed()));
         prepStmt.setString(10, splitContext(doc.getOverallContext()));
-        prepStmt.setLong(11, doc.getOverallContextSimhash());
+        prepStmt.setString(11, doc.getProjectName());
         prepStmt.executeUpdate();
         prepStmt.close();
     }
@@ -644,8 +644,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
                     }
                 };
                 List<String> overallContext = deserializeContext(rs.getString("overallcontext"));
-                long overallContextSimhash = rs.getLong("overallcontextsimhash");
-                IndexDocument doc = new IndexDocument(docID, method, overallContext, overallContextSimhash);
+                IndexDocument doc = new IndexDocument(docID, method, overallContext);
                 documents.add(doc);
                 rs.next();
             }
@@ -655,6 +654,375 @@ public class InvertedIndex extends AbstractInvertedIndex {
             e.printStackTrace();
         }
         return documents;
+    }
+
+    @Override
+    public List<IndexDocument> deserializeByProject(String projectName) {
+        List<IndexDocument> documents = new LinkedList<>();
+        String sqlSelect = "SELECT * FROM " + this.SQL_TABLE_NAME + " WHERE projectName=\"" + projectName + "\"";
+        try {
+            openSQLConnection();
+            Statement stmt = dbConn.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlSelect);
+            boolean hasItems = rs.isBeforeFirst();
+            while(!rs.isAfterLast()) {
+
+                String docID = rs.getString("docid");
+                String methodName = rs.getString("methodname");
+                String methodFullName = rs.getString("methodfullname");
+                String declaringTypeName = rs.getString("declaringtype");
+                String valueTypeName = rs.getString("valuetype");
+
+                boolean isStatic = intToBool(rs.getInt("isstatic"));
+                boolean isUnknown = intToBool(rs.getInt("isunknown"));
+                boolean isHashed = intToBool(rs.getInt("ishashed"));
+                String identifier = rs.getString("identifier");
+                String projectname = rs.getString("projectName");
+
+                IMemberName method = new IMemberName() {
+                    @Override
+                    public ITypeName getDeclaringType() {
+                        return new ITypeName() {
+                            @Override
+                            public int compareTo(ITypeName o) {
+                                return 0;
+                            }
+
+                            @Override
+                            public String getIdentifier() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isUnknown() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isHashed() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean hasTypeParameters() {
+                                return false;
+                            }
+
+                            @Override
+                            public List<ITypeParameterName> getTypeParameters() {
+                                return null;
+                            }
+
+                            @Override
+                            public IAssemblyName getAssembly() {
+                                return null;
+                            }
+
+                            @Override
+                            public INamespaceName getNamespace() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getFullName() {
+                                return declaringTypeName;
+                            }
+
+                            @Override
+                            public String getName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isVoidType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isValueType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isSimpleType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isEnumType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isStructType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isNullableType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isReferenceType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isClassType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isInterfaceType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isNestedType() {
+                                return false;
+                            }
+
+                            @Override
+                            public ITypeName getDeclaringType() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isDelegateType() {
+                                return false;
+                            }
+
+                            @Override
+                            public IDelegateTypeName asDelegateTypeName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isArray() {
+                                return false;
+                            }
+
+                            @Override
+                            public IArrayTypeName asArrayTypeName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isTypeParameter() {
+                                return false;
+                            }
+
+                            @Override
+                            public ITypeParameterName asTypeParameterName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isPredefined() {
+                                return false;
+                            }
+
+                            @Override
+                            public IPredefinedTypeName asPredefinedTypeName() {
+                                return null;
+                            }
+                        };
+                    }
+
+                    @Override
+                    public ITypeName getValueType() {
+                        return new ITypeName() {
+                            @Override
+                            public IAssemblyName getAssembly() {
+                                return null;
+                            }
+
+                            @Override
+                            public INamespaceName getNamespace() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getFullName() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getName() {
+                                return valueTypeName;
+                            }
+
+                            @Override
+                            public boolean isVoidType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isValueType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isSimpleType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isEnumType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isStructType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isNullableType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isReferenceType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isClassType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isInterfaceType() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isNestedType() {
+                                return false;
+                            }
+
+                            @Override
+                            public ITypeName getDeclaringType() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isDelegateType() {
+                                return false;
+                            }
+
+                            @Override
+                            public IDelegateTypeName asDelegateTypeName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isArray() {
+                                return false;
+                            }
+
+                            @Override
+                            public IArrayTypeName asArrayTypeName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isTypeParameter() {
+                                return false;
+                            }
+
+                            @Override
+                            public ITypeParameterName asTypeParameterName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isPredefined() {
+                                return false;
+                            }
+
+                            @Override
+                            public IPredefinedTypeName asPredefinedTypeName() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean hasTypeParameters() {
+                                return false;
+                            }
+
+                            @Override
+                            public List<ITypeParameterName> getTypeParameters() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getIdentifier() {
+                                return null;
+                            }
+
+                            @Override
+                            public boolean isUnknown() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean isHashed() {
+                                return false;
+                            }
+
+                            @Override
+                            public int compareTo(ITypeName o) {
+                                return 0;
+                            }
+                        };
+                    }
+
+                    @Override
+                    public boolean isStatic() {
+                        return isStatic;
+                    }
+
+                    @Override
+                    public String getName() {
+                        return methodName;
+                    }
+
+                    @Override
+                    public String getFullName() {
+                        return methodFullName;
+                    }
+
+                    @Override
+                    public String getIdentifier() {
+                        return identifier;
+                    }
+
+                    @Override
+                    public boolean isUnknown() {
+                        return isUnknown;
+                    }
+
+                    @Override
+                    public boolean isHashed() {
+                        return isHashed;
+                    }
+                };
+
+                List<String> overallContext = deserializeContext(rs.getString("overallcontext"));
+                IndexDocument doc = new IndexDocument(docID, method, overallContext, projectName);
+                documents.add(doc);
+                rs.next();
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documents;
+
     }
 
     /**
@@ -673,8 +1041,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 String methodCall = rs.getString("method");
                 String type = rs.getString("type");
                 List<String> overallContext = deserializeContext(rs.getString("overallcontext"));
-                long overallContextSimhash = rs.getLong("overallcontextsimhash");
-                IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext, overallContextSimhash);
+                IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext);
                 return doc;
             }
             rs.close();

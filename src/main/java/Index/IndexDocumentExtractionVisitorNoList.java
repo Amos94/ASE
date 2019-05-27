@@ -20,6 +20,11 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
 
     // Context Visitor
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
+    private String projectName;
+
+    public IndexDocumentExtractionVisitorNoList(String projectName){
+        this.projectName = projectName;
+    }
 
     /**
      * Create a list to visit
@@ -120,7 +125,7 @@ public class IndexDocumentExtractionVisitorNoList extends AbstractTraversingNode
                         overallContext.addAll(identifierSanitization(identifier));
                     //System.out.println(identifierSanitization(identifier));
                 }
-                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
+                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext, projectName);
                 index.indexDocument(indexDocument);
             }
         }
