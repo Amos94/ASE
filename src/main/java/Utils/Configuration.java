@@ -20,7 +20,7 @@ public class Configuration {
     public static final int MAX_CANDIDATES = 10;
 
     //Maximum number if queries for the demo
-    public static final int RECOMMENDATION_ZIPS = 1; //to disable this set it to -1
+    public static int RECOMMENDATION_ZIPS = 3; //to disable this set it to -1
 
 
     //English stopwords added for making the experiments described in the paper
@@ -51,9 +51,6 @@ public class Configuration {
 
     // Number of statements to consider for overall context
     public static int LAST_N_CONSIDERED_STATEMENTS = 3;
-
-    //Maximum number if queries for the demo
-    public static int MAX_EVENTS_CONSIDERED = 1; //to disable this set it to -1
 
     //use events and query against the whole indexed database for recommendations
     public static boolean USE_EVENTS = false;

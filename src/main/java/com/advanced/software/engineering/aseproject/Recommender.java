@@ -33,6 +33,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     private Map<IndexDocument, Double> candidates;
     private List<Integer> correctRecommendations = new LinkedList<>();
+    private List<Integer> methodCalls = new LinkedList<>();
 
     private String projectName;
 
@@ -72,7 +73,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         ) {
             getScoredDocuments(query);
             //System.out.println(query.getMethodCall());
-
+            methodCalls.add(1);
             for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
                 result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
                 logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
@@ -98,7 +99,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         ISSTNodeVisitor visitor = new IndexDocumentExtractionVisitor();
         List<IndexDocument> methodInvocations = new LinkedList<>();
         sst.accept(visitor, methodInvocations);
-
         IndexDocument queryDocument = combineContexts(methodInvocations);
         return query(queryDocument);
     }
@@ -200,6 +200,9 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     public int getNumberOfCorrectRecommendations(){
         return correctRecommendations.size();
+    }
+    public int getNumberMethodCalls(){
+        return methodCalls.size();
     }
 
 

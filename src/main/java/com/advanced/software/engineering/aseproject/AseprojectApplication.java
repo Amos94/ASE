@@ -41,10 +41,10 @@ public class AseprojectApplication {
 
                 if (args.length > 3) {
                     Configuration.LAST_N_CONSIDERED_STATEMENTS = Integer.parseInt(args[3]);
-                    Configuration.MAX_EVENTS_CONSIDERED = Integer.parseInt(args[4]);
+                    Configuration.RECOMMENDATION_ZIPS = Integer.parseInt(args[4]);
                     System.out.println("Non default configuration is used, 5 parameters expected");
                     System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
-                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.LAST_N_CONSIDERED_STATEMENTS + " MAX_EVENTS_CONSIDERED: " + Configuration.MAX_EVENTS_CONSIDERED);
+                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.LAST_N_CONSIDERED_STATEMENTS + " MAX_EVENTS_CONSIDERED: " + Configuration.RECOMMENDATION_ZIPS);
                 } else {
                     System.out.println("Non default configuration is used, 3 parameters expected:");
                     System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
@@ -64,11 +64,11 @@ public class AseprojectApplication {
         //Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 
         // If you want to reindex the database, this is where the time flies away
-        if(Configuration.REINDEX_DATABASE == true) {
+        if(Configuration.REINDEX_DATABASE) {
             recommenderInitialization.createIndex();
         }
 
-        if(Configuration.EVALUATION == true && Configuration.USE_EVENTS == true) {
+        if(Configuration.EVALUATION && Configuration.USE_EVENTS) {
             // New EventIndentifier
             IdentifyEvents e = new IdentifyEvents();
             Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
@@ -79,19 +79,18 @@ public class AseprojectApplication {
                 recommender.query(ctx);
             }
 
-            recommendationRate = recommender.getNumberOfCorrectRecommendations()/e.getAggregatedContextsSize();
+            recommendationRate = (double)(recommender.getNumberOfCorrectRecommendations()/e.getAggregatedContextsSize());
             logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
         }
 
-        if(Configuration.EVALUATION == true && Configuration.USE_TEST_CONTEXTS == true) {
+        if(Configuration.EVALUATION && Configuration.USE_TEST_CONTEXTS) {
             // New ContextIdentifier
             IdentifyTestContexts tc = new IdentifyTestContexts();
+
             int noMethodsToMakeRecomenationsFor = 0;
             int numberOfCorrectRecommendations = 0;
-
             // Aggregate through all events (Currently only jaccard)
             for(Context ctx:tc.getAggregatedContexts()){
-                noMethodsToMakeRecomenationsFor += getNoOfInvocations(ctx);
 
                 String projectName = tc.getProjectName();
                 Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE), projectName);
@@ -99,11 +98,14 @@ public class AseprojectApplication {
                 logger.log(Level.INFO, "\n"+Configuration.DELIMITER+"\nRecommendations within project: "+projectName +"\n"+Configuration.DELIMITER);
                 recommender.query(ctx);
 
+                noMethodsToMakeRecomenationsFor += recommender.getNumberMethodCalls();
                 numberOfCorrectRecommendations += recommender.getNumberOfCorrectRecommendations();
 
             }
-            //System.out.println(noMethodsToMakeRecomenationsFor);
-            recommendationRate = (double)(numberOfCorrectRecommendations/(noMethodsToMakeRecomenationsFor))/100;
+//            System.out.println(noMethodsToMakeRecomenationsFor);
+//            System.out.println(numberOfCorrectRecommendations);
+
+            recommendationRate = (double)((numberOfCorrectRecommendations*100)/(noMethodsToMakeRecomenationsFor));
             //System.out.println(numberOfCorrectRecommendations);
             logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate+"%");
         }
