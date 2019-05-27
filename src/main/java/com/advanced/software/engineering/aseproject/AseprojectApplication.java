@@ -4,12 +4,12 @@ import Events.IdentifyEvents;
 import Events.IdentifyTestContexts;
 import Index.InvertedIndex;
 import cc.kave.commons.model.events.completionevents.Context;
-import cc.kave.commons.model.ssts.IStatement;
-import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
-import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
-import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
-import cc.kave.commons.model.ssts.statements.IAssignment;
-import cc.kave.commons.model.ssts.statements.IExpressionStatement;
+//import cc.kave.commons.model.ssts.IStatement;
+//import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
+//import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
+//import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
+//import cc.kave.commons.model.ssts.statements.IAssignment;
+//import cc.kave.commons.model.ssts.statements.IExpressionStatement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import Utils.Configuration;
@@ -26,7 +26,7 @@ public class AseprojectApplication {
      * Main class for starting the application which boots the recommenderInitalization and creates the index
      * Caution: Creating the index can take a while (about 1h)
      *
-     * @param args
+     * @param args - args
      */
     public static void main(String[] args) {
         double recommendationRate;
@@ -113,25 +113,25 @@ public class AseprojectApplication {
         System.out.println("The program has ended gracefully - thanks for using :) ");
         System.out.println(Configuration.DELIMITER);
     }
-    public static int getNoOfInvocations(Context ctx) {
-        int noMethodsToMaleRecomenationsFor = 0;
-
-        for (IMethodDeclaration method : ctx.getSST().getMethods()) {
-            for (IStatement statement : method.getBody()) {
-                if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
-                    IAssignableExpression expression;
-                    if (statement instanceof IExpressionStatement) {
-                        expression = ((IExpressionStatement) statement).getExpression();
-                    } else {
-                        expression = ((IAssignment) statement).getExpression();
-                    }
-                    if (expression instanceof IInvocationExpression) {
-                        noMethodsToMaleRecomenationsFor++;
-                    }
-                }
-            }
-
-        }
-        return noMethodsToMaleRecomenationsFor;
-    }
+//    public static int getNoOfInvocations(Context ctx) {
+//        int noMethodsToMaleRecomenationsFor = 0;
+//
+//        for (IMethodDeclaration method : ctx.getSST().getMethods()) {
+//            for (IStatement statement : method.getBody()) {
+//                if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
+//                    IAssignableExpression expression;
+//                    if (statement instanceof IExpressionStatement) {
+//                        expression = ((IExpressionStatement) statement).getExpression();
+//                    } else {
+//                        expression = ((IAssignment) statement).getExpression();
+//                    }
+//                    if (expression instanceof IInvocationExpression) {
+//                        noMethodsToMaleRecomenationsFor++;
+//                    }
+//                }
+//            }
+//
+//        }
+//        return noMethodsToMaleRecomenationsFor;
+//    }
 }
