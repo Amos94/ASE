@@ -26,11 +26,14 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
     private String projectName;
-    public IndexDocumentExtractionVisitor(){
+
+    public IndexDocumentExtractionVisitor() {
     }
-    public IndexDocumentExtractionVisitor(String projectName){
+
+    public IndexDocumentExtractionVisitor(String projectName) {
         this.projectName = projectName;
     }
+
     /**
      * Create a list to visit
      *
@@ -115,7 +118,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         type = normalizeType(type);
 
         // Don't index constructors
-        if (!methodNameStr.equals("???") || !methodNameStr.equals("???")) {
+        if (!methodNameStr.equals("???")) {
             if (!methodName.isConstructor()) {
 
                 // create contexts
@@ -209,6 +212,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
 
     /**
      * Method to split in CamelCase
+     *
      * @param identifier
      * @return identifierSplitList
      */

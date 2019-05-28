@@ -70,7 +70,7 @@ public class AseprojectApplication {
                 recommender.query(ctx);
             }
 
-            recommendationRate = (recommender.getNumberOfCorrectRecommendations() / e.getAggregatedContextsSize());
+            recommendationRate = ((double)recommender.getNumberOfCorrectRecommendations() / e.getAggregatedContextsSize());
             logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate);
         }
 
