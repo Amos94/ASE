@@ -13,12 +13,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract class implementing {@link IInvertedIndex}
  * Indexes documents using Apache Lucene's {@link IndexWriter}
  */
 public abstract class AbstractInvertedIndex implements IInvertedIndex {
+
+    private static final Logger LOGGER = Logger.getLogger( InvertedIndex.class.getName() );
 
     // fields for indexing in Lucene index
     private static final String DOC_ID_FIELD = "docID";
@@ -38,10 +42,10 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexDirectory = getIndexDirectory();
         } catch (LockObtainFailedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (LockObtainFailedException) ", e);
             System.exit(1); // can't write to indexDirectory, abort
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while initalizing Directory ", e);
         }
     }
 
@@ -57,7 +61,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             serializeIndexDocument(doc);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while indexing the document ", e);
             System.exit(1);
         }
     }
@@ -125,10 +129,10 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
                 answers.add(matchingDoc);
             }
         } catch (IndexNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (IndexNotFound) ", e);
             System.exit(1); // exit on IOException
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (IOException) ", e);
             System.exit(1); // exit on IOException
         }
         return answers;
@@ -150,7 +154,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexWriter = new IndexWriter(indexDirectory, config);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while starting to index ", e);
         }
     }
 
@@ -162,7 +166,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while finishing the index ", e);
         }
     }
 

@@ -28,7 +28,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     private final IInvertedIndex index;
     private List<IndexDocument> documents;
-    private Logger logger = Logger.getLogger(Recommender.class.getName());
+    private Logger LOGGER = Logger.getLogger(Recommender.class.getName());
 
     private Map<IndexDocument, Double> candidates;
     private List<Integer> correctRecommendations = new LinkedList<>();
@@ -38,9 +38,9 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
 
     Recommender(IInvertedIndex index) {
-        logger.log(Level.INFO, "Initializing the recommender.");
+        LOGGER.log(Level.INFO, "Initializing the recommender.");
         this.index = index;
-        logger.log(Level.INFO, "Fetching identifiers from db...");
+        LOGGER.log(Level.INFO, "Fetching identifiers from db...");
         getIndexes(); //first let's retrieve all indexes from db
     }
 
@@ -50,10 +50,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         this.index = index;
         getIndexes(projectName); //first let's retrieve all indexes from db
     }
-
-//    public void setProjectName(String projectName){
-//        this.projectName = projectName;
-//    }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
@@ -76,7 +72,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
             methodCalls.add(1);
             for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
                 result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
-                logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
+                LOGGER.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
 
                 if(e.getKey().getMethod().getName().equals(query.getMethodCall()))
                     correctRecommendations.add(1);
@@ -123,9 +119,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
             lastMethod = "unknown";
         }
 
-//        for (IndexDocument doc : contexts) {
-//            combinedOverallContext.addAll(doc.getOverallContext());
-//        }
         return new IndexDocument(lastMethod, lastType, overallContext);
     }
 
@@ -138,7 +131,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         try {
             return FileUtils.sizeOfAsBigInteger(new File(Configuration.INDEX_STORAGE)).intValueExact();
         } catch (ArithmeticException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while getting the last model size ", e);
             return -1;
         }
     }

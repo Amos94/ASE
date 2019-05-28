@@ -14,9 +14,12 @@ import java.io.*;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class InvertedIndex extends AbstractInvertedIndex {
+
+    private static final Logger LOGGER = Logger.getLogger( InvertedIndex.class.getName() );
 
     // CLASS & INSTANCE VARIABLES
     private static final String SQL_TABLE_NAME = "indexdocuments";
@@ -24,7 +27,6 @@ public class InvertedIndex extends AbstractInvertedIndex {
     private static final String SERIALIZED_INDEX_DOCUMENTS_DIR_NAME = "IndexDocuments";
     private static final String SERIALIZED_INDEX_DOCUMENTS_SQLITE_FILE_NAME = "IndexDocuments.db";
     private static final String INVERTED_INDEX_STRUCTURES_DIR_NAME = "InvertedIndexStructures_Lucene";
-    private final Logger LOGGER = Logger.getLogger(InvertedIndex.class.getName());
 
     // directory where the Lucene index is persisted on disk
     private String indexRootDir;
@@ -108,7 +110,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         try (Statement stmt = sqlConnection.createStatement()) {
             stmt.execute(sqlCreate);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing createDBSchemaIfNotExists ", e);
         }
     }
 
@@ -123,7 +125,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             try {
                 FileUtils.forceMkdir(dir);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while creating directory ", e);
                 System.exit(1); // exit on IOException
             }
         }
@@ -140,7 +142,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             try {
                 createDBSchemaIfNotExists(dbConn);
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while starting to create an index ", e);
                 System.exit(1);
             }
         }
@@ -155,7 +157,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         try {
             dbConn = DriverManager.getConnection(sqlUrl);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Can not open an sql connection ", e);
             System.exit(1); // exit on exception
         }
     }
@@ -189,10 +191,10 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 boolean hasItems = rs.isBeforeFirst();
                 return hasItems;
             } catch (SQLDataException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while executing the query from is IndexedInDB ", e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "General error in IndexedInDB ", e);
         }
         return false;
     }
@@ -221,7 +223,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             try {
                 serializeToSQLite(doc);
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while executing serializeIndexDocument ", e);
                 throw new IOException(e.getMessage()); // TODO: it's probably not best practise to turn an SQLException into an IOException
             }
         } else {
@@ -651,10 +653,10 @@ public class InvertedIndex extends AbstractInvertedIndex {
                     rs.next();
                 }
             } catch (SQLDataException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while executing statement of deserializeAll ", e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "General error in deserializeAll ", e);
         }
         return documents;
     }
@@ -1019,10 +1021,10 @@ public class InvertedIndex extends AbstractInvertedIndex {
                     rs.next();
                 }
             } catch (SQLDataException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while executing rows of deserializeByProject ", e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing statement of deserializeByProject ", e);
         }
         return documents;
 
@@ -1047,10 +1049,10 @@ public class InvertedIndex extends AbstractInvertedIndex {
                     return doc;
                 }
             } catch (SQLDataException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while executing rows of deserializeFromSQLite ", e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing statement of deserializeFromSQLite ", e);
         }
 
         return null;
@@ -1092,7 +1094,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
         try {
             doc = (IndexDocument) in.readObject();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while processing deserializeFromFile ", e);
             System.exit(1); // exit on exception
         } finally {
             in.close();
@@ -1111,7 +1113,7 @@ public class InvertedIndex extends AbstractInvertedIndex {
             try {
                 dbConn.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while finishIndexing ", e);
             }
         }
     }
