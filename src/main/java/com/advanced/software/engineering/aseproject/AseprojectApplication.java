@@ -28,21 +28,21 @@ public class AseprojectApplication {
 
         if (args.length != 0) {
             try {
-                Configuration.REMOVE_STOP_WORDS = Boolean.parseBoolean(args[0]);
-                Configuration.REINDEX_DATABASE = Boolean.parseBoolean(args[1]);
-                Configuration.EVALUATION = Boolean.parseBoolean(args[2]);
+                Configuration.setRemoveStopWords(Boolean.parseBoolean(args[0]));
+                Configuration.setReindexDatabase(Boolean.parseBoolean(args[1]));
+                Configuration.setEVALUATION(Boolean.parseBoolean(args[2]));
 
                 if (args.length > 3) {
-                    Configuration.LAST_N_CONSIDERED_STATEMENTS = Integer.parseInt(args[3]);
-                    Configuration.RECOMMENDATION_ZIPS = Integer.parseInt(args[4]);
+                    Configuration.setLastNConsideredStatements(Integer.parseInt(args[3]));
+                    Configuration.setRecommendationZips(Integer.parseInt(args[4]));
                     System.out.println("Non default configuration is used, 5 parameters expected");
-                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
-                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.LAST_N_CONSIDERED_STATEMENTS + " MAX_EVENTS_CONSIDERED: " + Configuration.RECOMMENDATION_ZIPS);
+                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
+                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.getLastNConsideredStatements() + " MAX_EVENTS_CONSIDERED: " + Configuration.getRecommendationZips());
                 } else {
                     System.out.println("Non default configuration is used, 3 parameters expected:");
-                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.REMOVE_STOP_WORDS + " REINDEX_DATABASE set to " + Configuration.REINDEX_DATABASE + " EVALUATION set to " + Configuration.EVALUATION);
+                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
                 }
-                System.out.println(Configuration.DELIMITER);
+                System.out.println(Configuration.getDELIMITER());
 
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("ArrayIndexOutOfBoundsException caught");
@@ -55,11 +55,11 @@ public class AseprojectApplication {
         //Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 
         // If you want to reindex the database, this is where the time flies away
-        if (Configuration.REINDEX_DATABASE) {
+        if (Configuration.getReindexDatabase()) {
             recommenderInitialization.createIndex();
         }
 
-        if (Configuration.EVALUATION && Configuration.USE_EVENTS) {
+        if (Configuration.getEVALUATION() && Configuration.getUseEvents()) {
             // New EventIndentifier
             IdentifyEvents e = new IdentifyEvents();
             Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
@@ -74,7 +74,7 @@ public class AseprojectApplication {
             logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate);
         }
 
-        if (Configuration.EVALUATION && Configuration.USE_TEST_CONTEXTS) {
+        if (Configuration.getEVALUATION() && Configuration.getUseTestContexts()) {
             // New ContextIdentifier
             IdentifyTestContexts tc = new IdentifyTestContexts();
 
@@ -86,7 +86,7 @@ public class AseprojectApplication {
                 String projectName = tc.getProjectName();
                 Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE), projectName);
 
-                logger.log(Level.INFO, "\n" + Configuration.DELIMITER + "\nRecommendations within project: " + projectName + "\n" + Configuration.DELIMITER);
+                logger.log(Level.INFO, "\n" + Configuration.getDELIMITER() + "\nRecommendations within project: " + projectName + "\n" + Configuration.getDELIMITER());
                 recommender.query(ctx);
 
                 noMethodsToMakeRecomenationsFor += recommender.getNumberMethodCalls();
@@ -105,6 +105,6 @@ public class AseprojectApplication {
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");
-        System.out.println(Configuration.DELIMITER);
+        System.out.println(Configuration.getDELIMITER());
     }
 }

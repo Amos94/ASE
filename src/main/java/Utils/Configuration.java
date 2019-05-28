@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Configuration {
 
+    // final Configuration
     // Location of the KaVE dataset
     public static final String EVENTS_DIR = "Data/Events";
     public static final String CONTEXTS_DIR = "Data/Contexts";
@@ -15,16 +16,11 @@ public class Configuration {
     // Location where the index should be stored
     public static final String INDEX_STORAGE = "IndexStorage";
 
-
     //Maximum number of candidates
     public static final int MAX_CANDIDATES = 10;
 
-    //Maximum number if queries for the demo
-    public static int RECOMMENDATION_ZIPS = 3; //to disable this set it to -1
-
-
     //English stopwords added for making the experiments described in the paper
-    public static final List<String> STOP_WORDS = Arrays.asList(
+    protected static final List<String> STOP_WORDS = Arrays.asList(
             "i", "me", "my", "myself", "we", "our", "ours", "ourselves",
             "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she",
             "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs",
@@ -39,26 +35,95 @@ public class Configuration {
             "don", "should", "now"
     );
 
+    // Overwritable configuration
+    //Maximum number if queries for the demo
+    private static int RECOMMENDATION_ZIPS = 3; //to disable this set it to -1
+
     //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
-    public static boolean REMOVE_STOP_WORDS = false;
+    private static boolean REMOVE_STOP_WORDS = false;
 
     // ReIndex the Database
-    public static boolean REINDEX_DATABASE = false;
+    private static boolean REINDEX_DATABASE = false;
 
     // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
-    public static boolean EVALUATION = true;
+    private static boolean EVALUATION = true;
 
     // Number of statements to consider for overall context
-    public static int LAST_N_CONSIDERED_STATEMENTS = 3;
+    private static int LAST_N_CONSIDERED_STATEMENTS = 3;
 
     //use events and query against the whole indexed database for recommendations
-    public static boolean USE_EVENTS = false;
+    private static boolean USE_EVENTS = false;
 
     //use contexts and query against the filtered by project indexes for recommendations => as described in the paper
     //Due to we could not fetch project info from Events and match it to Projects in Contexts
-    public static boolean USE_TEST_CONTEXTS = true;
+    private static boolean USE_TEST_CONTEXTS = true;
 
-    public static String DELIMITER = "*********************************************************";
+    private static String DELIMITER = "*********************************************************";
 
+
+    // Getter & Setter
+    public static int getRecommendationZips() {
+        return RECOMMENDATION_ZIPS;
+    }
+
+    public static void setRecommendationZips(int recommendationZips) {
+        RECOMMENDATION_ZIPS = recommendationZips;
+    }
+
+    public static boolean getRemoveStopWords() {
+        return REMOVE_STOP_WORDS;
+    }
+
+    public static void setRemoveStopWords(boolean removeStopWords) {
+        REMOVE_STOP_WORDS = removeStopWords;
+    }
+
+    public static boolean getReindexDatabase() {
+        return REINDEX_DATABASE;
+    }
+
+    public static void setReindexDatabase(boolean reindexDatabase) {
+        REINDEX_DATABASE = reindexDatabase;
+    }
+
+    public static boolean getEVALUATION() {
+        return EVALUATION;
+    }
+
+    public static void setEVALUATION(boolean EVALUATION) {
+        Configuration.EVALUATION = EVALUATION;
+    }
+
+    public static int getLastNConsideredStatements() {
+        return LAST_N_CONSIDERED_STATEMENTS;
+    }
+
+    public static void setLastNConsideredStatements(int lastNConsideredStatements) {
+        LAST_N_CONSIDERED_STATEMENTS = lastNConsideredStatements;
+    }
+
+    public static boolean getUseEvents() {
+        return USE_EVENTS;
+    }
+
+    public static void setUseEvents(boolean useEvents) {
+        USE_EVENTS = useEvents;
+    }
+
+    public static boolean getUseTestContexts() {
+        return USE_TEST_CONTEXTS;
+    }
+
+    public static void setUseTestContexts(boolean useTestContexts) {
+        USE_TEST_CONTEXTS = useTestContexts;
+    }
+
+    public static String getDELIMITER() {
+        return DELIMITER;
+    }
+
+    public static void setDELIMITER(String DELIMITER) {
+        Configuration.DELIMITER = DELIMITER;
+    }
 }
