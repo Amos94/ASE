@@ -70,7 +70,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
 
-        if((query.getMethodCall() != "" || query.getMethodCall() != null || !query.getMethodCall().equals("unknown")) && (query.getOverallContext().size() > 0)) {
+        if((!query.getMethodCall().equals("") || query.getMethodCall() != null || !query.getMethodCall().equals("unknown")) && (query.getOverallContext().size() > 0)) {
             getScoredDocuments(query);
             //System.out.println(query.getMethodCall());
             methodCalls.add(1);

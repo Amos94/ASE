@@ -3,20 +3,13 @@ package com.advanced.software.engineering.aseproject;
 import Events.IdentifyEvents;
 import Events.IdentifyTestContexts;
 import Index.InvertedIndex;
+import Utils.Configuration;
 import cc.kave.commons.model.events.completionevents.Context;
-//import cc.kave.commons.model.ssts.IStatement;
-//import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
-//import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
-//import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
-//import cc.kave.commons.model.ssts.statements.IAssignment;
-//import cc.kave.commons.model.ssts.statements.IExpressionStatement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import Utils.Configuration;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 
 @SpringBootApplication
@@ -33,7 +26,7 @@ public class AseprojectApplication {
         SpringApplication.run(AseprojectApplication.class, args);
         Logger logger = Logger.getLogger(AseprojectApplication.class.getName());
 
-        if(args.length != 0) {
+        if (args.length != 0) {
             try {
                 Configuration.REMOVE_STOP_WORDS = Boolean.parseBoolean(args[0]);
                 Configuration.REINDEX_DATABASE = Boolean.parseBoolean(args[1]);
@@ -51,12 +44,10 @@ public class AseprojectApplication {
                 }
                 System.out.println(Configuration.DELIMITER);
 
-            }
-            catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("ArrayIndexOutOfBoundsException caught");
             }
         }
-
 
 
         // Initalize the recommender
@@ -64,74 +55,56 @@ public class AseprojectApplication {
         //Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 
         // If you want to reindex the database, this is where the time flies away
-        if(Configuration.REINDEX_DATABASE) {
+        if (Configuration.REINDEX_DATABASE) {
             recommenderInitialization.createIndex();
         }
 
-        if(Configuration.EVALUATION && Configuration.USE_EVENTS) {
+        if (Configuration.EVALUATION && Configuration.USE_EVENTS) {
             // New EventIndentifier
             IdentifyEvents e = new IdentifyEvents();
             Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 
             // Aggregate through all events (Currently only jaccard)
-            for(Context ctx:e.getAggregatedContexts()) {
-                logger.log(Level.INFO, "\nCreating recommendations for "+e.getAggregatedContextsSize()+" methods");
+            for (Context ctx : e.getAggregatedContexts()) {
+                logger.log(Level.INFO, "\nCreating recommendations for " + e.getAggregatedContextsSize() + " methods");
                 recommender.query(ctx);
             }
 
-            recommendationRate = (double)(recommender.getNumberOfCorrectRecommendations()/e.getAggregatedContextsSize());
-            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate);
+            recommendationRate = (recommender.getNumberOfCorrectRecommendations() / e.getAggregatedContextsSize());
+            logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate);
         }
 
-        if(Configuration.EVALUATION && Configuration.USE_TEST_CONTEXTS) {
+        if (Configuration.EVALUATION && Configuration.USE_TEST_CONTEXTS) {
             // New ContextIdentifier
             IdentifyTestContexts tc = new IdentifyTestContexts();
 
             int noMethodsToMakeRecomenationsFor = 0;
             int numberOfCorrectRecommendations = 0;
             // Aggregate through all events (Currently only jaccard)
-            for(Context ctx:tc.getAggregatedContexts()){
+            for (Context ctx : tc.getAggregatedContexts()) {
 
                 String projectName = tc.getProjectName();
                 Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE), projectName);
 
-                logger.log(Level.INFO, "\n"+Configuration.DELIMITER+"\nRecommendations within project: "+projectName +"\n"+Configuration.DELIMITER);
+                logger.log(Level.INFO, "\n" + Configuration.DELIMITER + "\nRecommendations within project: " + projectName + "\n" + Configuration.DELIMITER);
                 recommender.query(ctx);
 
                 noMethodsToMakeRecomenationsFor += recommender.getNumberMethodCalls();
                 numberOfCorrectRecommendations += recommender.getNumberOfCorrectRecommendations();
 
             }
-//            System.out.println(noMethodsToMakeRecomenationsFor);
-//            System.out.println(numberOfCorrectRecommendations);
 
-            recommendationRate = (double)((numberOfCorrectRecommendations*100)/(noMethodsToMakeRecomenationsFor));
-            //System.out.println(numberOfCorrectRecommendations);
-            logger.log(Level.INFO, "The recommendation rate is: "+recommendationRate+"%");
+            // Calculate final percentage
+            if (noMethodsToMakeRecomenationsFor == 0) {
+                logger.log(Level.WARNING, "No Methods to make recommendations for!");
+            } else {
+                recommendationRate = (((double) numberOfCorrectRecommendations * 100) / (noMethodsToMakeRecomenationsFor));
+                logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate + "%");
+            }
+
         }
 
         System.out.println("The program has ended gracefully - thanks for using :) ");
         System.out.println(Configuration.DELIMITER);
     }
-//    public static int getNoOfInvocations(Context ctx) {
-//        int noMethodsToMaleRecomenationsFor = 0;
-//
-//        for (IMethodDeclaration method : ctx.getSST().getMethods()) {
-//            for (IStatement statement : method.getBody()) {
-//                if (statement instanceof IExpressionStatement || statement instanceof IAssignment) {
-//                    IAssignableExpression expression;
-//                    if (statement instanceof IExpressionStatement) {
-//                        expression = ((IExpressionStatement) statement).getExpression();
-//                    } else {
-//                        expression = ((IAssignment) statement).getExpression();
-//                    }
-//                    if (expression instanceof IInvocationExpression) {
-//                        noMethodsToMaleRecomenationsFor++;
-//                    }
-//                }
-//            }
-//
-//        }
-//        return noMethodsToMaleRecomenationsFor;
-//    }
 }
