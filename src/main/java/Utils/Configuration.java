@@ -20,7 +20,7 @@ public class Configuration {
     public static final int MAX_CANDIDATES = 10;
 
     //English stopwords added for making the experiments described in the paper
-    protected static final List<String> STOP_WORDS = Arrays.asList(
+    public static final List<String> STOP_WORDS = Arrays.asList(
             "i", "me", "my", "myself", "we", "our", "ours", "ourselves",
             "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she",
             "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs",

@@ -122,7 +122,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
             if (!methodName.isConstructor()) {
 
                 // create contexts
-                List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.LAST_N_CONSIDERED_STATEMENTS);
+                List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.getLastNConsideredStatements());
                 Set<String> overallContextSet = new HashSet<>();
                 lastNStatements.forEach(iStatement -> iStatement.accept(CONTEXT_VISITOR, overallContextSet));
 
@@ -200,7 +200,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
      * @return
      */
     public List<String> identifierSanitization(String identifier) {
-        if (Configuration.REMOVE_STOP_WORDS) {
+        if (Configuration.getRemoveStopWords()) {
             if (identifier.length() != 1) {
                 return removeStopWords(stemIdentifiers(splitCamelCase(identifier)));
             }

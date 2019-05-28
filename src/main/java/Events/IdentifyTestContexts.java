@@ -32,7 +32,7 @@ public class IdentifyTestContexts {
 
         Set<String> slnZips = IoHelper.findAllZips(ctxsDir);
 
-        int maxEv = Configuration.RECOMMENDATION_ZIPS;
+        int maxEv = Configuration.getRecommendationZips();
 
         if(maxEv == -1) {
             for (String slnZip : slnZips) {
@@ -53,7 +53,7 @@ public class IdentifyTestContexts {
     }
 
     private List<Context> processZip(String slnZip) {
-        
+
         String[] zipName = slnZip.split("/");
         int pnSize = zipName.length;
         this.projectName = zipName[pnSize-1].replace(".zip","");
