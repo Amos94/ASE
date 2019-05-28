@@ -16,7 +16,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.*;
-import java.util.Map.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -56,6 +55,10 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 //        this.projectName = projectName;
 //    }
 
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 
     /**
      * Method to process a certain query to the recommender
@@ -67,10 +70,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
 
-        if(
-                (query.getMethodCall() != "" || query.getMethodCall() != null || query.getMethodCall() != "unknown") &&
-                (query.getOverallContext().size() > 0)
-        ) {
+        if((query.getMethodCall() != "" || query.getMethodCall() != null || !query.getMethodCall().equals("unknown")) && (query.getOverallContext().size() > 0)) {
             getScoredDocuments(query);
             //System.out.println(query.getMethodCall());
             methodCalls.add(1);
@@ -191,11 +191,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
         //candidates.putAll(findGreatest(candidates,Configuration.MAX_CANDIDATES));
 
-    }
-
-    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
     }
 
     int getNumberOfCorrectRecommendations(){
