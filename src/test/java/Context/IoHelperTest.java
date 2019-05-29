@@ -1,7 +1,5 @@
 package Context;
 
-import Utils.Configuration;
-
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 import helper.TestHelper;
@@ -34,16 +32,13 @@ public class IoHelperTest {
 
     @Test
     public void readFirstContext() {
-    	Context res;
 
-        String firstZip = IoHelper.findAllZips(Configuration.CONTEXTS_DIR).stream().findFirst().get();
+        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
 
-        try (IReadingArchive ra = new ReadingArchive(new File(Configuration.CONTEXTS_DIR, firstZip))) {
-            res = ra.getNext(Context.class);
-
+        try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
+            assertTrue(ra.hasNext());
         }
 
-    	assertNotNull(res);
     }
 
     @Test
