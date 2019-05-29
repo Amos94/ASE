@@ -19,7 +19,8 @@ import cc.kave.commons.model.ssts.statements.*;
 import cc.kave.commons.model.ssts.IStatement;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IndexDocumentExtractionVisitorNoListTest {
+public class IndexDocumentExtractionVisitorTest {
+
 
 	@Mock private List<IStatement> body;
 	@Mock private IInvertedIndex index;
