@@ -11,8 +11,8 @@ public class ConfigurationTest {
         assertEquals("Data/Events", Configuration.EVENTS_DIR);
         assertEquals("Data/Contexts", Configuration.CONTEXTS_DIR);
         assertEquals("IndexStorage", Configuration.INDEX_STORAGE);
-        assertEquals(4, Configuration.LAST_N_CONSIDERED_STATEMENTS);
-        assertEquals(false, Configuration.REINDEX_DATABASE);
+        assertEquals(4, Configuration.getLastNConsideredStatements());
+        assertEquals(false, Configuration.getReindexDatabase());
 //        assertEquals(false, Configuration.VERBOSE_OUTPUT);
     }
 }
