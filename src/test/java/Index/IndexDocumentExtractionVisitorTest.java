@@ -1,6 +1,6 @@
 package Index;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
-import cc.kave.commons.model.ssts.statements.*;
 import cc.kave.commons.model.ssts.IStatement;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -164,9 +162,9 @@ public class IndexDocumentExtractionVisitorTest {
     	String s3 = "apple";
     	String s4 = "y o u";
 
-    	assertEquals(true, iV.isStopWord(s1));
-    	assertEquals(true, iV.isStopWord(s2));
-    	assertEquals(false, iV.isStopWord(s3));
-    	assertEquals(false, iV.isStopWord(s4));
+		assertTrue(iV.isStopWord(s1));
+		assertTrue(iV.isStopWord(s2));
+		assertFalse(iV.isStopWord(s3));
+		assertFalse(iV.isStopWord(s4));
     }
 }
