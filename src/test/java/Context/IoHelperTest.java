@@ -20,8 +20,6 @@ import cc.kave.commons.utils.io.Directory;
 import cc.kave.commons.model.events.completionevents.Context;
 
 
-import javax.annotation.meta.Exclusive;
-
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,21 +32,14 @@ public class IoHelperTest {
 	}
 
     @Test
-    @Exclusive
     public void readFirstContext() {
-    	Context res = new Context();
-        String firstZip = "";
+    	Context res;
 
-        for(String zip:IoHelper.findAllZips(Configuration.CONTEXTS_DIR)) {
-            firstZip = zip;
-            break;
-        }
+        String firstZip = IoHelper.findAllZips(Configuration.CONTEXTS_DIR).stream().findFirst().get();
 
         try (IReadingArchive ra = new ReadingArchive(new File(Configuration.CONTEXTS_DIR, firstZip))) {
-            while (ra.hasNext()) {
-                res = ra.getNext(Context.class);
-                break;
-            }
+            res = ra.getNext(Context.class);
+
         }
 
     	assertNotNull(res);

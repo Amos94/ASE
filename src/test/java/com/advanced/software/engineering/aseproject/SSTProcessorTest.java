@@ -14,7 +14,7 @@ import cc.kave.commons.model.events.completionevents.Context;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,6 +41,7 @@ public class SSTProcessorTest {
 		IndexDocument doc = new IndexDocument(methodCall, null, type, overallContext,projectName);
     	processor.processSST(ctx,projectName);
     	verify(processor).processSST(ctx,projectName);
+    	assertNotNull(doc);
     }
 
     @Test
