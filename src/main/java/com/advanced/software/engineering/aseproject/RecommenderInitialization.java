@@ -1,5 +1,6 @@
 package com.advanced.software.engineering.aseproject;
 
+import Context.ContextHelper;
 import Context.IoHelper;
 import Index.InvertedIndex;
 import Index.IInvertedIndex;
@@ -17,10 +18,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RecommenderInitialization {
-
     private String contextsPath;
     private String eventsPath;
     private Logger logger;
+
+    public String getContextsPath() {
+        return contextsPath;
+    }
+
+    public String getEventsPath() {
+        return eventsPath;
+    }
 
     public RecommenderInitialization(String contextsPath, String eventsPath){
 
@@ -58,7 +66,7 @@ public class RecommenderInitialization {
         // log info about the start of the process
         logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
-        
+
       // start the SSTs process
         sstProcessor.startProcessSSTs();
 
