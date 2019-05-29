@@ -17,6 +17,7 @@ public class IdentifyTestContexts {
     private String ctxsDir;
     private Logger logger = Logger.getLogger(IdentifyTestContexts.class.getName());
     private List<Context> aggregatedContexts;
+    private String projectName;
 
     public IdentifyTestContexts() {
         this.ctxsDir = Configuration.CONTEXTS_DIR;
@@ -24,24 +25,24 @@ public class IdentifyTestContexts {
         run();
     }
 
-    public void run() {
+    private void run() {
 
-        System.out.printf("looking (recursively) for solution zips in folder %s\n",
-                new File(ctxsDir).getAbsolutePath());
+//        System.out.printf("looking (recursively) for solution zips in folder %s\n",
+//                new File(ctxsDir).getAbsolutePath());
 
         Set<String> slnZips = IoHelper.findAllZips(ctxsDir);
 
-        int maxEv = Configuration.RECOMMENDATION_ZIPS;
+        int maxEv = Configuration.getRecommendationZips();
 
         if(maxEv == -1) {
             for (String slnZip : slnZips) {
-                logger.log(Level.INFO,"\n#### processing solution zip: " + slnZip);
+                logger.log(Level.INFO,"\n#### processing... ");
                 aggregatedContexts.addAll(processZip(slnZip));
             }
         }
         else{
             for (String slnZip : slnZips) {
-                logger.log(Level.INFO,"\n#### processing solution zip: " + slnZip);
+                logger.log(Level.INFO,"\n######## processing... ");
                 aggregatedContexts.addAll(processZip(slnZip));
 
                 --maxEv;
@@ -51,7 +52,12 @@ public class IdentifyTestContexts {
         }
     }
 
-    public List<Context> processZip(String slnZip) {
+    private List<Context> processZip(String slnZip) {
+
+        String[] zipName = slnZip.split("/");
+        int pnSize = zipName.length;
+        this.projectName = zipName[pnSize-1].replace(".zip","");
+
 
         List<Context> contexts = new LinkedList<>();
         try (IReadingArchive ra = new ReadingArchive(new File(ctxsDir, slnZip))) {
@@ -70,7 +76,7 @@ public class IdentifyTestContexts {
         return aggregatedContexts;
     }
 
-    public long getAggregatedContextsSize(){
-        return aggregatedContexts.size();
+    public String getProjectName(){
+        return projectName;
     }
 }

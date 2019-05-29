@@ -6,33 +6,33 @@ import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.ssts.ISST;
 import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
 
-public class SSTProcessor {
+class SSTProcessor {
 
-    private IInvertedIndex index = null;
+    private IInvertedIndex index;
 
     /**
      * Create InvertedIndex
      */
-    public SSTProcessor(IInvertedIndex index) {
+    SSTProcessor(IInvertedIndex index) {
         this.index = index;
     }
 
     /**
      * Takes a Context object from the KaVe datasets and create IndexDocument
      */
-    public void processSST(Context ctx) {
+    void processSST(Context ctx, String projectName) {
         ISST sst = ctx.getSST();
 
-        ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList();
+        ISSTNodeVisitor indexDocumentExtractionVisitor = new IndexDocumentExtractionVisitorNoList(projectName);
 
         sst.accept(indexDocumentExtractionVisitor, index);
     }
 
-    public void startProcessSSTs() {
+    void startProcessSSTs() {
         index.startIndexing();
     }
 
-    public void finishProcessSSTs() {
+    void finishProcessSSTs() {
         index.finishIndexing();
     }
 

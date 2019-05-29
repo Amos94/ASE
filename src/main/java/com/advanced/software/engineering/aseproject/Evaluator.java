@@ -10,7 +10,7 @@ import java.util.Set;
  * The Evaluator class which compares the queried doc with the scored doc
  *
  */
-public class Evaluator {
+class Evaluator {
 
     private IndexDocument queryDoc;
     private IndexDocument scoredDoc;
@@ -18,10 +18,10 @@ public class Evaluator {
     /**
      * Initiate the Evaluator
      *
-     * @param storedDoc
-     * @param queryDoc
+     * @param storedDoc - stored document
+     * @param queryDoc - query document
      */
-    public Evaluator(IndexDocument storedDoc, IndexDocument queryDoc){
+    Evaluator(IndexDocument storedDoc, IndexDocument queryDoc){
         this.scoredDoc = storedDoc;
         this.queryDoc = queryDoc;
     }
@@ -31,12 +31,10 @@ public class Evaluator {
      *
      * @return double computedSimilarity
      */
-    public double calculateJaccard(){
-        Set<String> storedDocSet = new HashSet<>();
-        Set<String> queryDocSet = new HashSet<>();
+    double calculateJaccard(){
 
-        storedDocSet.addAll(scoredDoc.getOverallContext());
-        queryDocSet.addAll(queryDoc.getOverallContext());
+        Set<String> storedDocSet = new HashSet<>(scoredDoc.getOverallContext());
+        Set<String> queryDocSet = new HashSet<>(queryDoc.getOverallContext());
 
         JaccardSimilarity result = new JaccardSimilarity(storedDocSet,queryDocSet);
 

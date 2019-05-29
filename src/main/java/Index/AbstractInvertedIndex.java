@@ -13,12 +13,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract class implementing {@link IInvertedIndex}
  * Indexes documents using Apache Lucene's {@link IndexWriter}
  */
 public abstract class AbstractInvertedIndex implements IInvertedIndex {
+
+    private static final Logger LOGGER = Logger.getLogger( InvertedIndex.class.getName() );
 
     // fields for indexing in Lucene index
     private static final String DOC_ID_FIELD = "docID";
@@ -38,10 +42,10 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexDirectory = getIndexDirectory();
         } catch (LockObtainFailedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (LockObtainFailedException) ", e);
             System.exit(1); // can't write to indexDirectory, abort
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while initalizing Directory ", e);
         }
     }
 
@@ -56,9 +60,8 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         }
         try {
             serializeIndexDocument(doc);
-            addDocToLuceneIndex(doc);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while indexing the document ", e);
             System.exit(1);
         }
     }
@@ -78,25 +81,6 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
      * */
     abstract Directory getIndexDirectory() throws IOException;
 
-    /**
-     * Stores docID and the overall context in the Lucene index. The overall context will be what we search for at
-     * retrieval time, the docID will be the result of the retrieval
-     *
-     * @param doc the initalized document
-     * @throws IOException
-     */
-    void addDocToLuceneIndex(IndexDocument doc) throws IOException {
-        Document luceneDoc = new Document();
-        docIdField.setStringValue(doc.getId());
-        luceneDoc.add(docIdField);
-        typeField.setStringValue(doc.getType());
-        luceneDoc.add(typeField);
-        for (String term : doc.getOverallContext()) {
-            StringField overallContextField = new StringField(OVERALL_CONTEXT_FIELD, term, Field.Store.NO);
-            luceneDoc.add(overallContextField);
-        }
-        indexWriter.updateDocument(new Term(DOC_ID_FIELD, doc.getId()), luceneDoc); // don't index docs with same docID twice
-    }
 
     /**
      * Searches the Lucene index for documents which match doc's type and which contain similar terms in the overall
@@ -145,10 +129,10 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
                 answers.add(matchingDoc);
             }
         } catch (IndexNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (IndexNotFound) ", e);
             System.exit(1); // exit on IOException
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing the search (IOException) ", e);
             System.exit(1); // exit on IOException
         }
         return answers;
@@ -170,7 +154,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexWriter = new IndexWriter(indexDirectory, config);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while starting to index ", e);
         }
     }
 
@@ -182,7 +166,7 @@ public abstract class AbstractInvertedIndex implements IInvertedIndex {
         try {
             indexWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while finishing the index ", e);
         }
     }
 
