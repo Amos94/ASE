@@ -1,5 +1,6 @@
 package com.advanced.software.engineering.aseproject;
 
+import Index.IndexDocument;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -9,6 +10,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import cc.kave.commons.model.events.completionevents.Context;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -26,9 +30,17 @@ public class SSTProcessorTest {
 	
     @Test
     public void processSST() {
-		String projectName = "Test";
-    	processor.processSST(ctx, projectName);
-    	verify(processor).processSST(ctx, projectName);
+		Collection<String> overallContext = new LinkedList<>();
+		overallContext.add("Regex");
+		overallContext.add("bool");
+		overallContext.add("Build");
+		overallContext.add("Event");
+		String methodCall = "testMethod1";
+		String type = "java.util.StringJoiner";
+		String projectName = "Test-Project";
+		IndexDocument doc = new IndexDocument(methodCall, null, type, overallContext,projectName);
+    	processor.processSST(ctx,projectName);
+    	verify(processor).processSST(ctx,projectName);
     }
 
     @Test

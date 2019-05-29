@@ -16,10 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.events.IDEEvent;
 
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IdentifyEventsTest {
@@ -38,8 +35,8 @@ public class IdentifyEventsTest {
     	List<String> result = new ArrayList<>();
     	//TODO not hardcode it
     	result.add(Configuration.EVENTS_DIR);
-//Returns a list of the zip files
-//    	assertEquals(result, iETest.findAllUsers());
+
+    	assertEquals(result.size(), IdentifyEvents.findAllUsers().size());
     }
     
     //public static List<Context> readAllEvents() 
@@ -47,27 +44,19 @@ public class IdentifyEventsTest {
     public void readAllEvents() {
     	iETest = new IdentifyEvents();
     	//TODO check with context
-    	assertNotNull(iETest.readAllEvents());
-    }
-
-    //public static void readPlainEvents()
-    @Test
-    public void readPlainEvents() {
-//    	iETest.readPlainEvents();
-//    	verify(iETest).readPlainEvents();
+    	assertNotNull(IdentifyEvents.readAllEvents());
     }
     
     // public static List<Context> process(IDEEvent event) 
     @Test
     public void process() {
-    	List<Context> test = new ArrayList<>();
-    	iETest.process(event);
+    	IdentifyEvents.process(event);
     }
 
     // public List<Context> getAggregatedContexts()
     @Test
     public void getAggregatedContexts() {
-    	List<Context> test = new ArrayList<>();
+    	List<Context> test;
     	test = iETest.getAggregatedContexts();
         assertNotNull(test);
     }

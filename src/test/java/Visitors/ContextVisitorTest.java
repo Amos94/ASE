@@ -1,9 +1,7 @@
 package Visitors;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Before;
@@ -13,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import cc.kave.commons.model.naming.codeelements.IParameterName;
 import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.declarations.IEventDeclaration;
 import cc.kave.commons.model.ssts.declarations.IMethodDeclaration;
@@ -21,7 +18,6 @@ import cc.kave.commons.model.ssts.expressions.assignable.ICastExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IIfElseExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import cc.kave.commons.model.ssts.expressions.assignable.ITypeCheckExpression;
-import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.references.IEventReference;
 import cc.kave.commons.model.ssts.statements.*;
 
