@@ -33,35 +33,40 @@ public class IdentifyEvents {
      * containing folder here.
      */
     private List<Context> aggregatedContexts;
-    private static Logger logger;
+
+    private static final Logger LOGGER = Logger.getLogger( IdentifyEvents.class.getName() );
+    private static final Boolean muteLogger = true;
+
 
     public IdentifyEvents(){
-        logger = Logger.getLogger(IdentifyEvents.class.getName());
-        aggregatedContexts = readAllEvents();
+        aggregatedContexts = readAllEvents(Configuration.EVENTS_DIR);
     }
     /**
      * 1: Find all users in the dataset.
      */
-    public static List<String> findAllUsers() {
+    public static List<String> findAllUsers(String eventsDir) {
         // This step is straight forward, as events are grouped by user. Each
         // .zip file in the dataset corresponds to one user.
         int maxEv = Configuration.getRecommendationZips();
         List<String> zips = Lists.newLinkedList();
 
         if(maxEv == -1){
-            for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
+            for (File f : FileUtils.listFiles(new File(eventsDir), new String[] { "zip" }, true)) {
                 zips.add(f.getAbsolutePath());
-                logger.log(Level.INFO, f.getName()+" user folder added");
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, f.getName()+" user folder added");
+                }
             }
         }else{
-            for (File f : FileUtils.listFiles(new File(Configuration.EVENTS_DIR), new String[] { "zip" }, true)) {
+            for (File f : FileUtils.listFiles(new File(eventsDir), new String[] { "zip" }, true)) {
                 zips.add(f.getAbsolutePath());
 
                 --maxEv;
                 if(maxEv == 0)
                     break;
-
-                logger.log(Level.INFO, f.getName()+" user folder added. Left to add: "+maxEv);
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, f.getName() + " user folder added. Left to add: " + maxEv);
+                }
             }
         }
 
@@ -71,9 +76,9 @@ public class IdentifyEvents {
     /**
      * 2: Reading events
      */
-    public static List<Context> readAllEvents() {
+    public static List<Context> readAllEvents(String eventsDir) {
         // each .zip file corresponds to a user
-        List<String> userZips = findAllUsers();
+        List<String> userZips = findAllUsers(eventsDir);
         List<Context> aggregatedContexts = new LinkedList<>();
 
         for (String user : userZips) {
@@ -84,9 +89,9 @@ public class IdentifyEvents {
                 // ... and desrialize the IDE event.
                 IDEEvent e = ra.getNext(IDEEvent.class);
                 // afterwards, you can process it as a Java object
-                //System.out.println(e.getContext());
-                logger.log(Level.INFO, "Processing events for: "+user.toString());
-                //System.out.println(ra.getNextPlain());
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, "Processing events for: " + user.toString());
+                }
                 aggregatedContexts.addAll(process(e));
 
             }
@@ -109,7 +114,9 @@ public class IdentifyEvents {
             CompletionEvent ce = (CompletionEvent) event;
             //ce.ActiveDocument.getFileName();
             contexts.add(ce.getContext());
-            logger.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
+            if(!muteLogger) {
+                LOGGER.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
+            }
         }
 
         return contexts;

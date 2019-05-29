@@ -171,6 +171,7 @@ public class IndexDocument implements Serializable {
                 ", methodCall='" + methodCall + '\'' +
                 ", type='" + type + '\'' +
                 ", overallContext=" + overallContext +
+                ", projectname=" + projectName +
                 '}';
     }
 
