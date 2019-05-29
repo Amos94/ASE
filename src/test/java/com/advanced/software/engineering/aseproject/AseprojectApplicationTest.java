@@ -1,6 +1,5 @@
 package com.advanced.software.engineering.aseproject;
 
-import Utils.Configuration;
 import helper.TestHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

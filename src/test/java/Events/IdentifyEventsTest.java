@@ -1,7 +1,7 @@
 package Events;
 
-import Utils.Configuration;
 
+import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -34,7 +34,7 @@ public class IdentifyEventsTest {
     	iETest = new IdentifyEvents();
     	List<String> result = new ArrayList<>();
     	//TODO not hardcode it
-    	result.add(Configuration.EVENTS_DIR);
+    	result.add(TestHelper.TEST_EVENTS_DIR);
 
     	assertEquals(result.size(), IdentifyEvents.findAllUsers().size());
     }
