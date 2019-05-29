@@ -9,9 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -33,23 +31,17 @@ public class InvertedIndexTest {
         Directory dir = invertedIndex.getIndexDirectory();
         assertNotNull(dir);
     }
-//    @Test
-//    public void createDirectoryIfNotExists(){
-//        File dir = new File("/Data/db");
-//        invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
-//        invertedIndex.createDirectoryIfNotExists(dir);
-//    }
+
 
     @Test
     public void startIndexing() {
         invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
         invertedIndex.startIndexing();
-//        verify(invertedIndex).startIndexing();
     }
 
     @Test
     public void isIndexed() {
-        assertEquals(false, invertedIndex.isIndexed(indexDocument));
+        assertFalse(invertedIndex.isIndexed(indexDocument));
     }
 
     @Test

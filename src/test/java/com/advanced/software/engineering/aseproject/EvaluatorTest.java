@@ -2,6 +2,7 @@ package com.advanced.software.engineering.aseproject;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -23,18 +24,10 @@ public class EvaluatorTest {
         String[] c = new String[]{ "Hallo", "Bye", "Never"};
         String[] d = new String[]{ "Cold"};
 
-        for (String value : a) {
-            mySet1.add(value);
-        }
-        for (String value : b) {
-            mySet2.add(value);
-        }
-        for (String value : c) {
-            mySet3.add(value);
-        }
-        for (String value : d) {
-            mySet4.add(value);
-        }
+        mySet1.addAll(Arrays.asList(a));
+        mySet2.addAll(Arrays.asList(b));
+        mySet3.addAll(Arrays.asList(c));
+        mySet4.addAll(Arrays.asList(d));
 
         JaccardSimilarity result1 = new JaccardSimilarity(mySet1,mySet2);
         JaccardSimilarity result2 = new JaccardSimilarity(mySet1,mySet3);

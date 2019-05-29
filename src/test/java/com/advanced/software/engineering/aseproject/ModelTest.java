@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static org.junit.Assert.*;
 
 public class ModelTest {
 

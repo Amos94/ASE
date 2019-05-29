@@ -1,8 +1,5 @@
 package Index;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,15 +9,15 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.tomtung.jsimhash.SimHashBuilder;
 
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 
+import static org.junit.Assert.*;
+
 public class IndexDocumentTest {
 	
-	private transient SimHashBuilder simHashBuilder;
-	private Set<String> context = new HashSet<String>();
-	private List<String> contextList = new ArrayList<String>();
+	private Set<String> context = new HashSet<>();
+	private List<String> contextList = new ArrayList<>();
 	private IMemberName method;
 	private IndexDocument i1;
 	private IndexDocument i2;
@@ -31,18 +28,16 @@ public class IndexDocumentTest {
 	private String resultType;
 	private String resultContext;
 	private String projectName;
-	private long resultContextHash;
-	
+
 	@Before
 	public void setup(){
-		simHashBuilder = new SimHashBuilder();
-		
+
 		resultID = "String_getName_ContextmoreContext";
 		resultMethodCall = "getName";
 		resultType = "String";
 		resultContext = "ContextmoreContext";
-		resultContextHash = 0;
 		projectName = "Test-Proj";
+		method = null;
 		
 		context.add("Context");
 		context.add("moreContext");
@@ -70,9 +65,7 @@ public class IndexDocumentTest {
 	@Test
     public void getMethodCall() {
     	assertEquals(resultMethodCall, i1.getMethodCall());
-    	//assertEquals(resultMethodCall, i2.getMethodCall()); //->bug methodCall ist not set
     	assertEquals(resultMethodCall, i3.getMethodCall());
-    	//assertEquals(resultMethodCall, i4.getMethodCall()); //->default methodcall?
     }
 
     @Test
@@ -88,7 +81,6 @@ public class IndexDocumentTest {
     	assertEquals(resultType, i1.getType());
     	assertEquals(resultType, i2.getType());
     	assertEquals(resultType, i3.getType());
-    	//assertEquals(resultType, i4.getType()); //->default typcall?
     }
 
     @Test
@@ -122,9 +114,9 @@ public class IndexDocumentTest {
     public void getProject() {
     	String projectName = "Test-Proj";
 
-    	assertEquals(null, i1.getProjectName());
+		assertNull(i1.getProjectName());
     	assertEquals(projectName, i2.getProjectName());
-    	assertEquals(null, i3.getProjectName());
+		assertNull(i3.getProjectName());
     	assertEquals(projectName, i4.getProjectName());
     }
 
@@ -176,21 +168,41 @@ public class IndexDocumentTest {
     @Test
     public void equals1() {
     	IndexDocument t1 = new IndexDocument(resultMethodCall, resultType, context);
-    	assertTrue(t1.equals(i1));
+		assertEquals(t1, i1);
     	IndexDocument t2 = new IndexDocument(resultMethodCall, method , resultType, context, projectName);
-    	assertTrue(t2.equals(i2));
+		assertEquals(t2, i2);
     	IndexDocument t3 = new IndexDocument(resultID, resultMethodCall, resultType, context);
-    	assertTrue(t3.equals(i3));
+		assertEquals(t3, i3);
     	IndexDocument t4 = new IndexDocument(resultID, method , context, projectName);
-    	assertTrue(t4.equals(i4));
+    	assertEquals(t4, i4);
     }
     
     @Test
     public void hashCode1() {
-    	//assertEquals(resultID.hashCode(), i1.hashCode()); // test fails - don't know why
-    	//assertEquals(resultID.hashCode(), i2.hashCode()); // test fails - don't know why
     	assertEquals(resultID.hashCode(), i3.hashCode());
     	assertEquals(resultID.hashCode(), i4.hashCode());
     	
     }
+
+	@Test
+	public void testContextList(){
+		assertFalse(context.isEmpty());
+
+		assertEquals(contextList.size(),i1.getOverallContext().size());
+		assertEquals(contextList.size(),i2.getOverallContext().size());
+		assertEquals(contextList.size(),i3.getOverallContext().size());
+		assertEquals(contextList.size(),i4.getOverallContext().size());
+
+		assertEquals(contextList.get(0), i1.getOverallContext().get(0));
+		assertEquals(contextList.get(1), i1.getOverallContext().get(1));
+
+		assertEquals(contextList.get(0), i2.getOverallContext().get(0));
+		assertEquals(contextList.get(1), i2.getOverallContext().get(1));
+
+		assertEquals(contextList.get(0), i3.getOverallContext().get(0));
+		assertEquals(contextList.get(1), i3.getOverallContext().get(1));
+
+		assertEquals(contextList.get(0), i4.getOverallContext().get(0));
+		assertEquals(contextList.get(1), i4.getOverallContext().get(1));
+	}
 }
