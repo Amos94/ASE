@@ -53,8 +53,8 @@ public class IdentifyEventsTest {
     //public static void readPlainEvents()
     @Test
     public void readPlainEvents() {
-    	iETest.readPlainEvents();
-    	verify(iETest).readPlainEvents();	
+//    	iETest.readPlainEvents();
+//    	verify(iETest).readPlainEvents();
     }
     
     // public static List<Context> process(IDEEvent event) 

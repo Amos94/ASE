@@ -26,8 +26,9 @@ public class SSTProcessorTest {
 	
     @Test
     public void processSST() {
-    	processor.processSST(ctx);
-    	verify(processor).processSST(ctx);
+		String projectName = "Test";
+    	processor.processSST(ctx, projectName);
+    	verify(processor).processSST(ctx, projectName);
     }
 
     @Test
