@@ -83,19 +83,19 @@ public class IdentifyEvents {
 
         for (String user : userZips) {
             // you can use our helper to open a file...
-            ReadingArchive ra = new ReadingArchive(new File(user));
-            // ...iterate over it...
-            while (ra.hasNext()) {
-                // ... and desrialize the IDE event.
-                IDEEvent e = ra.getNext(IDEEvent.class);
-                // afterwards, you can process it as a Java object
-                if(!muteLogger) {
-                    LOGGER.log(Level.INFO, "Processing events for: " + user.toString());
-                }
-                aggregatedContexts.addAll(process(e));
+            try (ReadingArchive ra = new ReadingArchive(new File(user))) {
+                // ...iterate over it...
+                while (ra.hasNext()) {
+                    // ... and desrialize the IDE event.
+                    IDEEvent e = ra.getNext(IDEEvent.class);
+                    // afterwards, you can process it as a Java object
+                    if(!muteLogger) {
+                        LOGGER.log(Level.INFO, "Processing events for: " + user.toString());
+                    }
+                    aggregatedContexts.addAll(process(e));
 
+                }
             }
-            ra.close();
         }
         return aggregatedContexts;
     }
