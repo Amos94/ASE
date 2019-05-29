@@ -28,7 +28,5 @@ public class RecommenderInitializationTest {
         IInvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
         assertNotEquals(null, invertedIndex);
 
-        Model model = new Model(invertedIndex);
-        assertNotEquals(null, model);
     }
 }

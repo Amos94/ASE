@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -32,14 +34,30 @@ import cc.kave.commons.utils.io.ReadingArchive;
  */
 public class IoHelper {
 
+    private static final Logger LOGGER = Logger.getLogger( IoHelper.class.getName() );
+
+    /**
+     * Read only the first context
+     * s
+     * @param dir
+     * @return Context
+     */
     public static Context readFirstContext(String dir) {
         for (String zip : findAllZips(dir)) {
             List<Context> ctxs = read(zip);
-            return ctxs.get(0);
+            if(!ctxs.isEmpty()) {
+                return ctxs.get(0);
+            }
         }
         return null;
     }
 
+    /**
+     * Read all Contexts
+     *
+     * @param dir
+     * @return Context
+     */
     public static List<Context> readAll(String dir) {
         LinkedList<Context> res = Lists.newLinkedList();
 
@@ -49,16 +67,20 @@ public class IoHelper {
         return res;
     }
 
+    /**
+     * Read list of Contexts
+     *
+     * @param zipFile
+     * @return Context
+     */
     public static List<Context> read(String zipFile) {
         LinkedList<Context> res = Lists.newLinkedList();
-        try {
-            IReadingArchive ra = new ReadingArchive(new File(zipFile));
+        try (IReadingArchive ra = new ReadingArchive(new File(zipFile))) {
             while (ra.hasNext()) {
                 res.add(ra.getNext(Context.class));
             }
-            ra.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while reading zipFiles ", e);
         }
         return res;
     }

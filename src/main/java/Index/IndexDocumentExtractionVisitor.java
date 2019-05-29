@@ -25,6 +25,15 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
     // Context Visitor
     private final ContextVisitor CONTEXT_VISITOR = new ContextVisitor();
 
+    private String projectName;
+
+    public IndexDocumentExtractionVisitor() {
+    }
+
+    public IndexDocumentExtractionVisitor(String projectName) {
+        this.projectName = projectName;
+    }
+
     /**
      * Create a list to visit
      *
@@ -109,11 +118,11 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
         type = normalizeType(type);
 
         // Don't index constructors
-        if (!methodNameStr.equals("???") || !methodNameStr.equals("???")) {
+        if (!methodNameStr.equals("???")) {
             if (!methodName.isConstructor()) {
 
                 // create contexts
-                List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.LAST_N_CONSIDERED_STATEMENTS);
+                List<IStatement> lastNStatements = getLastNStatementsBeforeStatement(body, body.indexOf(statement), Configuration.getLastNConsideredStatements());
                 Set<String> overallContextSet = new HashSet<>();
                 lastNStatements.forEach(iStatement -> iStatement.accept(CONTEXT_VISITOR, overallContextSet));
 
@@ -125,7 +134,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
                         overallContext.addAll(identifierSanitization(identifier));
                     //System.out.println(identifierSanitization(identifier));
                 }
-                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext);
+                IndexDocument indexDocument = new IndexDocument(methodNameStr, method, type, overallContext, projectName);
                 indexDocuments.add(indexDocument);
             }
         }
@@ -191,7 +200,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
      * @return
      */
     public List<String> identifierSanitization(String identifier) {
-        if (Configuration.REMOVE_STOP_WORDS) {
+        if (Configuration.getRemoveStopWords()) {
             if (identifier.length() != 1) {
                 return removeStopWords(stemIdentifiers(splitCamelCase(identifier)));
             }
@@ -203,6 +212,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
 
     /**
      * Method to split in CamelCase
+     *
      * @param identifier
      * @return identifierSplitList
      */

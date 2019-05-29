@@ -1,6 +1,6 @@
 package Index;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import cc.kave.commons.model.ssts.blocks.*;
 import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
-import cc.kave.commons.model.ssts.statements.*;
 import cc.kave.commons.model.ssts.IStatement;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,19 +30,19 @@ public class IndexDocumentExtractionVisitorTest {
 
 	@Before
 	public void setup(){
-		iV = new IndexDocumentExtractionVisitorNoList();
+		iV = new IndexDocumentExtractionVisitorNoList("testproject");
 		MockitoAnnotations.initMocks(this);
 	}
 
     @Test
-    public void visit() {							
+    public void visit() {
     	List<IStatement> test = new ArrayList<>();
     	test.add(statement);
     	op.visit(test,index);
     	verify(op).visit(test,index);					//not sure what else to test
-    	
+
     }
-    
+
     @Test
     public void doVisit() {
     	op.doVisit(expression, body, statement, index);
@@ -62,19 +60,19 @@ public class IndexDocumentExtractionVisitorTest {
 		}
 		assertEquals("IO,Exception,",sb.toString());
 		sb.setLength(0);
-		
+
 		for(String s : iV.identifierSanitization("stemmingCases")){
 			sb.append(s);
 			sb.append(",");
 		}
 		assertEquals("stem,Case,",sb.toString());
 		sb.setLength(0);
-		
+
 		for(String s : iV.identifierSanitization("youAreGoing")){
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("Are,Go,",sb.toString());
+		assertEquals("you,Are,Go,",sb.toString());
     }
 
     @Test
@@ -87,39 +85,39 @@ public class IndexDocumentExtractionVisitorTest {
 		}
 		assertEquals("IO,Exception,",sb.toString());
 		sb.setLength(0);
-		
+
 		for(String s : iV.splitCamelCase("getMessage")){
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("get,Message,",sb.toString());	
+		assertEquals("get,Message,",sb.toString());
 		sb.setLength(0);
-		
+
 		for(String s : iV.splitCamelCase("GETMESSAGE")){
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("GETMESSAGE,",sb.toString());	
+		assertEquals("GETMESSAGE,",sb.toString());
     }
 
     @Test
     public void stemIdentifiers() {
 		StringBuilder sb = new StringBuilder();
 		test1.add("stemming");
-		
+
 		for(String s : iV.stemIdentifiers(test1)){
 			sb.append(s);
 		}
-		assertEquals("stem",sb.toString());	
+		assertEquals("stem",sb.toString());
 		sb.setLength(0);
-		
+
 		test1.add("getMessage");
-		
+
 		for(String s : iV.stemIdentifiers(test1)){
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("stem,getMessag,",sb.toString());	
+		assertEquals("stem,getMessag,",sb.toString());
     }
 
     @Test
@@ -139,7 +137,7 @@ public class IndexDocumentExtractionVisitorTest {
 		}
 		assertEquals("banana,apple,",sb.toString());
 		sb.setLength(0);
-		
+
     	test1.add("are");
     	for(String s : iV.removeStopWords(test1)){
 			sb.append(s);
@@ -147,7 +145,7 @@ public class IndexDocumentExtractionVisitorTest {
 		}
 		assertEquals("banana,apple,",sb.toString());
 		sb.setLength(0);
-		
+
     	test1.add("y o u");
 		for(String s : iV.removeStopWords(test1)){
 			sb.append(s);
@@ -163,10 +161,10 @@ public class IndexDocumentExtractionVisitorTest {
     	String s2 = "yourself";
     	String s3 = "apple";
     	String s4 = "y o u";
-    	
-    	assertEquals(true, iV.isStopWord(s1)); 
-    	assertEquals(true, iV.isStopWord(s2));
-    	assertEquals(false, iV.isStopWord(s3));
-    	assertEquals(false, iV.isStopWord(s4));
+
+		assertTrue(iV.isStopWord(s1));
+		assertTrue(iV.isStopWord(s2));
+		assertFalse(iV.isStopWord(s3));
+		assertFalse(iV.isStopWord(s4));
     }
 }

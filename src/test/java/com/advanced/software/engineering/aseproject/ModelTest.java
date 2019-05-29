@@ -9,8 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class ModelTest {
 	
     @Test
     public void processSST() {
-        List<String> overallContext = new LinkedList<>();
+        Collection<String> overallContext = new LinkedList<>();
         overallContext.add("Regex");
         overallContext.add("bool");
         overallContext.add("Build");
@@ -35,10 +35,8 @@ public class ModelTest {
         String docID = "1";
         String methodCall = "testMethod1";
         String type = "java.util.StringJoiner";
-        long overallContextSimhash = 30896187;
-        IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext, overallContextSimhash);
+        IndexDocument doc = new IndexDocument(docID, methodCall, type, overallContext);
     }
-
     @Test
     public void startProcessSSTs() {
     	model.startProcessSSTs();
