@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IoHelperTest {
-	
+
 
 	@Before
 	public void setup() {
@@ -34,7 +34,6 @@ public class IoHelperTest {
     public void readFirstContext() {
 
         String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
-
         try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
             assertTrue(ra.hasNext());
         }
@@ -42,7 +41,7 @@ public class IoHelperTest {
     }
 
     @Test
-    public void readAll() { 
+    public void readAll() {
     	//public static List<Context> readAll(String dir)
     	String zipFile = TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src";
     	List<Context> res;
@@ -54,10 +53,10 @@ public class IoHelperTest {
     @Test
     public void read() {
     	//public static List<Context> read(String zipFile)
-    	String zipFile = TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src/ACAT.sln-contexts.zip";
+        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
     	List<Context> res;
     	LinkedList expected = new LinkedList();
-    	res = IoHelper.read(zipFile);
+    	res = IoHelper.read(firstZip);
     	assertEquals(expected, res);
     }
 

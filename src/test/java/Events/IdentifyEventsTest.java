@@ -23,31 +23,28 @@ public class IdentifyEventsTest {
 
 	@Mock private IdentifyEvents iETest;
 	@Mock private IDEEvent event;
-	
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
     @Test
     public void findAllUsers() {
-    	iETest = new IdentifyEvents();
     	List<String> result = new ArrayList<>();
     	//TODO not hardcode it
     	result.add(TestHelper.TEST_EVENTS_DIR);
 
-    	assertEquals(result.size(), IdentifyEvents.findAllUsers().size());
+    	assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
     }
-    
-    //public static List<Context> readAllEvents() 
+
+    //public static List<Context> readAllEvents()
     @Test
     public void readAllEvents() {
-    	iETest = new IdentifyEvents();
-    	//TODO check with context
-    	assertNotNull(IdentifyEvents.readAllEvents());
+    	assertNotNull(IdentifyEvents.readAllEvents(TestHelper.TEST_EVENTS_DIR));
     }
-    
-    // public static List<Context> process(IDEEvent event) 
+
+    // public static List<Context> process(IDEEvent event)
     @Test
     public void process() {
     	IdentifyEvents.process(event);
