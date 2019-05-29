@@ -35,6 +35,7 @@ public class IdentifyEvents {
     private List<Context> aggregatedContexts;
 
     private static final Logger LOGGER = Logger.getLogger( IdentifyEvents.class.getName() );
+    private static final Boolean muteLogger = true;
 
 
     public IdentifyEvents(){
@@ -52,7 +53,9 @@ public class IdentifyEvents {
         if(maxEv == -1){
             for (File f : FileUtils.listFiles(new File(eventsDir), new String[] { "zip" }, true)) {
                 zips.add(f.getAbsolutePath());
-                LOGGER.log(Level.INFO, f.getName()+" user folder added");
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, f.getName()+" user folder added");
+                }
             }
         }else{
             for (File f : FileUtils.listFiles(new File(eventsDir), new String[] { "zip" }, true)) {
@@ -61,8 +64,9 @@ public class IdentifyEvents {
                 --maxEv;
                 if(maxEv == 0)
                     break;
-
-                LOGGER.log(Level.INFO, f.getName()+" user folder added. Left to add: "+maxEv);
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, f.getName() + " user folder added. Left to add: " + maxEv);
+                }
             }
         }
 
@@ -85,9 +89,9 @@ public class IdentifyEvents {
                 // ... and desrialize the IDE event.
                 IDEEvent e = ra.getNext(IDEEvent.class);
                 // afterwards, you can process it as a Java object
-                //System.out.println(e.getContext());
-                LOGGER.log(Level.INFO, "Processing events for: "+user.toString());
-                //System.out.println(ra.getNextPlain());
+                if(!muteLogger) {
+                    LOGGER.log(Level.INFO, "Processing events for: " + user.toString());
+                }
                 aggregatedContexts.addAll(process(e));
 
             }
@@ -110,7 +114,9 @@ public class IdentifyEvents {
             CompletionEvent ce = (CompletionEvent) event;
             //ce.ActiveDocument.getFileName();
             contexts.add(ce.getContext());
-            LOGGER.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
+            if(!muteLogger) {
+                LOGGER.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
+            }
         }
 
         return contexts;
