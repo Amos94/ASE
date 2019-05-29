@@ -9,20 +9,18 @@ import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 import Context.ContextHelper;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RecommenderInitialization {
+class RecommenderInitialization {
 
     private String contextsPath;
     private String eventsPath;
     private Logger logger;
 
-    public RecommenderInitialization(String contextsPath, String eventsPath){
+    RecommenderInitialization(String contextsPath, String eventsPath){
 
         // process start
         logger = Logger.getLogger(RecommenderInitialization.class.getName());
@@ -39,7 +37,7 @@ public class RecommenderInitialization {
                         .concat("\nEvents: "+eventsPath));
     }
 
-    public void createIndex() {
+    void createIndex() {
         // finds all given zips by context path
         Set<String> zips = IoHelper.findAllZips(contextsPath);
         int numberOfZips = zips.size();
@@ -70,13 +68,19 @@ public class RecommenderInitialization {
                 // ... and iterate over content.
                 // the iteration will stop after 10 contexts to speed things up in the example.
                 while (ra.hasNext()) {
+
+                    //Project name for index
+                    String[] zipName = zip.split("/");
+                    int pnSize = zipName.length;
+                    String projectName = zipName[pnSize-1].replace(".zip","");
+
                     /*
                      * within the slnZip, each stored context is contained as a single file that
                      * contains the Json representation of a {@see Context}.
                      */
-                    Context ctx = ra.getNext(Context.class);
 
-                    sstProcessor.processSST(ctx);
+                    Context ctx = ra.getNext(Context.class);
+                    sstProcessor.processSST(ctx, projectName);
                 }
             }
             logger.log(Level.INFO, "\n Finishing to create index for "+zip);

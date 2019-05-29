@@ -1,7 +1,6 @@
 package Index;
 
 import cc.kave.commons.model.naming.codeelements.IMemberName;
-import com.github.tomtung.jsimhash.SimHashBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.Serializable;
@@ -16,13 +15,12 @@ import java.util.*;
  */
 public class IndexDocument implements Serializable {
 
-    private transient SimHashBuilder simHashBuilder;
+    private String projectName;
     private String id;
     private String methodCall;
     private IMemberName method;
     private String type;
     private Set<String> overallContext;
-    private long overallContextSimhash;
 
     // Getters
     public String getId() {
@@ -31,6 +29,10 @@ public class IndexDocument implements Serializable {
 
     public String getMethodCall() {
         return methodCall;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
     public IMemberName getMethod() {
@@ -45,10 +47,6 @@ public class IndexDocument implements Serializable {
         return setToList(overallContext);
     }
 
-    public long getOverallContextSimhash() {
-        return overallContextSimhash;
-    }
-
 
     /**
      * Creates a new IndexDocument storing the given information and assigns it an id.
@@ -61,8 +59,6 @@ public class IndexDocument implements Serializable {
         this.type = type;
 
         this.overallContext = new TreeSet<>(overallContext);
-        this.simHashBuilder = new SimHashBuilder();
-        this.overallContextSimhash = createSimhashFromStrings(setToList(this.overallContext));
 
         String uniqueDeterministicId = type + "_" + (methodCall == null ? "-" : methodCall) + "_" + concatenate(setToList(this.overallContext));
         this.id = DigestUtils.sha256Hex(uniqueDeterministicId);
@@ -76,16 +72,17 @@ public class IndexDocument implements Serializable {
      * @param type
      * @param overallContext
      */
-    public IndexDocument(String methodCall, IMemberName method, String type, Collection<String> overallContext) {
+    public IndexDocument(String methodCall, IMemberName method, String type, Collection<String> overallContext, String projectName) {
         if (type == null || type.equals("")) {
             throw new IllegalArgumentException("Parameter 'type' of IndexDocument must not be null or empty!");
         }
+
+        this.projectName = projectName;
+
         this.method = method;
         this.type = type;
 
         this.overallContext = new TreeSet<>(overallContext);
-        this.simHashBuilder = new SimHashBuilder();
-        this.overallContextSimhash = createSimhashFromStrings(setToList(this.overallContext));
 
         String uniqueDeterministicId = type + "_" + (methodCall == null ? "-" : methodCall) + "_" + concatenate(setToList(this.overallContext));
         this.id = DigestUtils.sha256Hex(uniqueDeterministicId);
@@ -95,40 +92,43 @@ public class IndexDocument implements Serializable {
      * Creates a new IndexDocument with the given information.
      * <p>
      * Use this constructor only if you are loading IndexDocument instances from a stored model
-     * and you already know their docID and simhashes. This Constructor also contains the methodCall.
      *
      * @param docId
      * @param methodCall
      * @param type
      * @param overallContext
-     * @param overallContextSimhash
      */
-    public IndexDocument(String docId, String methodCall, String type, Collection<String> overallContext, long overallContextSimhash) {
+    public IndexDocument(String docId, String methodCall, String type, Collection<String> overallContext) {
         id = docId;
         this.methodCall = methodCall;
         this.type = type;
         this.overallContext = new TreeSet<>(overallContext);
-        this.overallContextSimhash = overallContextSimhash;
     }
 
     /**
      * Creates a new IndexDocument with the given information.
      * <p>
      * Use this constructor only if you are loading IndexDocument instances from a stored model
-     * and you already know their docID and simhashes.
      *
      * @param docId
      * @param method
      * @param overallContext
-     * @param overallContextSimhash
      */
-    public IndexDocument(String docId, IMemberName method, Collection<String> overallContext, long overallContextSimhash) {
+    public IndexDocument(String docId, IMemberName method, Collection<String> overallContext) {
         id = docId;
         this.method = method;
         this.methodCall = methodCall;
         this.type = type;
         this.overallContext = new TreeSet<>(overallContext);
-        this.overallContextSimhash = overallContextSimhash;
+    }
+
+    public IndexDocument(String docId, IMemberName method, Collection<String> overallContext, String projectName) {
+        id = docId;
+        this.method = method;
+        this.methodCall = methodCall;
+        this.type = type;
+        this.overallContext = new TreeSet<>(overallContext);
+        this.projectName = projectName;
     }
 
 
@@ -143,19 +143,6 @@ public class IndexDocument implements Serializable {
         List<T> result = new LinkedList<>();
         result.addAll(set);
         return result;
-    }
-
-    /**
-     * Creates a SimHash from strings
-     *
-     * @param strings
-     * @return
-     */
-    private long createSimhashFromStrings(List<String> strings) {
-        String concatenatedString = concatenate(strings);
-        simHashBuilder.reset();
-        simHashBuilder.addStringFeature(concatenatedString);
-        return (long) simHashBuilder.computeResult();
     }
 
     /**
@@ -184,7 +171,6 @@ public class IndexDocument implements Serializable {
                 ", methodCall='" + methodCall + '\'' +
                 ", type='" + type + '\'' +
                 ", overallContext=" + overallContext +
-                ", overallContextSimhash=" + overallContextSimhash +
                 '}';
     }
 

@@ -29,5 +29,8 @@ public interface IInvertedIndex {
      */
     List<IndexDocument> deserializeAll();
 
+    //get data by project
+    List<IndexDocument> deserializeByProject(String projectName);
+
 
 }

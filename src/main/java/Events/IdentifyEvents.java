@@ -1,18 +1,3 @@
-/**
- * Copyright 2016 Technische Universität Darmstadt
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package Events;
 
 import java.io.File;
@@ -33,7 +18,6 @@ import com.google.common.collect.Lists;
 
 import cc.kave.commons.utils.io.ReadingArchive;
 
-import static Utils.Configuration.RECOMMENDATION_ZIPS;
 
 /**
  * This class contains several code examples that explain how to read enriched
@@ -61,7 +45,7 @@ public class IdentifyEvents {
     public static List<String> findAllUsers() {
         // This step is straight forward, as events are grouped by user. Each
         // .zip file in the dataset corresponds to one user.
-        int maxEv = RECOMMENDATION_ZIPS;
+        int maxEv = Configuration.getRecommendationZips();
         List<String> zips = Lists.newLinkedList();
 
         if(maxEv == -1){
@@ -102,6 +86,7 @@ public class IdentifyEvents {
                 // afterwards, you can process it as a Java object
                 //System.out.println(e.getContext());
                 logger.log(Level.INFO, "Processing events for: "+user.toString());
+                //System.out.println(ra.getNextPlain());
                 aggregatedContexts.addAll(process(e));
 
             }
@@ -118,9 +103,11 @@ public class IdentifyEvents {
         // type. As the events are not nested, we did not implement the visitor
         // pattern, but resorted to instanceof checks.
         List<Context> contexts = new LinkedList<>();
+
         if (event instanceof CompletionEvent) {
             // if the correct type is identified, you can cast it...
             CompletionEvent ce = (CompletionEvent) event;
+            //ce.ActiveDocument.getFileName();
             contexts.add(ce.getContext());
             logger.log(Level.INFO, "Event "+ event.getClass().getName() + " added");
         }

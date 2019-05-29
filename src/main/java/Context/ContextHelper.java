@@ -43,7 +43,7 @@ public class ContextHelper {
         Set<String> slnZips = IoHelper.findAllZips(ctxsDir);
 
         for (String slnZip : slnZips) {
-            System.out.printf("\n#### processing solution zip: %s #####\n", slnZip);
+            System.out.printf("\n#### processing the events#####\n");
             processZip(slnZip);
         }
     }
