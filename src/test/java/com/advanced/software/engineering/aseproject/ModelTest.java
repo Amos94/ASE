@@ -2,14 +2,29 @@ package com.advanced.software.engineering.aseproject;
 
 import Index.IndexDocument;
 import org.junit.Test;
+import org.junit.Before;
+
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ModelTest {
+	
+	@Mock private Model model;
 
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	}
+	
     @Test
     public void processSST() {
         List<String> overallContext = new LinkedList<>();
@@ -26,9 +41,13 @@ public class ModelTest {
 
     @Test
     public void startProcessSSTs() {
+    	model.startProcessSSTs();
+    	verify(model).startProcessSSTs();
     }
 
     @Test
     public void finishProcessSSTs() {
+    	model.finishProcessSSTs();
+    	verify(model).finishProcessSSTs();
     }
 }

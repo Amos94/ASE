@@ -40,15 +40,13 @@ public class IndexDocumentExtractionVisitorNoListTest {
     	List<IStatement> test = new ArrayList<>();
     	test.add(statement);
     	op.visit(test,index);
-    	verify(op).visit(test,index);					//not sure what else to test
-    	
+    	verify(op).visit(test,index);					
     }
     
     @Test
     public void doVisit() {
     	op.doVisit(expression, body, statement, index);
-    	verify(op).doVisit(expression, body, statement, index);					//not sure what else to test
-
+    	verify(op).doVisit(expression, body, statement, index);				
     }
 
     @Test
@@ -77,7 +75,7 @@ public class IndexDocumentExtractionVisitorNoListTest {
     }
 
     @Test
-    public void splitCamelCase() {							//is it okay that IO does not get split?
+    public void splitCamelCase() {							
 		StringBuilder sb = new StringBuilder();
 
 		for(String s : iV.splitCamelCase("IOException")){
