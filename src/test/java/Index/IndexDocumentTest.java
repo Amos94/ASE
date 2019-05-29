@@ -30,6 +30,7 @@ public class IndexDocumentTest {
 	private String resultMethodCall;
 	private String resultType;
 	private String resultContext;
+	private String projectName;
 	private long resultContextHash;
 	
 	@Before
@@ -41,6 +42,7 @@ public class IndexDocumentTest {
 		resultType = "String";
 		resultContext = "ContextmoreContext";
 		resultContextHash = 0;
+		projectName = "Test-Proj";
 		
 		context.add("Context");
 		context.add("moreContext");
@@ -50,11 +52,11 @@ public class IndexDocumentTest {
 		//IndexDocument(String methodCall, String type, Collection<String> overallContext)
 		i1 = new IndexDocument(resultMethodCall, resultType, context);
 		//IndexDocument(String methodCall, IMemberName method, String type, Collection<String> overallContext)
-		i2 = new IndexDocument(resultMethodCall, method , resultType, context);
+		i2 = new IndexDocument(resultMethodCall, method , resultType, context,projectName);
 		//IndexDocument(String docId, String methodCall, String type, Collection<String> overallContext, long overallContextSimhash)
-		i3 = new IndexDocument(resultID, resultMethodCall, resultType, context, 0);
+		i3 = new IndexDocument(resultID, resultMethodCall, resultType, context);
 		//IndexDocument(String docId, IMemberName method, Collection<String> overallContext, long overallContextSimhash)
-		i4 = new IndexDocument(resultID, method , context, 0);
+		i4 = new IndexDocument(resultID, method , context, projectName);
 	}
 	
     @Test
@@ -117,14 +119,13 @@ public class IndexDocumentTest {
 	}
 
     @Test
-    public void getOverallContextSimhash() {
-    	simHashBuilder.addStringFeature(resultContext);
-    	long expectedSimhash = simHashBuilder.computeResult();
+    public void getProject() {
+    	String projectName = "Test-Proj";
 
-    	assertEquals(expectedSimhash, i1.getOverallContextSimhash()); 
-    	assertEquals(expectedSimhash, i2.getOverallContextSimhash());
-    	assertEquals(resultContextHash, i3.getOverallContextSimhash());
-    	assertEquals(resultContextHash, i4.getOverallContextSimhash());
+    	assertEquals(null, i1.getProjectName());
+    	assertEquals(projectName, i2.getProjectName());
+    	assertEquals(null, i3.getProjectName());
+    	assertEquals(projectName, i4.getProjectName());
     }
 
     @Test
@@ -134,7 +135,7 @@ public class IndexDocumentTest {
               ", methodCall='" + i1.getMethodCall() + '\'' +
               ", type='" + i1.getType() + '\'' +
               ", overallContext=" + i1.getOverallContext() +
-              ", overallContextSimhash=" + i1.getOverallContextSimhash() +
+              ", projectname=" + i1.getProjectName() +
               '}';
     	assertEquals(result, i1.toString());
     }
@@ -145,7 +146,7 @@ public class IndexDocumentTest {
                 ", methodCall='" + i2.getMethodCall() + '\'' +
                 ", type='" + i2.getType() + '\'' +
                 ", overallContext=" + i2.getOverallContext() +
-                ", overallContextSimhash=" + i2.getOverallContextSimhash() +
+                ", projectname=" + i2.getProjectName() +
                 '}';
       	assertEquals(result, i2.toString());
     }
@@ -156,7 +157,7 @@ public class IndexDocumentTest {
                 ", methodCall='" + i3.getMethodCall() + '\'' +
                 ", type='" + i3.getType() + '\'' +
                 ", overallContext=" + i3.getOverallContext() +
-                ", overallContextSimhash=" + i3.getOverallContextSimhash() +
+                ", projectname=" + i3.getProjectName() +
                 '}';
       	assertEquals(result, i3.toString());
     }
@@ -167,7 +168,7 @@ public class IndexDocumentTest {
                 ", methodCall='" + i4.getMethodCall() + '\'' +
                 ", type='" + i4.getType() + '\'' +
                 ", overallContext=" + i4.getOverallContext() +
-                ", overallContextSimhash=" + i4.getOverallContextSimhash() +
+                ", projectname=" + i4.getProjectName() +
                 '}';
       	assertEquals(result, i4.toString());
     }
@@ -176,11 +177,11 @@ public class IndexDocumentTest {
     public void equals1() {
     	IndexDocument t1 = new IndexDocument(resultMethodCall, resultType, context);
     	assertTrue(t1.equals(i1));
-    	IndexDocument t2 = new IndexDocument(resultMethodCall, method , resultType, context);
+    	IndexDocument t2 = new IndexDocument(resultMethodCall, method , resultType, context, projectName);
     	assertTrue(t2.equals(i2));
-    	IndexDocument t3 = new IndexDocument(resultID, resultMethodCall, resultType, context, 0);
+    	IndexDocument t3 = new IndexDocument(resultID, resultMethodCall, resultType, context);
     	assertTrue(t3.equals(i3));
-    	IndexDocument t4 = new IndexDocument(resultID, method , context, 0);
+    	IndexDocument t4 = new IndexDocument(resultID, method , context, projectName);
     	assertTrue(t4.equals(i4));
     }
     
