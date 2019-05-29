@@ -16,6 +16,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.Map.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -23,11 +29,17 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     private final IInvertedIndex index;
     private List<IndexDocument> documents;
+    private Logger logger = Logger.getLogger(Recommender.class.getName());
+
     private Map<IndexDocument, Double> candidates;
+    private int numberOfCorrectRecommendations = 0;
 
 
     public Recommender(IInvertedIndex index) {
+        logger.log(Level.INFO, "Initializing the recommender.");
         this.index = index;
+        logger.log(Level.INFO, "Fetching identifiers from db...");
+        getIndexes(); //first let's retrieve all indexes from db
     }
 
     /**
@@ -39,12 +51,22 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     @Override
     public Set<Pair<IMemberName, Double>> query(IndexDocument query) {
         Set<Pair<IMemberName, Double>> result = new LinkedHashSet<>();
-        getScoredDocuments(query);
 
-        //get top 10 candidates
-        for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
-            result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
-            System.out.println("Recommended: " + e.getKey().getMethod().getName());
+        if(
+                (query.getMethodCall() != "" || query.getMethodCall() != null || query.getMethodCall() != "unknown") &&
+                (query.getOverallContext().size() > 0)
+        ) {
+            getScoredDocuments(query);
+            //System.out.println(query.getMethodCall());
+
+            for (Map.Entry<IndexDocument, Double> e : candidates.entrySet()) {
+                result.add(Pair.of(e.getKey().getMethod(), e.getValue()));
+                logger.log(Level.INFO, "\nFor " + query.getMethodCall() + " our recommendation is: " + e.getKey().getMethod().getName() + " confident: " + e.getValue());
+
+                if(e.getKey().getMethod().getName().equals(query.getMethodCall()))
+                    incrementNumberOfRecommendations();
+                //System.out.println(numberOfCorrectRecommendations);
+            }
         }
 
         return result;
@@ -74,17 +96,23 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
      */
     private IndexDocument combineContexts(List<IndexDocument> contexts) {
         String lastType;
+        String lastMethod;
+        List<String> overallContext = new LinkedList<>();
 
-        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "")
+        if (contexts.size() > 0 && contexts.get((contexts.size() - 1)).getType() != "" && (contexts.get((contexts.size() - 1)).getOverallContext().size() > 0)) {
             lastType = contexts.get(contexts.size() - 1).getType();
-        else
-            lastType = "unknown";
-
-        List<String> combinedOverallContext = new LinkedList<>();
-        for (IndexDocument doc : contexts) {
-            combinedOverallContext.addAll(doc.getOverallContext());
+            lastMethod = contexts.get(contexts.size() - 1).getMethod().getName();
+            overallContext.addAll(contexts.get(contexts.size() - 1).getOverallContext());
         }
-        return new IndexDocument(null, lastType, combinedOverallContext);
+        else {
+            lastType = "unknown";
+            lastMethod = "unknown";
+        }
+
+//        for (IndexDocument doc : contexts) {
+//            combinedOverallContext.addAll(doc.getOverallContext());
+//        }
+        return new IndexDocument(lastMethod, lastType, overallContext);
     }
 
     /**
@@ -125,25 +153,74 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
      * @param queryDoc
      */
     private void getScoredDocuments(IndexDocument queryDoc) {
-        getIndexes(); //first let's retrieve all indexes from db
-
         Map<IndexDocument, Double> scoredDocuments = new HashMap<>();
 
         //score documents using jaccard similarity score
         for (IndexDocument doc : documents) {
             Evaluator evaluator = new Evaluator(doc, queryDoc);
+
             double similarityScore = evaluator.calculateJaccard();
             scoredDocuments.put(doc, similarityScore);
         }
 
         candidates = scoredDocuments.entrySet()
                 .stream()
-                .limit(Configuration.MAX_CANDIDATES)
                 .distinct()
+                .filter(distinctByKey(p->p.getKey().getMethod().getName()))
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .limit(Configuration.MAX_CANDIDATES)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, HashMap::new));
+
+        //candidates.putAll(findGreatest(candidates,Configuration.MAX_CANDIDATES));
 
     }
 
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 
+    public int getNumberOfCorrectRecommendations(){
+        return this.numberOfCorrectRecommendations;
+    }
+
+    public void incrementNumberOfRecommendations()
+    {
+        this.numberOfCorrectRecommendations = this.numberOfCorrectRecommendations+1;
+    }
+
+
+    private static <K, V extends Comparable<? super V>> HashMap<K, V> findGreatest(Map<K, V> map, int n)
+    {
+        Comparator<? super Entry<K, V>> comparator =
+                new Comparator<Entry<K, V>>()
+                {
+                    @Override
+                    public int compare(Entry<K, V> e0, Entry<K, V> e1)
+                    {
+                        V v0 = e0.getValue();
+                        V v1 = e1.getValue();
+                        return v0.compareTo(v1);
+                    }
+                };
+
+        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<Entry<K,V>>(n, comparator);
+        //highest.stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+
+        for (Entry<K, V> entry : map.entrySet())
+        {
+            highest.offer(entry);
+            while (highest.size() > n)
+            {
+                highest.poll();
+            }
+        }
+
+        HashMap<K, V> result = new HashMap<K,V>();
+        while (highest.size() > 0)
+        {
+            result.put(highest.poll().getKey(), highest.poll().getValue());
+        }
+        return result;
+    }
 }
