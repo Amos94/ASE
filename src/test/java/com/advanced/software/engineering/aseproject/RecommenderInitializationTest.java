@@ -5,6 +5,7 @@ import Context.IoHelper;
 import Index.IInvertedIndex;
 import Index.InvertedIndex;
 import Utils.Configuration;
+import helper.TestHelper;
 import org.junit.Test;
 
 import java.util.Set;
@@ -15,11 +16,11 @@ public class RecommenderInitializationTest {
 
     @Test
     public void createIndex() {
-        Set<String> zips = IoHelper.findAllZips(Configuration.CONTEXTS_DIR);
+        Set<String> zips = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR);
         int numberOfZips = zips.size();
         assertNotEquals(0,numberOfZips);
 
-        ContextHelper ctxHelper = new ContextHelper(Configuration.CONTEXTS_DIR);
+        ContextHelper ctxHelper = new ContextHelper(TestHelper.TEST_CONTEXTS_DIR);
         assertNotEquals(null, ctxHelper);
 
         long startTime = System.currentTimeMillis();

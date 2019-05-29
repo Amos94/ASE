@@ -1,6 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
 import Utils.Configuration;
+import helper.TestHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,7 @@ public class AseprojectApplicationTest {
 
     @Test
     public void contextLoads() {
-        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
+        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(TestHelper.TEST_CONTEXTS_DIR, TestHelper.TEST_EVENTS_DIR);
 //        String contextsPath = recommenderInitialization.getContextsPath();
 //        String eventsPath = recommenderInitialization.getEventsPath();
 //        assertEquals(Configuration.CONTEXTS_DIR, contextsPath);

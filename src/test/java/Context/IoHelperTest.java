@@ -4,6 +4,7 @@ import Utils.Configuration;
 
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
+import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -48,7 +49,7 @@ public class IoHelperTest {
     @Test
     public void readAll() { 
     	//public static List<Context> readAll(String dir)
-    	String zipFile = "\\ASE\\Data\\Contexts\\01org\\acat\\src";
+    	String zipFile = TestHelper.TEST_CONTEXTS_DIR+"\\01org\\acat\\src";
     	List<Context> res;
     	LinkedList expected = new LinkedList();
     	res = IoHelper.readAll(zipFile);
@@ -58,7 +59,7 @@ public class IoHelperTest {
     @Test
     public void read() {
     	//public static List<Context> read(String zipFile)
-    	String zipFile = "\\ASE\\Data\\Contexts\\01org\\acat\\src\\ACAT.sln-contexts.zip";
+    	String zipFile = TestHelper.TEST_CONTEXTS_DIR+"\\01org\\acat\\src\\ACAT.sln-contexts.zip";
     	List<Context> res;
     	LinkedList expected = new LinkedList();
     	res = IoHelper.read(zipFile);
@@ -67,7 +68,7 @@ public class IoHelperTest {
 
     @Test
     public void findAllZips() {
-        Set<String> allZips = new Directory("Data/").findFiles(s -> {
+        Set<String> allZips = new Directory("src/test/java/data").findFiles(s -> {
             assert s != null;
             return s.endsWith(".zip");
         });
