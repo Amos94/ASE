@@ -67,7 +67,7 @@ public class AseprojectApplication {
 
 
         // Initalize the recommender
-        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR, Configuration.EVENTS_DIR);
+        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(Configuration.CONTEXTS_DIR);
         //Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE));
 
         // If you want to reindex the database, this is where the time flies away

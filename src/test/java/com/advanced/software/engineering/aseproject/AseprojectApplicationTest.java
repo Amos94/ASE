@@ -13,7 +13,7 @@ public class AseprojectApplicationTest {
 
     @Test
     public void contextLoads() {
-        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(TestHelper.TEST_CONTEXTS_DIR, TestHelper.TEST_EVENTS_DIR);
+        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(TestHelper.TEST_CONTEXTS_DIR);
 //        String contextsPath = recommenderInitialization.getContextsPath();
 //        String eventsPath = recommenderInitialization.getEventsPath();
 //        assertEquals(Configuration.CONTEXTS_DIR, contextsPath);
