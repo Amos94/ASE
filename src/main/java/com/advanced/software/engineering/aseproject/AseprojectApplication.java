@@ -31,6 +31,9 @@ import java.util.logging.Logger;
 @SpringBootApplication
 public class AseprojectApplication {
 
+    private static final Logger LOGGER = Logger.getLogger( AseprojectApplication.class.getName() );
+
+
     /**
      * Main class for starting the application which boots the recommenderInitalization and creates the index
      * Caution: Creating the index can take a while (about 1h)
@@ -40,7 +43,6 @@ public class AseprojectApplication {
     public static void main(String[] args) {
         double recommendationRate;
         SpringApplication.run(AseprojectApplication.class, args);
-        Logger logger = Logger.getLogger(AseprojectApplication.class.getName());
 
         if (args.length != 0) {
             try {
@@ -51,17 +53,17 @@ public class AseprojectApplication {
                 if (args.length > 3) {
                     Configuration.setLastNConsideredStatements(Integer.parseInt(args[3]));
                     Configuration.setRecommendationZips(Integer.parseInt(args[4]));
-                    System.out.println("Non default configuration is used, 5 parameters expected");
-                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
-                    System.out.println("LAST_N_CONSIDERED_STATEMENTS: " + Configuration.getLastNConsideredStatements() + " MAX_EVENTS_CONSIDERED: " + Configuration.getRecommendationZips());
+                    LOGGER.log(Level.INFO, "Non default configuration is used, 5 parameters expected");
+                    LOGGER.log(Level.INFO, "REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
+                    LOGGER.log(Level.INFO, "LAST_N_CONSIDERED_STATEMENTS: " + Configuration.getLastNConsideredStatements() + " MAX_EVENTS_CONSIDERED: " + Configuration.getRecommendationZips());
                 } else {
-                    System.out.println("Non default configuration is used, 3 parameters expected:");
-                    System.out.println("REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
+                    LOGGER.log(Level.INFO, "Non default configuration is used, 3 parameters expected:");
+                    LOGGER.log(Level.INFO, "REMOVE_STOP_WORDS set to " + Configuration.getRemoveStopWords() + " REINDEX_DATABASE set to " + Configuration.getReindexDatabase() + " EVALUATION set to " + Configuration.getEVALUATION());
                 }
-                System.out.println(Configuration.getDELIMITER());
+                LOGGER.log(Level.INFO, Configuration.getDELIMITER());
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("ArrayIndexOutOfBoundsException caught");
+                LOGGER.log(Level.INFO, "ArrayIndexOutOfBoundsException caught");
             }
         }
 
@@ -82,12 +84,12 @@ public class AseprojectApplication {
 
             // Aggregate through all events (Currently only jaccard)
             for (Context ctx : e.getAggregatedContexts()) {
-                logger.log(Level.INFO, "\nCreating recommendations for " + e.getAggregatedContextsSize() + " methods");
+                LOGGER.log(Level.INFO, "\nCreating recommendations for " + e.getAggregatedContextsSize() + " methods");
                 recommender.query(ctx);
             }
 
             recommendationRate = ((double)recommender.getNumberOfCorrectRecommendations() / e.getAggregatedContextsSize());
-            logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate);
+            LOGGER.log(Level.INFO, "The recommendation rate is: " + recommendationRate);
         }
 
         if (Configuration.getEVALUATION() && Configuration.getUseTestContexts()) {
@@ -102,7 +104,7 @@ public class AseprojectApplication {
                 String projectName = tc.getProjectName();
                 Recommender recommender = new Recommender(new InvertedIndex(Configuration.INDEX_STORAGE), projectName);
 
-                logger.log(Level.INFO, "\n" + Configuration.getDELIMITER() + "\nRecommendations within project: " + projectName + "\n" + Configuration.getDELIMITER());
+                LOGGER.log(Level.INFO, "\n" + Configuration.getDELIMITER() + "\nRecommendations within project: " + projectName + "\n" + Configuration.getDELIMITER());
                 recommender.query(ctx);
 
                 noMethodsToMakeRecomenationsFor += recommender.getNumberMethodCalls();
@@ -112,15 +114,15 @@ public class AseprojectApplication {
 
             // Calculate final percentage
             if (noMethodsToMakeRecomenationsFor == 0) {
-                logger.log(Level.WARNING, "No Methods to make recommendations for!");
+                LOGGER.log(Level.WARNING, "No Methods to make recommendations for!");
             } else {
                 recommendationRate = (((double) numberOfCorrectRecommendations * 100) / (noMethodsToMakeRecomenationsFor));
-                logger.log(Level.INFO, "The recommendation rate is: " + recommendationRate + "%");
+                LOGGER.log(Level.INFO, "The recommendation rate is: " + recommendationRate + "%");
             }
 
         }
 
-        System.out.println("The program has ended gracefully - thanks for using :) ");
-        System.out.println(Configuration.getDELIMITER());
+        LOGGER.log(Level.INFO, "The program has ended gracefully - thanks for using :) ");
+        LOGGER.log(Level.INFO, Configuration.getDELIMITER());
     }
 }
