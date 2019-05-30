@@ -37,7 +37,7 @@ public class Configuration {
 
     // Overwritable configuration
     //Maximum number if queries for the demo
-    private static int RECOMMENDATION_ZIPS = 1; //to disable this set it to -1
+    private static int RECOMMENDATION_ZIPS = 5; //to disable this set it to -1
 
     //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
