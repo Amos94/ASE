@@ -4,6 +4,7 @@ import cc.kave.commons.model.ssts.IStatement;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import utils.Configuration;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -27,13 +28,18 @@ public class IndexHelperTest {
     public void testIdentifierSanitization() {
         // Setup
         final String identifier = "iAmAnIdentifier";
-        final List<String> expectedResult = Arrays.asList("Identifi");
 
         // Run the test
         final List<String> result = indexHelperUnderTest.identifierSanitization(identifier);
 
         // Verify the results
-        assertEquals(expectedResult, result);
+        if(Configuration.getRemoveStopWords()) {
+            final List<String> expectedResult = Arrays.asList("Identifi");
+            assertEquals(expectedResult, result);
+        }else{
+            final List<String> expectedResult = Arrays.asList("i","Am","An","Identifi");
+            assertEquals(expectedResult, result);
+        }
     }
 
     @Test

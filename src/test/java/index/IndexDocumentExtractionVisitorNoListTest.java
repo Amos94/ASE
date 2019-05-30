@@ -16,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import cc.kave.commons.model.ssts.expressions.IAssignableExpression;
 import cc.kave.commons.model.ssts.IStatement;
+import utils.Configuration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IndexDocumentExtractionVisitorNoListTest {
@@ -72,7 +73,11 @@ public class IndexDocumentExtractionVisitorNoListTest {
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("Go,",sb.toString());
+		if(Configuration.getRemoveStopWords()) {
+			assertEquals("Go,", sb.toString());
+		}else{
+			assertEquals("you,Are,Go,", sb.toString());
+		}
     }
 
     @Test
