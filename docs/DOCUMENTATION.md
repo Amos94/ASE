@@ -21,14 +21,14 @@ For a detailed architectural view, please follow the links below where you can f
 
 Description | Image Link
 ------------ | -------------
-Top-Level package | [High-Res Link](images/Top-Level Package.png)
-Package aseproject | [High-Res Link](images/Package aseproject.png)
-Package context | [High-Res Link](images/Package context.png)
-Package events | [High-Res Link](images/Package events.png)
-Package index | [High-Res Link](images/Package index.png)
-Package similarity_measures | [High-Res Link](images/Package similarity_measures.png)
-Package visitors | [High-Res Link](images/Package visitors.png)
-Package utils | [High-Res Link](images/Package utils.png)
+Top-Level package | [High-Res Link](images/top_level_package.png)
+Package aseproject | [High-Res Link](images/package_aseproject.png)
+Package context | [High-Res Link](images/package_context.png)
+Package events | [High-Res Link](images/package_events.png)
+Package index | [High-Res Link](images/package_index.png)
+Package similarity_measures | [High-Res Link](images/package_similarity_measures.png)
+Package visitors | [High-Res Link](images/package_visitors.png)
+Package utils | [High-Res Link](images/package_utils.png)
 Project dependecies | [High-Res Link](images/mdl-aseproject.png)
 
 For insights in the several classes we programmed, please have a look at the provided javadoc. We tried to add Javadoc to each class and method to make it easier to understand for the reader but not over-exceeding this documentation.
