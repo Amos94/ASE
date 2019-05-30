@@ -110,8 +110,7 @@ class IndexHelper  extends AbstractTraversingNodeVisitor<IInvertedIndex, Void>{
 
 
         for(String identifier : identifiers) {
-            String sanitized = identifier.toLowerCase();
-            if(isStopWord(sanitized)){
+            if(isStopWord(identifier)){
                 identifiers.remove(identifier);
             }
         }

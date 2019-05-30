@@ -41,7 +41,7 @@ public class Configuration {
 
     //Experiments (non final)
     //Do you want to remove the stopwords from the stemmed identifiers?
-    private static boolean REMOVE_STOP_WORDS = false;
+    private static boolean REMOVE_STOP_WORDS = true;
 
     // ReIndex the Database
     private static boolean REINDEX_DATABASE = false;
