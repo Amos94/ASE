@@ -1,6 +1,8 @@
 package Events;
 
 
+import Utils.Configuration;
+import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.events.IDEEvent;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.Assert.*;
 
@@ -38,6 +41,17 @@ public class IdentifyEventsTest {
     	assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
     }
 
+    @Test
+    public void findAllUsersMaxEvMinusOne(){
+//        IdentifyEvents identifyEvents = new IdentifyEvents();
+        Configuration.setRecommendationZips(-1);
+//        ReflectionTestUtils.setField(identifyEvents, "muteLogger", false); //used to set private fields in testing
+        List<String> result = new ArrayList<>();
+        result.add(TestHelper.TEST_EVENTS_DIR);
+        assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
+
+    }
+
     //public static List<Context> readAllEvents()
     @Test
     public void readAllEvents() {
@@ -48,6 +62,9 @@ public class IdentifyEventsTest {
     @Test
     public void process() {
     	IdentifyEvents.process(event);
+
+        CompletionEvent cEvent = new CompletionEvent();
+        IdentifyEvents.process(cEvent);
     }
 
     // public List<Context> getAggregatedContexts()
@@ -56,5 +73,15 @@ public class IdentifyEventsTest {
     	List<Context> test;
     	test = iETest.getAggregatedContexts();
         assertNotNull(test);
+    }
+
+    @Test
+    public void constructorTest() {
+	    IdentifyEvents identifyEvents = new IdentifyEvents();
+        List<Context> aggregatedContexts = identifyEvents.getAggregatedContexts();
+        assertNotNull(aggregatedContexts);
+
+        long aggregatedContextsSize = identifyEvents.getAggregatedContextsSize();
+        assertTrue(aggregatedContextsSize >= 0);
     }
 }
