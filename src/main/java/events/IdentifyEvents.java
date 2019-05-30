@@ -38,11 +38,18 @@ public class IdentifyEvents {
     private static final Boolean muteLogger = true;
 
 
+    /**
+     * Identify all events
+     */
     public IdentifyEvents(){
         aggregatedContexts = readAllEvents(Configuration.EVENTS_DIR);
     }
+
     /**
      * 1: Find all users in the dataset.
+     *
+     * @param eventsDir
+     * @return all users in the dataset
      */
     public static List<String> findAllUsers(String eventsDir) {
         // This step is straight forward, as events are grouped by user. Each
@@ -75,6 +82,9 @@ public class IdentifyEvents {
 
     /**
      * 2: Reading events
+     *
+     * @param eventsDir
+     * @return aggregated Contexts
      */
     public static List<Context> readAllEvents(String eventsDir) {
         // each .zip file corresponds to a user
@@ -102,6 +112,9 @@ public class IdentifyEvents {
 
     /**
      * 4: Processing events
+     *
+     * @param event
+     * @return contexts
      */
     public static List<Context> process(IDEEvent event) {
         // once you have access to the instantiated event you can dispatch the
@@ -122,10 +135,20 @@ public class IdentifyEvents {
         return contexts;
     }
 
+    /**
+     * Get aggregated contexts
+     *
+     * @return aggregated contexts
+     */
     public List<Context> getAggregatedContexts(){
         return aggregatedContexts;
     }
 
+    /**
+     * Size of aggregated contexts
+     *
+     * @return size of aggregated contexts
+     */
     public long getAggregatedContextsSize(){
         return aggregatedContexts.size();
     }

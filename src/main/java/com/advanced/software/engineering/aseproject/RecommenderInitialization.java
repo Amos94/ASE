@@ -19,6 +19,11 @@ class RecommenderInitialization {
     private String contextsPath;
     private static final Logger LOGGER = Logger.getLogger( IoHelper.class.getName() );
 
+    /**
+     * Constructor to initalize the recommender
+     *
+     * @param contextsPath
+     */
     RecommenderInitialization(String contextsPath){
 
         // process start
@@ -33,6 +38,9 @@ class RecommenderInitialization {
                         .concat("\nContexts: "+contextsPath));
     }
 
+    /**
+     * Create the index
+     */
     void createIndex() {
         // finds all given zips by context path
         Set<String> zips = IoHelper.findAllZips(contextsPath);

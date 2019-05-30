@@ -37,6 +37,11 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     private String projectName;
 
 
+    /**
+     * Create recommender with index
+     *
+     * @param index
+     */
     Recommender(IInvertedIndex index) {
         LOGGER.log(Level.INFO, "Initializing the recommender.");
         this.index = index;
@@ -44,6 +49,12 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         getIndexes(); //first let's retrieve all indexes from db
     }
 
+    /**
+     * Create recommender with index and project name
+     *
+     * @param index
+     * @param projectName
+     */
     Recommender(IInvertedIndex index, String projectName) {
         this.projectName = projectName;
 
@@ -51,6 +62,13 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         getIndexes(projectName); //first let's retrieve all indexes from db
     }
 
+    /**
+     * Get the Predicate
+     *
+     * @param keyExtractor
+     * @param <T>
+     * @return applied key
+     */
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
@@ -84,22 +102,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     /**
-     *
-     *
-     * @param ctx - context
-     * @return - return member and score
-     */
-    @Override
-    public Set<Pair<IMemberName, Double>> query(Context ctx) {
-        ISST sst = ctx.getSST();
-        ISSTNodeVisitor visitor = new IndexDocumentExtractionVisitor();
-        List<IndexDocument> methodInvocations = new LinkedList<>();
-        sst.accept(visitor, methodInvocations);
-        IndexDocument queryDocument = combineContexts(methodInvocations);
-        return query(queryDocument);
-    }
-
-    /**
+     * Combine the contexts
      *
      * @param contexts - contexts
      * @return - return document
@@ -123,6 +126,7 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     /**
+     * Get the last model size
      *
      * @return - return model size
      */
@@ -136,8 +140,25 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         }
     }
 
+
     /**
+     * Run the query
      *
+     * @param ctx - context
+     * @return - return member and score
+     */
+    @Override
+    public Set<Pair<IMemberName, Double>> query(Context ctx) {
+        ISST sst = ctx.getSST();
+        ISSTNodeVisitor visitor = new IndexDocumentExtractionVisitor();
+        List<IndexDocument> methodInvocations = new LinkedList<>();
+        sst.accept(visitor, methodInvocations);
+        IndexDocument queryDocument = combineContexts(methodInvocations);
+        return query(queryDocument);
+    }
+
+    /**
+     * Run the query
      *
      * @param ctx - context
      * @param ideProposals - proposals
@@ -149,17 +170,23 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
     }
 
     /**
-     * Method
+     * Get the Indexes
      */
     private void getIndexes() {
         documents = index.deserializeAll();
     }
 
+    /**
+     * Get the indexes with projectName
+     *
+     * @param projectName
+     */
     private void getIndexes(String projectName) {
         documents = index.deserializeByProject(projectName);
     }
 
     /**
+     * Get the scored documents
      *
      * @param queryDoc - query document
      */
@@ -184,9 +211,20 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
 
     }
 
+    /**
+     * Get the number of correct recommendations
+     * 
+     * @return number of correct recommendations
+     */
     int getNumberOfCorrectRecommendations(){
         return correctRecommendations.size();
     }
+
+    /**
+     * Get the number of method calls
+     *
+     * @return number of method calls
+     */
     int getNumberMethodCalls(){
         return methodCalls.size();
     }

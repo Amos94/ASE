@@ -19,16 +19,19 @@ public class IdentifyTestContexts {
     private List<Context> aggregatedContexts;
     private String projectName;
 
+    /**
+     * Identify all test contexts
+     */
     public IdentifyTestContexts() {
         this.ctxsDir = Configuration.CONTEXTS_DIR;
         aggregatedContexts = new LinkedList<>();
         run();
     }
 
+    /**
+     * Run
+     */
     private void run() {
-
-//        System.out.printf("looking (recursively) for solution zips in folder %s\n",
-//                new File(ctxsDir).getAbsolutePath());
 
         Set<String> slnZips = IoHelper.findAllZips(ctxsDir);
 
@@ -52,6 +55,12 @@ public class IdentifyTestContexts {
         }
     }
 
+    /**
+     * Process all zips
+     *
+     * @param slnZip
+     * @return contexts
+     */
     private List<Context> processZip(String slnZip) {
 
         String[] zipName = slnZip.split("/");
@@ -72,10 +81,19 @@ public class IdentifyTestContexts {
         return contexts;
     }
 
+    /**
+     * get all aggregated contexts
+     * @return
+     */
     public List<Context> getAggregatedContexts(){
         return aggregatedContexts;
     }
 
+    /**
+     * Get the project name
+     *
+     * @return project name
+     */
     public String getProjectName(){
         return projectName;
     }

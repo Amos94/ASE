@@ -27,22 +27,47 @@ public class IndexDocument implements Serializable {
         return id;
     }
 
+    /**
+     * Get the method call
+     *
+     * @return method call
+     */
     public String getMethodCall() {
         return methodCall;
     }
 
+    /**
+     * Get the project name
+     *
+     * @return project name
+     */
     public String getProjectName() {
         return projectName;
     }
 
+    /**
+     * Get the method
+     *
+     * @return method
+     */
     public IMemberName getMethod() {
         return method;
     }
 
+    /**
+     * Get the type
+     *
+     * @return type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Get the overall context
+     *
+     * @return overal contexts
+     */
     public List<String> getOverallContext() {
         return setToList(overallContext);
     }
