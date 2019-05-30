@@ -1,8 +1,9 @@
 package utils;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ConfigurationTest {
 
@@ -12,5 +13,101 @@ public class ConfigurationTest {
         assertEquals("Data/events", Configuration.EVENTS_DIR);
         assertEquals("Data/Contexts", Configuration.CONTEXTS_DIR);
         assertEquals("IndexStorage", Configuration.INDEX_STORAGE);
+    }
+
+    @Test
+    public void getRecommendationZips() {
+        Configuration.setRecommendationZips(1);
+        assertEquals(1,Configuration.getRecommendationZips());
+    }
+
+    @Test
+    public void setRecommendationZips() {
+        Configuration.setRecommendationZips(10);
+        assertEquals(10,Configuration.getRecommendationZips());
+    }
+
+    @Test
+    public void getRemoveStopWords() {
+        Configuration.setRemoveStopWords(false);
+        assertFalse(Configuration.getRemoveStopWords());
+    }
+
+    @Test
+    public void setRemoveStopWords() {
+        Configuration.setRemoveStopWords(true);
+        Assert.assertTrue(Configuration.getRemoveStopWords());
+    }
+
+    @Test
+    public void getReindexDatabase() {
+        Configuration.setReindexDatabase(false);
+        assertFalse(Configuration.getReindexDatabase());
+    }
+
+    @Test
+    public void setReindexDatabase() {
+        Configuration.setReindexDatabase(true);
+        Assert.assertTrue(Configuration.getReindexDatabase());
+    }
+
+    @Test
+    public void getEVALUATION() {
+        Configuration.setEVALUATION(false);
+        assertFalse(Configuration.getEVALUATION());
+    }
+
+    @Test
+    public void setEVALUATION() {
+        Configuration.setEVALUATION(true);
+        Assert.assertTrue(Configuration.getEVALUATION());
+    }
+
+    @Test
+    public void getLastNConsideredStatements() {
+        Configuration.setLastNConsideredStatements(3);
+        assertEquals(3, Configuration.getLastNConsideredStatements());
+    }
+
+    @Test
+    public void setLastNConsideredStatements() {
+        Configuration.setLastNConsideredStatements(1);
+        assertEquals(1, Configuration.getLastNConsideredStatements());
+    }
+
+    @Test
+    public void getUseEvents() {
+        Configuration.setUseEvents(true);
+        assertTrue(Configuration.getUseEvents());
+    }
+
+    @Test
+    public void setUseEvents() {
+        Configuration.setUseEvents(false);
+        assertFalse(Configuration.getUseEvents());
+    }
+
+    @Test
+    public void getUseTestContexts() {
+        Configuration.setUseTestContexts(true);
+        assertTrue(Configuration.getUseTestContexts());
+    }
+
+    @Test
+    public void setUseTestContexts() {
+        Configuration.setUseTestContexts(false);
+        assertFalse(Configuration.getUseTestContexts());
+    }
+
+    @Test
+    public void getDELIMITER() {
+        Configuration.setDELIMITER("**");
+        assertEquals("**", Configuration.getDELIMITER());
+    }
+
+    @Test
+    public void setDELIMITER() {
+        Configuration.setDELIMITER("***");
+        assertEquals("***", Configuration.getDELIMITER());
     }
 }
