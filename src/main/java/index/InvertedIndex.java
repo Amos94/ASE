@@ -288,6 +288,88 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
+    String getDocID(ResultSet rs){
+        try {
+            return rs.getString("docid");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
+    String getMethodName(ResultSet rs){
+        try {
+            return rs.getString("methodname");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
+    String getMethodFullName(ResultSet rs){
+        try {
+            return rs.getString("methodfullname");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
+    String getDeclaringTypeName(ResultSet rs){
+        try {
+            return rs.getString("declaringtype");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
+    String getValueTypeName(ResultSet rs){
+        try {
+            return rs.getString("valuetype");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
+
+    boolean getIsStatic(ResultSet rs){
+        try {
+            return intToBool(rs.getInt("isstatic"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return false;
+        }
+    }
+    boolean getIsUnknown(ResultSet rs){
+        try {
+            return intToBool(rs.getInt("isunknown"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return false;
+        }
+    }
+    boolean getIsHashed(ResultSet rs){
+        try {
+            return intToBool(rs.getInt("ishashed"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return false;
+        }
+    }
+    String getIdentifier(ResultSet rs){
+        try {
+            return rs.getString("identifier");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            return null;
+        }
+    }
 
     /**
      * Method to deserialze everything
@@ -304,16 +386,16 @@ public class InvertedIndex extends AbstractInvertedIndex {
                 boolean hasItems = rs.isBeforeFirst();
                 while (!rs.isAfterLast()) {
 
-                    String docID = rs.getString("docid");
-                    String methodName = rs.getString("methodname");
-                    String methodFullName = rs.getString("methodfullname");
-                    String declaringTypeName = rs.getString("declaringtype");
-                    String valueTypeName = rs.getString("valuetype");
+                    String docID = getDocID(rs);
+                    String methodName = getMethodName(rs);
+                    String methodFullName = getMethodFullName(rs);
+                    String declaringTypeName = getDeclaringTypeName(rs);
+                    String valueTypeName = getValueTypeName(rs);
 
-                    boolean isStatic = intToBool(rs.getInt("isstatic"));
-                    boolean isUnknown = intToBool(rs.getInt("isunknown"));
-                    boolean isHashed = intToBool(rs.getInt("ishashed"));
-                    String identifier = rs.getString("identifier");
+                    boolean isStatic = getIsStatic(rs);
+                    boolean isUnknown = getIsUnknown(rs);
+                    boolean isHashed = getIsHashed(rs);
+                    String identifier = getIdentifier(rs);
 
                     IMemberName method = getMemberName(declaringTypeName, valueTypeName, isStatic, methodName, methodFullName, identifier, isUnknown, isHashed);
                     List<String> overallContext = deserializeContext(rs.getString("overallcontext"));
