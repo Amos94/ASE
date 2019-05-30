@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 
@@ -32,6 +33,11 @@ public class InvertedIndexTest {
         assertNotNull(dir);
     }
 
+    @Test
+    public void createDirectory(){
+        invertedIndex = new InvertedIndex("testDir", false);
+    }
+
 
     @Test
     public void startIndexing() {
@@ -41,6 +47,10 @@ public class InvertedIndexTest {
 
     @Test
     public void isIndexed() {
+        ReflectionTestUtils.setField(invertedIndex, "USE_SQLITE", true);
+        assertFalse(invertedIndex.isIndexed(indexDocument));
+
+        ReflectionTestUtils.setField(invertedIndex, "USE_SQLITE", false);
         assertFalse(invertedIndex.isIndexed(indexDocument));
     }
 

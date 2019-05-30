@@ -1,11 +1,15 @@
 package Index;
 
+import static cc.kave.commons.model.naming.Names.newMethod;
+import static cc.kave.commons.utils.ssts.SSTUtils.invExpr;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.kave.commons.model.naming.codeelements.IMethodName;
+import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +26,10 @@ public class IndexDocumentExtractionVisitorTest {
 
 	@Mock private List<IStatement> body;
 	@Mock private IInvertedIndex index;
+	@Mock private List<IndexDocument> indexDocuments;
 	@Mock private IStatement statement;
 	@Mock private IAssignableExpression expression;
+	@Mock private IInvocationExpression expression2;
 	@Mock private IndexDocumentExtractionVisitorNoList op;
 	private IndexDocumentExtractionVisitorNoList iV;
 	private List<String> test1 = new ArrayList<>();
@@ -39,15 +45,23 @@ public class IndexDocumentExtractionVisitorTest {
     	List<IStatement> test = new ArrayList<>();
     	test.add(statement);
     	op.visit(test,index);
-    	verify(op).visit(test,index);					//not sure what else to test
+    	verify(op).visit(test,index);
+
+		IndexDocumentExtractionVisitor visitor = new IndexDocumentExtractionVisitor("testproject");
+		List<Void> visits = visitor.visit(test,indexDocuments);
+		assertNotNull(visits);
 
     }
 
     @Test
     public void doVisit() {
     	op.doVisit(expression, body, statement, index);
-    	verify(op).doVisit(expression, body, statement, index);					//not sure what else to test
+    	verify(op).doVisit(expression, body, statement, index);
 
+		IMethodName m = newMethod("[p:void] [p:object].m([p:int] arg)");
+		expression2 = invExpr("o", m, "p");
+		IndexDocumentExtractionVisitor visitor = new IndexDocumentExtractionVisitor("testproject");
+		visitor.doVisit(expression2, body, statement, indexDocuments);
     }
 
     @Test
