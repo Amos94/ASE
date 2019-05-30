@@ -75,7 +75,7 @@ public class IndexDocumentExtractionVisitorTest {
 			sb.append(s);
 			sb.append(",");
 		}
-		assertEquals("you,Are,Go,",sb.toString());
+		assertEquals("Are,Go,",sb.toString());
     }
 
     @Test

@@ -27,7 +27,7 @@ public class IndexHelperTest {
     public void testIdentifierSanitization() {
         // Setup
         final String identifier = "iAmAnIdentifier";
-        final List<String> expectedResult = Arrays.asList("i", "Am", "An", "Identifi");
+        final List<String> expectedResult = Arrays.asList("Am", "An", "Identifi");
 
         // Run the test
         final List<String> result = indexHelperUnderTest.identifierSanitization(identifier);
@@ -66,7 +66,7 @@ public class IndexHelperTest {
     public void testRemoveStopWords() {
         // Setup
         List<String> identifiers = new CopyOnWriteArrayList<>();
-        identifiers.add("VeRy");
+        identifiers.add("very");
         identifiers.add("Long");
         identifiers.add("identifier");
 

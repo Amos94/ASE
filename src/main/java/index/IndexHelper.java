@@ -106,14 +106,8 @@ class IndexHelper  extends AbstractTraversingNodeVisitor<IInvertedIndex, Void>{
      * @param identifiers - identifier
      * @return identifiers
      */
-    List<String> removeStopWords(List<String> identifiers) {
-
-
-        for(String identifier : identifiers) {
-            if(isStopWord(identifier)){
-                identifiers.remove(identifier);
-            }
-        }
+     List<String> removeStopWords(List<String> identifiers) {
+        identifiers.removeIf(i -> isStopWord(i));
 
         return identifiers;
     }
