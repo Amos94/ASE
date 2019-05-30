@@ -29,6 +29,14 @@ public class CosineSimilarityTest {
         double result = cosSim.cosineSimilarity(leftVector, rightVector);
         assertEquals(0.119,result,0.001);
 
+
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentException() {
+        CosineSimilarity cosSim = new CosineSimilarity();
+        cosSim.cosineSimilarity(null,null);
     }
 
 }

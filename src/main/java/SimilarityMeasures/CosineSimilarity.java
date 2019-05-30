@@ -38,10 +38,8 @@ public class CosineSimilarity {
         for (final Integer value : rightVector.values()) {
             d2 += Math.pow(value, 2);
         }
-        double cosineSimilarity ;
-        if (d1 <= 0.0 || d2 <= 0.0) {
-            cosineSimilarity  = 0.0;
-        } else {
+        double cosineSimilarity = 0.0;
+        if (d1 > 0.0 && d2 > 0.0) {
             cosineSimilarity  = (double) (dotProduct / (double) (Math.sqrt(d1) * Math.sqrt(d2)));
         }
         return cosineSimilarity ;

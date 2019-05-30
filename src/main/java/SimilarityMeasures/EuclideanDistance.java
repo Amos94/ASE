@@ -11,7 +11,7 @@ public class EuclideanDistance {
     public EuclideanDistance(double[] array1, double[] array2){
         calculateEuclideanDistance(array1, array2);
     }
-
+//this constructor does not return or set any values
     /**
      * Get the euclidean distance out of two arrays
      * @param array1
