@@ -23,6 +23,7 @@ public class IndexDocumentTest {
 	private IndexDocument i2;
 	private IndexDocument i3;
 	private IndexDocument i4;
+	private IndexDocument i5;
 	private String resultID;
 	private String resultMethodCall;
 	private String resultType;
@@ -52,6 +53,8 @@ public class IndexDocumentTest {
 		i3 = new IndexDocument(resultID, resultMethodCall, resultType, context);
 		//IndexDocument(String docId, IMemberName method, Collection<String> overallContext, long overallContextSimhash)
 		i4 = new IndexDocument(resultID, method , context, projectName);
+		//IndexDocument(String docId, IMemberName method, Collection<String> overallContext)
+		i5 = new IndexDocument(resultID, method , context);
 	}
 	
     @Test
@@ -175,6 +178,8 @@ public class IndexDocumentTest {
 		assertEquals(t3, i3);
     	IndexDocument t4 = new IndexDocument(resultID, method , context, projectName);
     	assertEquals(t4, i4);
+		IndexDocument t5 = new IndexDocument(resultID, method , context);
+		assertEquals(t5, i5);
     }
     
     @Test
