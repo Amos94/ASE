@@ -6,7 +6,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,27 +22,12 @@ public class IndexHelperTest {
         indexHelperUnderTest = new IndexHelper();
     }
 
-    @Test
-    @Ignore
-    public void testGetLastNStatementsBeforeStatement() {
-        // Setup
-        final List<IStatement> statements = Arrays.asList();
-        final int indexOfStatement = 0;
-        final int lastNConsideredStatements = 0;
-        final List<IStatement> expectedResult = Arrays.asList();
-
-        // Run the test
-        final List<IStatement> result = indexHelperUnderTest.getLastNStatementsBeforeStatement(statements, indexOfStatement, lastNConsideredStatements);
-
-        // Verify the results
-        assertEquals(expectedResult, result);
-    }
 
     @Test
     public void testIdentifierSanitization() {
         // Setup
-        final String identifier = "identifier";
-        final List<String> expectedResult = Arrays.asList();
+        final String identifier = "iAmAnIdentifier";
+        final List<String> expectedResult = Arrays.asList("i", "Am", "An", "Identifi");
 
         // Run the test
         final List<String> result = indexHelperUnderTest.identifierSanitization(identifier);
@@ -52,8 +39,8 @@ public class IndexHelperTest {
     @Test
     public void testSplitCamelCase() {
         // Setup
-        final String identifier = "identifier";
-        final List<String> expectedResult = Arrays.asList();
+        final String identifier = "newIdentifier";
+        final List<String> expectedResult = Arrays.asList("new", "Identifier");
 
         // Run the test
         final List<String> result = indexHelperUnderTest.splitCamelCase(identifier);
@@ -78,11 +65,17 @@ public class IndexHelperTest {
     @Test
     public void testRemoveStopWords() {
         // Setup
-        final List<String> identifiers = Arrays.asList();
-        final List<String> expectedResult = Arrays.asList();
+        List<String> identifiers = new CopyOnWriteArrayList<>();
+        identifiers.add("VeRy");
+        identifiers.add("Long");
+        identifiers.add("identifier");
+
+        List<String> expectedResult = new LinkedList<>();
+        expectedResult.add("Long");
+        expectedResult.add("identifier");
 
         // Run the test
-        final List<String> result = indexHelperUnderTest.removeStopWords(identifiers);
+        List<String> result = indexHelperUnderTest.removeStopWords(identifiers);
 
         // Verify the results
         assertEquals(expectedResult, result);
@@ -91,7 +84,7 @@ public class IndexHelperTest {
     @Test
     public void testIsStopWord() {
         // Setup
-        final String identifier = "identifier";
+        final String identifier = "am";
 
         // Run the test
         final boolean result = indexHelperUnderTest.isStopWord(identifier);
@@ -103,8 +96,9 @@ public class IndexHelperTest {
     @Test
     public void testNormalizeType() {
         // Setup
-        final String type = "type";
-        final String expectedResult = "result";
+        final String type = "int`Something";
+
+        final String expectedResult = "int";
 
         // Run the test
         final String result = indexHelperUnderTest.normalizeType(type);

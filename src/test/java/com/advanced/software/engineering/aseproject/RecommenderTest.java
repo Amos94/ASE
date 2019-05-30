@@ -1,5 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
+import cc.kave.rsse.calls.AbstractCallsRecommender;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -57,5 +59,37 @@ public class RecommenderTest {
     	Set<Pair<IMemberName, Double>> expected = new LinkedHashSet<>();
     	result = recommender.query(ctx, ideProposals);
     	assertEquals(expected, result);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void query3() {
+    }
+
+    @Test
+    public void query4() {
+    }
+
+    @Test
+    public void query5() {
+    }
+
+    @Test
+    public void getLastModelSize1() {
+    }
+
+    @Test
+    public void query6() {
+    }
+
+    @Test
+    public void getNumberOfCorrectRecommendations() {
+    }
+
+    @Test
+    public void getNumberMethodCalls() {
     }
 }

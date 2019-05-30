@@ -59,7 +59,7 @@ class IndexHelper  extends AbstractTraversingNodeVisitor<IInvertedIndex, Void>{
      * Sanitize the identifier
      *
      * @param identifier - identifier
-     * @return - retirm serialization
+     * @return - return serialization
      */
     List<String> identifierSanitization(String identifier) {
         if (Configuration.getRemoveStopWords()) {
@@ -107,7 +107,14 @@ class IndexHelper  extends AbstractTraversingNodeVisitor<IInvertedIndex, Void>{
      * @return identifiers
      */
     List<String> removeStopWords(List<String> identifiers) {
-        identifiers.removeIf(this::isStopWord);
+
+
+        for(String identifier : identifiers) {
+            String sanitized = identifier.toLowerCase();
+            if(isStopWord(sanitized)){
+                identifiers.remove(identifier);
+            }
+        }
 
         return identifiers;
     }

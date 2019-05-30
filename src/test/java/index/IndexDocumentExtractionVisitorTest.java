@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class IndexDocumentExtractionVisitorTest {
 	@Mock private IndexDocumentExtractionVisitorNoList op;
 	private IndexDocumentExtractionVisitorNoList iV;
 	private IndexHelper iH;
-	private List<String> test1 = new ArrayList<>();
+	private List<String> test1 = new CopyOnWriteArrayList<>();
 
 	@Before
 	public void setup(){
