@@ -35,6 +35,42 @@ For insights in the several classes we programmed, please have a look at the pro
 
 ## 3. DevOps, CI/CD
 
+The CI/CD management had one big challenge to face - the large amount of data used to create the index. We first tried to incorporate the whole index (or its basic contexts) as part of the git repository. This failed by the limitation of 100mb per repo. We then tried to use it as an independent jar, this works but the creation of the jar is slow and each time we want to use a different index we have to change this large jar. Because of these circumstances, we decided to be a bit more creative and use the techniques learned during the course. Therefore we separated our process into 3 phases which are now discussed in detail and illustrated as follows:
+
+![CICD Image](images/sem_cicd.png)
+
+Phase 1:
+
+During the first phase, we are focused on the code which needs to be runnable and the tests need to have no errors. Since we use GitHub as a source code repository we added Travis CI and coveralls just for the sole purpose to do this on each push. We also agreed to not push on the master branch during the project (and set the Github settings accordingly), this helped us to keep the quality in a good state at all times. The first phase ends when Travis has done its basic work and has the tests run. If this is completed and the code is reviewed by a peer, the PR (Pull Request) is ready to be merged to master (master branch).
+
+Phase 2: 
+
+In Phase 2 there is a Jenkins instance configured (VM, basic Ubuntu 18.04, not as a docker container). That is connected with the git repository via ssh keys. Jenkins checks every 5 minutes if there is something new on the master branch. If this is the case, Jenkins pulls the new code and starts a “clean package” maven command on the local runner. If this succeeds, a sonarqube instance (docker container, same VM as Jenkins) is called to visualize the jacoco report (note: the jacoco report can also be used for this locally if the maven command “clean test” is run).
+
+![Code Coverage](images/code_coverage.png)
+
+
+Now we have a clear view of how the state of the code looks like. We were pretty picky about the Bugs and Vulnerabilites and therefore tried to keep the A-Level at all times. 
+
+Phase 3: 
+
+For the final step, Jenkins produces the jar file and stores it to the Jenkins local artifact storage as seen here:
+
+![Artefact](images/artefact.png)
+
+but this is not yet enough for us, we also wanted to have a runnable, preconfigured version on the server. That is why we configured some more Shell-Scripts to move the newly created jar file in the right surrounding. As we can see there is the jar file and also preconfigured a folder with Events (if needed) and an IndexStorage.
+
+![Filebrowser](images/filebrowser.png)
+
+This way, it was easier to do the experiments and evaluation, since we only had to replace the index storage if we wanted to for example test with a look back of 3, 4 or 5 and with or without stopwords. In our test environment, we only configured one such test server “prod” but it would be easy to add multiple instances (VMs, Docker Images) to have instances run in parallel for a larger experiment. 
+
+Maven Repository on Github: 
+
+Since we have way more jar files created than we are proud of, we added: “mvn clean target” as a manual step. If this is run, the settings preconfigured in pom.xml are activated and matched with the user's local m2 settings for GitHub (this needs to be done before the target command is executed). After some more seconds we have a brand new artifact on GitHub as seen here:
+
+![Repo](images/repo.png)
+
+But keep in mind, this is only a running jar file. It needs the right environment either of a context folder filled with zips or with a preconfigured IndexStorage Database. 
 
 
 ## 4. Configuration
