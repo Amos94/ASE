@@ -45,8 +45,9 @@ public class InvertedIndexTest {
         invertedIndex.startIndexing();
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void isIndexed() {
+        InvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
         ReflectionTestUtils.setField(invertedIndex, "USE_SQLITE", true);
         assertFalse(invertedIndex.isIndexed(indexDocument));
 

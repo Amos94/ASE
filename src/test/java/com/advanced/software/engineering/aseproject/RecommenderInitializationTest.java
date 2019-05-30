@@ -16,6 +16,9 @@ public class RecommenderInitializationTest {
 
     @Test
     public void createIndex() {
+        RecommenderInitialization recommenderInitialization = new RecommenderInitialization(TestHelper.TEST_CONTEXTS_DIR, TestHelper.TEST_EVENTS_DIR);
+        recommenderInitialization.createIndex();
+
         Set<String> zips = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR);
         int numberOfZips = zips.size();
         assertNotEquals(0,numberOfZips);

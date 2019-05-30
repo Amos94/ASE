@@ -12,6 +12,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AseprojectApplicationTest {
 
     @Test
+    public void applicationTest(){
+        AseprojectApplication app = new AseprojectApplication();
+        String[] arg = new String[0];
+//        app.main(arg);
+    }
+    @Test
     public void contextLoads() {
         RecommenderInitialization recommenderInitialization = new RecommenderInitialization(TestHelper.TEST_CONTEXTS_DIR, TestHelper.TEST_EVENTS_DIR);
 //        String contextsPath = recommenderInitialization.getContextsPath();
