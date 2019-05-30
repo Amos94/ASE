@@ -27,7 +27,7 @@ public class IndexHelperTest {
     public void testIdentifierSanitization() {
         // Setup
         final String identifier = "iAmAnIdentifier";
-        final List<String> expectedResult = Arrays.asList("Am", "An", "Identifi");
+        final List<String> expectedResult = Arrays.asList("Identifi");
 
         // Run the test
         final List<String> result = indexHelperUnderTest.identifierSanitization(identifier);
