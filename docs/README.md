@@ -3,6 +3,8 @@
 
 ## 1. Introduction
 
+This project was started as part of the Advanced Software Engineering, Spring 2019 course at the University of Zurich. The Goal was to Reimplement the system described in the given paper using the KAVE CC datasets. While our selected paper was “Implementation of Identifier-Based context-Dependent API Method Recommendation system” we tried to find smart ways to use this context-dependent API with the KAVE data. In the following chapters the reader will find an overview of all important parts which help to understand our approach and how to use and extend the project. It also should briefly introduce how we worked and how our environment was looking while doing the project.
+
 ## 2. Technical Description
 
 In order to replicate the recommender system described in the paper, the development approach was straight forward. After getting used to the Contexts and Events datasets provided by KAVE we decided to start build the visitors. It might not be a surprise that the most used pattern it the project was the visitor pattern. We used it to traverse the syntax trees and retrieve the relevant information needed to create and query the index. The next step was to design and implement the data model of the index. In the end we implemented two versions for querying and evaluate it.
