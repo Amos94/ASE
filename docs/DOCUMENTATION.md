@@ -58,5 +58,31 @@ The fifth parameter is: set number of recommendation zips (int)
 
 ## 6. Overheads and adaption
 
+### A conceptual problem
+The recommender system described in the paper is creating an index to which associates each method call to the its context given a predefined lookback. Then, the recommender is querying the index to retrieve the recommendation set. 
+
+In the specifications given it is stated that we shall build a model from the contexts given and test it against the events. Hence, here we encounter our first conceptual problem, where we tried to link the projects indexed from the contexts to the ones that exist in events. It was impossible. Therefore, we decided to have two versions that can be easily interchanged. 
+
+In the first version, we index the contexts and also use contexts to query the database, where the query filters the the entries stored by the project name. In this case, the results were very close to the one reported in the given paper.
+
+The second version, uses the events to query the stored index (made from contexts), but we do not filter for anything, hence the recommendation rate is considerably smaller than the recommendation rate in the first version since it is impossible to map the project names between the two datasets and we need to query the whole database and retrieve the recommendation sets.
+
+### Getting used with KAVE CC
+Nobody can argue the quality of KAVE. The datasets can be easily used for research by familiarized users. The examples provided in the project’s GitHub are very useful for novice users and they provide a very good starting base. However, the lack of documentation was felt in the later stages of the project when we weren’t sure what is there or not. Nonetheless, it wasn’t a big blocker since the development process got easier with time. 
+
+## 7. Reccomendations
+
+### How to use the Recommender
+In our opinion the best and the most efficient way to use the recommender is the way described in the paper:
+* We already have indexed the contexts for a predefined lookback of 3,4 and 5 for both cases: including and excluding the stopwords
+* Add in the Contexts folder a project folder with a zip, i.e. the methods that you want to test. Our recommender will give you a recommendation set for each method found in the SST found in that project.
+* Make sure you make the the relevant changes for the case you want to test, e.g., REINDEX_DATABASE = false, EVALUATION = true, lookback should have the same number as the one that was used to index the db, REMOVE_STOPWORDS should have the same value as the one it was used to index the db (due to we have to treat the query in the same way we treated the index at its creation).
+
+You can test against one or more contexts, just make sure you change the RECOMMENDATION_ZIPS value (See Configuration for more information). Furthermore, feel free to change the MAX_CANDIDATES value. In our tests we used a set of 10 methods per recommendation set. It is important to state that the paper does not specify anything about the recommendation set size.
+
+One can also test it against the events. Make sure you take care of the last point above and set the proper configuration. Just add a folder which contains a zip with some events in Events directory. Make sure you will be patient because for each method we need to query the whole database to retrieve the relevant info since it’s impossible to map a project from Contexts to a project from Events. The recommendation rate will be smaller, but at least it’s an interesting exercise to see how powerful is this recommender with unknown contexts.
+
+
+
 ## 7. Conclusion
 
