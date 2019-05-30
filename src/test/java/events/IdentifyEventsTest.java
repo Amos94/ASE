@@ -63,14 +63,14 @@ public class IdentifyEventsTest {
         IdentifyEvents.process(completionEvent);
     }
 
-    @Test
-    public void constructorTest() {
-        IdentifyEvents identifyEvents = new IdentifyEvents();
-        List<Context> aggregatedContexts = identifyEvents.getAggregatedContexts();
-        assertNotNull(aggregatedContexts);
-        long aggregatedContextsSize = identifyEvents.getAggregatedContextsSize();
-        assertTrue(aggregatedContextsSize >= 0);
-    }
+//    @Test
+//    public void constructorTest() {
+//        IdentifyEvents identifyEvents = new IdentifyEvents();
+//        List<Context> aggregatedContexts = identifyEvents.getAggregatedContexts();
+//        assertNotNull(aggregatedContexts);
+//        long aggregatedContextsSize = identifyEvents.getAggregatedContextsSize();
+//        assertTrue(aggregatedContextsSize >= 0);
+//    }
 
     // public List<context> getAggregatedContexts()
     @Test
