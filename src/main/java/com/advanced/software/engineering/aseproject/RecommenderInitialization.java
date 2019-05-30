@@ -1,16 +1,15 @@
 package com.advanced.software.engineering.aseproject;
 
-import Context.ContextHelper;
-import Context.IoHelper;
-import Index.InvertedIndex;
-import Index.IInvertedIndex;
-import Utils.Configuration;
+import context.ContextHelper;
+import context.IoHelper;
+import index.InvertedIndex;
+import index.IInvertedIndex;
+import utils.Configuration;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 
 import java.io.File;
-import Context.ContextHelper;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,9 +32,9 @@ class RecommenderInitialization {
 
         // log the set paths
         logger.log(Level.INFO,
-                "\nContexts and Events directories were set."
+                "\nContexts and events directories were set."
                         .concat("\nContexts: "+contextsPath)
-                        .concat("\nEvents: "+eventsPath));
+                        .concat("\nevents: "+eventsPath));
     }
 
     void createIndex() {
@@ -77,7 +76,7 @@ class RecommenderInitialization {
 
                     /*
                      * within the slnZip, each stored context is contained as a single file that
-                     * contains the Json representation of a {@see Context}.
+                     * contains the Json representation of a {@see context}.
                      */
 
                     Context ctx = ra.getNext(Context.class);

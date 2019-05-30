@@ -1,5 +1,5 @@
 # Advanced Software Engineering project
-## Implementation of Identifier-Based Context-Dependent API Method Recommendation system
+## Implementation of Identifier-Based context-Dependent API Method Recommendation system
 
 ### Project status:
 [![Build Status](https://travis-ci.org/Amos94/ASE.svg?branch=master)](https://travis-ci.org/Amos94/ASE)
@@ -30,9 +30,9 @@ First you need to get the contexts and events, the ones the app is testet with a
 
 http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Contexts-170503.zip
 
-**Events dataset:**
+**events dataset:**
 
-http://www.st.informatik.tu-darmstadt.de/artifacts/kave/Events-170301-2.zip
+http://www.st.informatik.tu-darmstadt.de/artifacts/kave/events-170301-2.zip
 
 Both of them are taken via the original source: http://www.kave.cc/datasets
 
@@ -40,7 +40,7 @@ Both of them are taken via the original source: http://www.kave.cc/datasets
 
   * **Contexts version:** May 3, 2017
 
-  * **Events version:** Jan 18, 2018
+  * **events version:** Jan 18, 2018
 
 ### How to use it:
 

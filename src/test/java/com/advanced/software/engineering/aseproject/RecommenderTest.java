@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import cc.kave.commons.model.events.completionevents.Context;
-import Index.IndexDocument;
+import index.IndexDocument;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 
