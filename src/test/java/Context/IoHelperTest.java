@@ -1,6 +1,5 @@
 package Context;
 
-import Utils.Configuration;
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
 import helper.TestHelper;
@@ -26,45 +25,39 @@ import static org.junit.Assert.*;
 public class IoHelperTest {
 
 
-	@Before
-	public void setup() {
-		MockitoAnnotations.initMocks(this);
-	}
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void readFirstContext() {
-        IoHelper ioHelper = new IoHelper();
-        //TODO: fix getting file
+
         String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
         try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
             assertTrue(ra.hasNext());
         }
+
     }
 
     @Test
     public void readAll() {
-	    //TODO: fix, unable to create directory at Context.IoHelperTest.readAll
-    	//public static List<Context> readAll(String dir)
-    	String zipFile = "/"+TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src";
-    	List<Context> res;
-    	LinkedList expected = new LinkedList();
+        //public static List<Context> readAll(String dir)
+        String zipFile = TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src";
+        List<Context> res;
+        LinkedList expected = new LinkedList();
         res = IoHelper.readAll(zipFile);
-    	assertEquals(expected, res);
+        assertEquals(expected, res);
     }
 
     @Test
     public void read() {
-    	//public static List<Context> read(String zipFile)
-        //TODO: fix test
-//        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
-//        List<Context> res;
-//    	LinkedList expected = new LinkedList();
-//    	res = IoHelper.read(firstZip);
-//    	assertEquals(expected, res);
-
-        String file = "src/test/java/testdata/TestContexts/01org/acat/src/ACAT.sln-contexts.zip";
-        List<Context> firstZipList = IoHelper.read(file);
-        assertNotNull(firstZipList);
+        //public static List<Context> read(String zipFile)
+        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
+        List<Context> res;
+        LinkedList expected = new LinkedList();
+        res = IoHelper.read(firstZip);
+        assertEquals(expected, res);
     }
 
     @Test
