@@ -102,6 +102,7 @@ public class Configuration {
     public static void setLastNConsideredStatements(int lastNConsideredStatements) {
         LAST_N_CONSIDERED_STATEMENTS = lastNConsideredStatements;
     }
+    
 
     public static boolean getUseEvents() {
         return USE_EVENTS;

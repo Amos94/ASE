@@ -17,24 +17,20 @@ import java.util.logging.Logger;
 class RecommenderInitialization {
 
     private String contextsPath;
-    private String eventsPath;
-    private Logger logger;
+    private static final Logger LOGGER = Logger.getLogger( IoHelper.class.getName() );
 
-    RecommenderInitialization(String contextsPath, String eventsPath){
+    RecommenderInitialization(String contextsPath){
 
         // process start
-        logger = Logger.getLogger(RecommenderInitialization.class.getName());
-        logger.log(Level.INFO, "\nRecommenderInitialization initializing..." );
+        LOGGER.log(Level.INFO, "\nRecommenderInitialization initializing..." );
 
         // set context and events path
         this.contextsPath = contextsPath;
-        this.eventsPath = eventsPath;
 
         // log the set paths
-        logger.log(Level.INFO,
+        LOGGER.log(Level.INFO,
                 "\nContexts and events directories were set."
-                        .concat("\nContexts: "+contextsPath)
-                        .concat("\nevents: "+eventsPath));
+                        .concat("\nContexts: "+contextsPath));
     }
 
     void createIndex() {
@@ -54,14 +50,14 @@ class RecommenderInitialization {
         SSTProcessor sstProcessor = new SSTProcessor(invertedIndex);
 
         // log info about the start of the process
-        logger.log(Level.INFO, "\nStart to create the index out of the given contexts."
+        LOGGER.log(Level.INFO, "\nStart to create the index out of the given contexts."
                 .concat("\nFound " + numberOfZips + " zips in the context directory."));
 
       // start the SSTs process
         sstProcessor.startProcessSSTs();
 
         for (String zip : zips) {
-            logger.log(Level.INFO, "\n Starting to create index for "+zip);
+            LOGGER.log(Level.INFO, "\n Starting to create index for "+zip);
             //read data in the zip
             // open the .zip file ...
             try (IReadingArchive ra = new ReadingArchive(new File(contextsPath, zip))) {
@@ -83,7 +79,7 @@ class RecommenderInitialization {
                     sstProcessor.processSST(ctx, projectName);
                 }
             }
-            logger.log(Level.INFO, "\n Finishing to create index for "+zip);
+            LOGGER.log(Level.INFO, "\n Finishing to create index for "+zip);
         }
 
         sstProcessor.finishProcessSSTs();
@@ -91,6 +87,6 @@ class RecommenderInitialization {
         long endTime = System.currentTimeMillis();
 
         long timeElapsed = (endTime - startTime)/1000;
-        logger.log(Level.INFO, "\nThe index was created in "+ timeElapsed + " seconds.");
+        LOGGER.log(Level.INFO, "\nThe index was created in "+ timeElapsed + " seconds.");
     }
 }
