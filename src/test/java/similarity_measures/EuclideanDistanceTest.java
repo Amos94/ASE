@@ -11,7 +11,8 @@ public class EuclideanDistanceTest {
     public void calculateEuclideanDistanceTest() {
         double[] a = new double[]{ 0,0};
         double[] b = new double[]{ 4,3};
-        double result = calculateEuclideanDistance(a,b);
+        EuclideanDistance euclideanDistance = new EuclideanDistance(a,b);
+        double result = euclideanDistance.calculateEuclideanDistance(a,b);
         assertEquals(5.0,result,0);
     }
 }

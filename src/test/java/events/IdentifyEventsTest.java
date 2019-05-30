@@ -1,6 +1,7 @@
 package events;
 
 
+import cc.kave.commons.model.events.completionevents.CompletionEvent;
 import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.events.IDEEvent;
+import utils.Configuration;
 
 import static org.junit.Assert.*;
 
@@ -38,6 +40,15 @@ public class IdentifyEventsTest {
     	assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
     }
 
+    @Test
+    public void findAllUsersMaxEvMinusOne(){
+        Configuration.setRecommendationZips(-1);
+        List<String> result = new ArrayList<>();
+        result.add(TestHelper.TEST_EVENTS_DIR);
+        assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
+
+    }
+
     //public static List<context> readAllEvents()
     @Test
     public void readAllEvents() {
@@ -48,6 +59,17 @@ public class IdentifyEventsTest {
     @Test
     public void process() {
     	IdentifyEvents.process(event);
+        CompletionEvent completionEvent = new CompletionEvent();
+        IdentifyEvents.process(completionEvent);
+    }
+
+    @Test
+    public void constructorTest() {
+        IdentifyEvents identifyEvents = new IdentifyEvents();
+        List<Context> aggregatedContexts = identifyEvents.getAggregatedContexts();
+        assertNotNull(aggregatedContexts);
+        long aggregatedContextsSize = identifyEvents.getAggregatedContextsSize();
+        assertTrue(aggregatedContextsSize >= 0);
     }
 
     // public List<context> getAggregatedContexts()

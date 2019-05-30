@@ -5,10 +5,15 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import index.IndexDocument;
 import org.junit.Test;
+import org.mockito.Mock;
 import similarity_measures.JaccardSimilarity;
 
 public class EvaluatorTest {
+    @Mock private IndexDocument queryDoc;
+    @Mock private IndexDocument scoredDoc;
 
 	private Set<String> mySet1 = new HashSet<>();
 	private Set<String> mySet2 = new HashSet<>();
@@ -16,6 +21,10 @@ public class EvaluatorTest {
 	private Set<String> mySet4 = new HashSet<>();
 
 	//@TODO add Test for Constructor
+    @Test
+    public void constructorTest(){
+        Evaluator evaluator = new Evaluator(scoredDoc, queryDoc);
+    }
 
     @Test
     public void calculateJaccard() {

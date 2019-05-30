@@ -1,5 +1,7 @@
 package index;
 
+import static cc.kave.commons.model.naming.Names.newMethod;
+import static cc.kave.commons.utils.ssts.SSTUtils.invExpr;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
@@ -7,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import cc.kave.commons.model.naming.codeelements.IMethodName;
+import cc.kave.commons.model.ssts.expressions.assignable.IInvocationExpression;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +29,7 @@ public class IndexDocumentExtractionVisitorNoListTest {
 	@Mock private IInvertedIndex index;
 	@Mock private IStatement statement;
 	@Mock private IAssignableExpression expression;
+	@Mock private IInvocationExpression expression2;
 	@Mock private IndexDocumentExtractionVisitorNoList op;
 	private IndexDocumentExtractionVisitorNoList iV;
 	private IndexHelper iH;
@@ -42,13 +47,22 @@ public class IndexDocumentExtractionVisitorNoListTest {
     	List<IStatement> test = new ArrayList<>();
     	test.add(statement);
     	op.visit(test,index);
-    	verify(op).visit(test,index);					
+    	verify(op).visit(test,index);
+
+		IndexDocumentExtractionVisitorNoList visitor = new IndexDocumentExtractionVisitorNoList("testproject");
+		List<Void> visits = visitor.visit(test,index);
+		assertNotNull(visits);
     }
 
     @Test
     public void doVisit() {
     	op.doVisit(expression, body, statement, index);
-    	verify(op).doVisit(expression, body, statement, index);				
+    	verify(op).doVisit(expression, body, statement, index);
+
+    	IMethodName m = newMethod("[p:void] [p:object].m([p:int] arg)");
+		expression2 = invExpr("o", m, "p");
+		IndexDocumentExtractionVisitorNoList visitor = new IndexDocumentExtractionVisitorNoList("testproject");
+		visitor.doVisit(expression2, body, statement, index);
     }
 
     @Test

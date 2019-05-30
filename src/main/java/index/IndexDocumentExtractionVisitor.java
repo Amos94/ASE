@@ -64,7 +64,7 @@ public class IndexDocumentExtractionVisitor extends AbstractTraversingNodeVisito
      * @param statement - statement
      * @param indexDocuments - indexed documents
      */
-    private void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, List<IndexDocument> indexDocuments) {
+    void doVisit(IAssignableExpression expression, List<IStatement> body, IStatement statement, List<IndexDocument> indexDocuments) {
         final IMemberName method = new IMemberName() {
             @Override
             public String getIdentifier() {
