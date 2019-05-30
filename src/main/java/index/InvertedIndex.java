@@ -288,87 +288,95 @@ public class InvertedIndex extends AbstractInvertedIndex {
         }
     }
 
-    String getDocID(ResultSet rs){
+    private String getDocID(ResultSet rs){
+        String docid = "";
         try {
-            return rs.getString("docid");
+            docid = rs.getString("docid");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
+            LOGGER.log(Level.SEVERE, e.toString());
         }
-    }
-    String getMethodName(ResultSet rs){
-        try {
-            return rs.getString("methodname");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
-        }
-    }
-    String getMethodFullName(ResultSet rs){
-        try {
-            return rs.getString("methodfullname");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
-        }
-    }
-    String getDeclaringTypeName(ResultSet rs){
-        try {
-            return rs.getString("declaringtype");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
-        }
-    }
-    String getValueTypeName(ResultSet rs){
-        try {
-            return rs.getString("valuetype");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
-        }
+        return docid;
     }
 
-    boolean getIsStatic(ResultSet rs){
+    private String getMethodName(ResultSet rs){
+        String methodName = "";
         try {
-            return intToBool(rs.getInt("isstatic"));
+            methodName = rs.getString("methodname");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return false;
+            LOGGER.log(Level.SEVERE, e.toString());
         }
+        return methodName;
     }
-    boolean getIsUnknown(ResultSet rs){
+
+    private String getMethodFullName(ResultSet rs){
+        String methodFullName = "";
         try {
-            return intToBool(rs.getInt("isunknown"));
+            methodFullName = rs.getString("methodfullname");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return false;
+            LOGGER.log(Level.SEVERE, e.toString());
         }
+        return methodFullName;
     }
-    boolean getIsHashed(ResultSet rs){
+
+    private String getDeclaringTypeName(ResultSet rs){
+        String declaringTypeName = "";
         try {
-            return intToBool(rs.getInt("ishashed"));
+            declaringTypeName = rs.getString("declaringtype");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return false;
+            LOGGER.log(Level.SEVERE, e.toString());
         }
+        return declaringTypeName;
     }
-    String getIdentifier(ResultSet rs){
+
+    private String getValueTypeName(ResultSet rs){
+        String valueTypeName ="";
         try {
-            return rs.getString("identifier");
+            valueTypeName = rs.getString("valuetype");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            return null;
+            LOGGER.log(Level.SEVERE, e.toString());
         }
+        return valueTypeName;
+    }
+
+    private boolean getIsStatic(ResultSet rs){
+        boolean isStatic = false;
+        try {
+            isStatic = intToBool(rs.getInt("isstatic"));
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.toString());
+        }
+        return isStatic;
+    }
+
+    private boolean getIsUnknown(ResultSet rs){
+        boolean isUnknown = false;
+        try {
+            isUnknown = intToBool(rs.getInt("isunknown"));
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.toString());
+        }
+        return isUnknown;
+    }
+
+    private boolean getIsHashed(ResultSet rs){
+        boolean isHashed = false;
+        try {
+            isHashed = intToBool(rs.getInt("ishashed"));
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.toString());
+        }
+
+        return isHashed;
+    }
+
+    private String getIdentifier(ResultSet rs){
+        String identifier = "";
+        try {
+            identifier = rs.getString("identifier");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.toString());
+        }
+        return identifier;
     }
 
     /**
