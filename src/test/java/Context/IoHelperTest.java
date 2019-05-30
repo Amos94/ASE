@@ -39,7 +39,6 @@ public class IoHelperTest {
         try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
             assertTrue(ra.hasNext());
         }
-//        String zipFile = "/"+Configuration.CONTEXTS_DIR+"/umbraco/Umbraco-CMS/src/";
     }
 
     @Test
@@ -49,8 +48,8 @@ public class IoHelperTest {
     	String zipFile = "/"+TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src";
     	List<Context> res;
     	LinkedList expected = new LinkedList();
-//        res = IoHelper.readAll(zipFile);
-//    	assertEquals(expected, res);
+        res = IoHelper.readAll(zipFile);
+    	assertEquals(expected, res);
     }
 
     @Test

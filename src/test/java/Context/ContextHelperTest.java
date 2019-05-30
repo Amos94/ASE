@@ -33,6 +33,8 @@ public class ContextHelperTest {
 	
     @Test
     public void run() {
+		ContextHelper cxtHelper = new ContextHelper(Configuration.CONTEXTS_DIR);
+		cxtHelper.run();
     	contextHelper.run();
     	verify(contextHelper).run();
     }
