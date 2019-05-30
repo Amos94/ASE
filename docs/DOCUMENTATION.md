@@ -9,6 +9,16 @@
 
 ## 3. DevOps, CI/CD
 
+![CICD Image](images/sem_cicd.png)
+
+![Code Coverage](images/code_coverage.png)
+
+![Artefact](images/artefact.png)
+
+
+![Filebrowser](images/filebrowser.png)
+
+![Repo](images/repo.png)
 
 ## 4. Configuration
 
@@ -16,18 +26,18 @@ To make the program as versatile and easy to use when deployed as a jar we added
 
 Name | Default | Purpose | Accessor
 ------------ | ------------- | ------------ | -------------
-EVENTS_DIR | Data/events | folder for all event zips | Needs to be changed in the file
-CONTEXTS_DIR | Data/Contexts | folder for all context zips | Needs to be changed in the file
+EVENTS_DIR | Data/events | Folder for all event zips | Needs to be changed in the file
+CONTEXTS_DIR | Data/Contexts | Folder for all context zips | Needs to be changed in the file
 INDEX_STORAGE | IndexStorage | The location where the created index should be stored | Needs to be changed in the file
 MAX_CANDIDATES | 10 | Maximum number of candidates  | Needs to be changed in the file
 STOP_WORDS | default list | List of stop words that can be removed | Needs to be changed in the file
 RECOMMENDATION_ZIPS | -1 | How many Queries should be taken into account (-1 = all)  | Can be set initially
 REMOVE_STOP_WORDS | true | Should the stop words be removed or not | Can be set initially
-REINDEX_DATABASE | false | should the database be reindexed (only needed in the first run, or when a new setting is evaluated) | Can be set initially
+REINDEX_DATABASE | false | Should the database be reindexed (only needed in the first run, or when a new setting is evaluated) | Can be set initially
 EVALUATION | true | Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments | Can be set initially
 LAST_N_CONSIDERED_STATEMENTS | 3 | How big is the lookback set? | Can be set initially
 USE_EVENTS | false | Use events against the whole indexed database for recommendations | Needs to be changed in the file
-USE_TEST_CONTEXTS | true | use contexts and query against the filtered by project indexes for recommendations => as described in the paper | Needs to be changed in the file
+USE_TEST_CONTEXTS | true | Use contexts and query against the filtered by project indexes for recommendations => as described in the paper | Needs to be changed in the file
 DELIMITER | ** | Set an individual delimiter for messages | Needs to be changed in the file
 
 This table concludes into 3 flavors of calling the jar and make it configurable, this is in detail described now:
