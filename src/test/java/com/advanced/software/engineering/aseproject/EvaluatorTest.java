@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
-import SimilarityMeasures.JaccardSimilarity;
+import similarity_measures.JaccardSimilarity;
 
 public class EvaluatorTest {
 
