@@ -5,20 +5,37 @@
 
 ## 2. Technical Description
 
+In order to replicate the recommender system described in the paper, the development approach was straight forward. After getting used to the Contexts and Events datasets provided by KAVE we decided to start build the visitors. It might not be a surprise that the most used pattern it the project was the visitor pattern. We used it to traverse the syntax trees and retrieve the relevant information needed to create and query the index. The next step was to design and implement the data model of the index. In the end we implemented two versions for querying and evaluate it.
 
+In the beginning, we thought it would be great to imply a test-driven development methodology, but it was a bit of an overhead given that we didn’t know how to interact with KAVE properly. However, we tested the most critical paths of our application and the Jaccard calculation.
+
+Although we have taken extensive care to have implemented just clean code, in later stages, the project needed some deep refactoring. We had to remove code duplication and started to generalize the concepts a bit. Furthermore, we removed the smells and the bugs indicated by our static analysis tool as they were found. In order to keep the code clean and under control, we employed a PR driven methodology (details in the CI/CD section), where at least another peer had to review and approve/ reject the branch before merging master. Hence, we did not have any major problems, we assured that the tests were building and the test coverage increases or stagnates.
+
+We tried to extend the project as much as we could. For example, even if in the paper the similarity measure used to evaluate each recommendation was the Jaccard similarity measure, we also implemented other similarity measurements, such as  Cosine similarity or the Euclidean Distance, so they can be used in later stages in our evaluation or future releases.
+
+Among libraries, we used it some of them worth to be mentioned, e.g., the **Apache Lucene** which also provided the Potter stemmer out of the box or **Simmetrics** which provided a variety of similarity measures ready to use. We used JUnit and Mockito to ease our testing efforts.
+
+In our development we used: Java 8, Spring Boot and MAVEN. As a database solution we chose SQLite because it’s lightweight, but powerful enough to store the index and query it.
+
+For a detailed architectural view, please follow the links below where you can find the UML diagrams of the project packages.
+
+Description | Image Link
+------------ | -------------
+Top-Level package | [High-Res Link](images/Top-Level Package.png)
+Package aseproject | [High-Res Link](images/Package aseproject.png)
+Package context | [High-Res Link](images/Package context.png)
+Package events | [High-Res Link](images/Package events.png)
+Package index | [High-Res Link](images/Package index.png)
+Package similarity_measures | [High-Res Link](images/Package similarity_measures.png)
+Package visitors | [High-Res Link](images/Package visitors.png)
+Package utils | [High-Res Link](images/Package utils.png)
+Project dependecies | [High-Res Link](images/mdl-aseproject.png)
+
+For insights in the several classes we programmed, please have a look at the provided javadoc. We tried to add Javadoc to each class and method to make it easier to understand for the reader but not over-exceeding this documentation.
 
 ## 3. DevOps, CI/CD
 
-![CICD Image](images/sem_cicd.png)
 
-![Code Coverage](images/code_coverage.png)
-
-![Artefact](images/artefact.png)
-
-
-![Filebrowser](images/filebrowser.png)
-
-![Repo](images/repo.png)
 
 ## 4. Configuration
 
