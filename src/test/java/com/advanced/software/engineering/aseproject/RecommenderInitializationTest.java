@@ -1,10 +1,10 @@
 package com.advanced.software.engineering.aseproject;
 
-import Context.ContextHelper;
-import Context.IoHelper;
-import Index.IInvertedIndex;
-import Index.InvertedIndex;
-import Utils.Configuration;
+import context.ContextHelper;
+import context.IoHelper;
+import index.IInvertedIndex;
+import index.InvertedIndex;
+import utils.Configuration;
 import helper.TestHelper;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
-import Index.IndexDocument;
-import SimilarityMeasures.JaccardSimilarity;
+import index.IndexDocument;
+import similarity_measures.JaccardSimilarity;
 
 import java.util.HashSet;
 import java.util.Set;

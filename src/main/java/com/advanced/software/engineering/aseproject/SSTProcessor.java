@@ -1,7 +1,7 @@
 package com.advanced.software.engineering.aseproject;
 
-import Index.IInvertedIndex;
-import Index.IndexDocumentExtractionVisitorNoList;
+import index.IInvertedIndex;
+import index.IndexDocumentExtractionVisitorNoList;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.ssts.ISST;
 import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
@@ -18,7 +18,7 @@ class SSTProcessor {
     }
 
     /**
-     * Takes a Context object from the KaVe datasets and create IndexDocument
+     * Takes a context object from the KaVe datasets and create IndexDocument
      */
     void processSST(Context ctx, String projectName) {
         ISST sst = ctx.getSST();

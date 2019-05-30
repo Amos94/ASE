@@ -1,6 +1,6 @@
 package com.advanced.software.engineering.aseproject;
 
-import Index.IndexDocument;
+import index.IndexDocument;
 import org.junit.Test;
 import org.junit.Before;
 

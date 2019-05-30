@@ -1,10 +1,10 @@
 package com.advanced.software.engineering.aseproject;
 
 
-import Index.IInvertedIndex;
-import Index.IndexDocument;
-import Index.IndexDocumentExtractionVisitor;
-import Utils.Configuration;
+import index.IInvertedIndex;
+import index.IndexDocument;
+import index.IndexDocumentExtractionVisitor;
+import utils.Configuration;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
@@ -182,8 +182,6 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
                 .limit(Configuration.MAX_CANDIDATES)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, HashMap::new));
 
-        //candidates.putAll(findGreatest(candidates,Configuration.MAX_CANDIDATES));
-
     }
 
     int getNumberOfCorrectRecommendations(){
@@ -193,33 +191,4 @@ public class Recommender extends AbstractCallsRecommender<IndexDocument> {
         return methodCalls.size();
     }
 
-
-//    private static <K, V extends Comparable<? super V>> HashMap<K, V> findGreatest(Map<K, V> map, int n)
-//    {
-//        Comparator<? super Entry<K, V>> comparator =
-//                (Comparator<Entry<K, V>>) (e0, e1) -> {
-//                    V v0 = e0.getValue();
-//                    V v1 = e1.getValue();
-//                    return v0.compareTo(v1);
-//                };
-//
-//        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(n, comparator);
-//        //highest.stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-//
-//        for (Entry<K, V> entry : map.entrySet())
-//        {
-//            highest.offer(entry);
-//            while (highest.size() > n)
-//            {
-//                highest.poll();
-//            }
-//        }
-//
-//        HashMap<K, V> result = new HashMap<>();
-//        while (highest.size() > 0)
-//        {
-//            result.put(highest.poll().getKey(), Objects.requireNonNull(highest.poll()).getValue());
-//        }
-//        return result;
-//    }
 }
