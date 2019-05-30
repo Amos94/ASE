@@ -13,6 +13,7 @@ public class IdentifyTestContextsTest {
     @Test
     public void runTest(){
         IdentifyTestContexts identifyTestContexts = new IdentifyTestContexts();
+        Configuration.setRecommendationZips(3);
         List<Context> aggregatedContexts = identifyTestContexts.getAggregatedContexts();
         assertNotNull(aggregatedContexts);
 
