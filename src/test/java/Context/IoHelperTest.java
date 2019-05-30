@@ -39,9 +39,7 @@ public class IoHelperTest {
         try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
             assertTrue(ra.hasNext());
         }
-        String zipFile = "/"+Configuration.CONTEXTS_DIR+"/umbraco/Umbraco-CMS/src/";
-        ioHelper.readFirstContext(zipFile);
-
+//        String zipFile = "/"+Configuration.CONTEXTS_DIR+"/umbraco/Umbraco-CMS/src/";
     }
 
     @Test
