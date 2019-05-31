@@ -70,7 +70,7 @@ public class IoHelper {
         return res;
     }
 
-    /*
+    /**
      * will recursively search for all .zip files in the "dir". The paths that are
      * returned are relative to "dir".
      */

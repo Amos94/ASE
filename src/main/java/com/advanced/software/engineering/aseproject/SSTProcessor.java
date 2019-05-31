@@ -28,10 +28,16 @@ class SSTProcessor {
         sst.accept(indexDocumentExtractionVisitor, index);
     }
 
+    /**
+     * Start to process SSTs
+     */
     void startProcessSSTs() {
         index.startIndexing();
     }
 
+    /**
+     * Finish to process SSTs
+     */
     void finishProcessSSTs() {
         index.finishIndexing();
     }

@@ -29,7 +29,12 @@ public interface IInvertedIndex {
      */
     List<IndexDocument> deserializeAll();
 
-    //get data by project
+    /**
+     * Deserialize by project
+     *
+     * @param projectName
+     * @return
+     */
     List<IndexDocument> deserializeByProject(String projectName);
 
 

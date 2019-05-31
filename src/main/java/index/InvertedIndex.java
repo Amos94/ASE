@@ -755,6 +755,9 @@ public class InvertedIndex extends AbstractInvertedIndex {
     }
 
     @Override
+    /**
+     * Deserialize by project
+     */
     public List<IndexDocument> deserializeByProject(String projectName) {
         List<IndexDocument> documents = new LinkedList<>();
         String sqlSelect = "SELECT * FROM " + this.SQL_TABLE_NAME + " WHERE projectName=\"" + projectName + "\"";

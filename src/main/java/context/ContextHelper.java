@@ -22,10 +22,18 @@ public class ContextHelper {
 
     private String ctxsDir;
 
+    /**
+     * Get the Context helper
+     *
+     * @param ctxsDir
+     */
     public ContextHelper(String ctxsDir) {
         this.ctxsDir = ctxsDir;
     }
 
+    /**
+     * Run the Context helper
+     */
     public void run() {
 
         System.out.printf("looking (recursively) for solution zips in folder %s\n",
@@ -39,6 +47,10 @@ public class ContextHelper {
         }
     }
 
+    /**
+     * Process the zips
+     * @param slnZip
+     */
     public void processZip(String slnZip) {
         try (IReadingArchive ra = new ReadingArchive(new File(ctxsDir, slnZip))) {
             while (ra.hasNext()) {
@@ -50,19 +62,41 @@ public class ContextHelper {
         }
     }
 
+    /**
+     * Get the SSTS
+     *
+     * @param ctx
+     * @return SSTs
+     */
     public ISST getSST(Context ctx){
         return ctx.getSST();
     }
 
+    /**
+     * Get the type shape
+     *
+     * @param ctx
+     * @return type shape
+     */
     public ITypeShape getTypeShape(Context ctx){
         return ctx.getTypeShape();
     }
 
+    /**
+     * Process the context
+     *
+     * @param ctx
+     */
     public void processContext(Context ctx) {
         process(ctx.getSST());
         process(ctx.getTypeShape());
     }
 
+    /**
+     * Process the sst
+     *
+     * @param sst
+     */
     public void process(ISST sst) {
         ITypeName declType = sst.getEnclosingType();
 
@@ -72,7 +106,6 @@ public class ContextHelper {
             for (IStatement stmt : md.getBody()) {
                 stmt.accept(new ExampleVisitor(), null);
             }
-
         }
 
         /*
@@ -98,6 +131,11 @@ public class ContextHelper {
         }
     }
 
+    /**
+     * Process the shape
+     *
+     * @param ts
+     */
     public void process(ITypeShape ts) {
         // a type shape contains hierarchy info for the declared type
         ITypeHierarchy th = ts.getTypeHierarchy();
@@ -126,6 +164,9 @@ public class ContextHelper {
         ts.getNestedTypes();
     }
 
+    /**
+     * Example Visitor
+     */
     public class ExampleVisitor extends AbstractTraversingNodeVisitor<Object, Object> {
     }
 
