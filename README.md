@@ -42,19 +42,40 @@ Both of them are taken via the original source: http://www.kave.cc/datasets
 
   * **events version:** Jan 18, 2018
 
-### How to use it:
+### Step by step guide 
+
+#### Step 1 - Preparation: 
+
+The first step you need to do is to download the sources. You either download a preindexed databases or you start from scratch.
+Both ways will be described now. The goal is to reach a datastructure that looks like this:
+
+![Structure](docs/images/structure.png)
 
 
-### Run Sonarqube Tests
+##### Step 1.1a - Contexts, preindexed Database:
 
-Run locally the following maven script
+Download the preindexed databases from:  https://gofile.io/?c=akdj6u
+If it does not work, please reach out to @dpinezich.
 
-mvn sonar:sonar \
-  -Dsonar.projectKey=ase \
-  -Dsonar.host.url=http://144.76.28.184:9001 \
-  -Dsonar.login=25046cbf54d572a8df8a73f8bb63d9a73d343b94
-  
-The Server is reachable by: http://144.76.28.184:9001
-  
-  
+##### Step 1.1b - Contexts, from scratch:
+
+If you like to create your own settings just download the contexts from KAVE (http://www.kave.cc/datasets)
+as described. This is also the preferred way if you want to update the contexts. It should look like this:
+
+ ![Structure](docs/images/contexts.png)
+ 
+ This is to be understand additive to the first Image where Data only contains Events.
+
+##### Step 1.2 - Events:
+
+The events can easily be downloaded from the KAVE datasets ((http://www.kave.cc/datasets))
+
+
+##### Step 1.3 - Jar-file:
+
+You can get the Jar-file directly from GitHub in the mvn-repo branch: https://github.com/Amos94/ASE/tree/mvn-repo
+
+
+##### Step 1.4 - Finalization:
+
 
