@@ -179,4 +179,4 @@ What made us happy was not exactly that we reimplemented the approach of the pap
 
 After all, one can say that doing this project was not easy but with all the practices learned during the courses we were able to try out most of them on a real example. For future projects, we now have more experience which tools to apply in certain situations and which we might not apply anymore, same holds for patterns. Knowing “your” tools is a strong skill of each and every software developer and should not be underestimated.
 
-To conclude on a funny manner, a quote that I like and I relate with when I jump in a new project and I have to interact with new things is: "A fool with a tool, it's still a fool". :)
+To conclude in a funny manner, a quote that I like and I relate with when I jump in a new project and I have to interact with new things is: "A fool with a tool, it's still a fool". :)
