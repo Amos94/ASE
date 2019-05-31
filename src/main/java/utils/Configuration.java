@@ -48,7 +48,7 @@ public class Configuration {
     private static boolean REMOVE_STOP_WORDS = true;
 
     // ReIndex the Database
-    private static boolean REINDEX_DATABASE = false;
+    private static boolean REINDEX_DATABASE = true;
 
     // Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments
     private static boolean EVALUATION = true;
@@ -109,7 +109,7 @@ public class Configuration {
     public static void setLastNConsideredStatements(int lastNConsideredStatements) {
         LAST_N_CONSIDERED_STATEMENTS = lastNConsideredStatements;
     }
-    
+
 
     public static boolean getUseEvents() {
         return USE_EVENTS;
