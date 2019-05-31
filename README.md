@@ -53,15 +53,21 @@ Both ways will be described now. The goal is to reach a datastructure that looks
 
 ##### Step 1.x - Quick Start:
 
-If you have not enough time to put everything together and you are fine with the event and context version from above, there is a preconfigured zip to download which has everything nicely combined.
-It can be found under: xxxx
+If you have not enough time to put everything together and you are fine with the context version from above, 
+there is a preconfigured zip to download which has the pre-indexed databases and the runnable example nicely combined.
+It can be found under:  
+https://gofile.io/?c=GXhXWU (1.3gb).
+
+To give it a test-run just use:  
+`java -jar aseproject-0.0.1-SNAPSHOT.jar false true true 3 1`
 
 If it does not work, please reach out to @dpinezich.
 
 
 ##### Step 1.1a - Contexts, preindexed Database:
 
-Download the preindexed databases from:  https://gofile.io/?c=akdj6u
+Download only the pre-indexed databases from:  
+https://gofile.io/?c=akdj6u
 
 If it does not work, please reach out to @dpinezich.
 
@@ -76,7 +82,7 @@ as described. This is also the preferred way if you want to update the contexts.
 
 ##### Step 1.2 - Events:
 
-The events can easily be downloaded from the KAVE datasets ((http://www.kave.cc/datasets))
+The events can easily be downloaded from the KAVE datasets (http://www.kave.cc/datasets) as well.
 
 
 ##### Step 1.3 - Jar-file:
