@@ -93,6 +93,7 @@ EVALUATION | true | Should there be an evaluation of the events? => often used i
 LAST_N_CONSIDERED_STATEMENTS | 3 | How big is the lookback set? | Can be set initially
 USE_EVENTS | false | Use events against the whole indexed database for recommendations | Needs to be changed in the file
 USE_TEST_CONTEXTS | true | Use contexts and query against the filtered by project indexes for recommendations => as described in the paper | Needs to be changed in the file
+TESTING_MODE_ON | false | Only used for tests to reduce runtime | Needs to be changed in the file
 DELIMITER | ** | Set an individual delimiter for messages | Needs to be changed in the file
 
 This table concludes into 3 flavors of calling the jar and make it configurable, this is in detail described now:
