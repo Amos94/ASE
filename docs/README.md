@@ -83,6 +83,8 @@ Name | Default | Purpose | Accessor
 ------------ | ------------- | ------------ | -------------
 EVENTS_DIR | Data/events | Folder for all event zips | Needs to be changed in the file
 CONTEXTS_DIR | Data/Contexts | Folder for all context zips | Needs to be changed in the file
+TEST_EVENTS_DIR | src/test/java/testdata/TestEvents | Test folder for all event zips | Needs to be changed in the file
+TEST_CONTEXTS_DIR | src/test/java/testdata/TestContexts | Test folder for all context zips | Needs to be changed in the file
 INDEX_STORAGE | IndexStorage | The location where the created index should be stored | Needs to be changed in the file
 MAX_CANDIDATES | 10 | Maximum number of candidates  | Needs to be changed in the file
 STOP_WORDS | default list | List of stop words that can be removed | Needs to be changed in the file
