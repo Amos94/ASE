@@ -120,6 +120,8 @@ The fourth parameter is: the last n considered statements for the lookback (int)
 The fifth parameter is: set number of recommendation zips (int) 
 
 ## 5. Evaluation
+For evaluation we took at random 20 projects and evaluate them against different paramenters with appropriate databases created.
+
 | #  | Project Name     |  Recommendation Rate % (Lookback: 3, Remove Stop Words: false) |  Recommendation Rate % (Lookback: 3, Remove Stop Words: true) |  Recommendation Rate % (Lookback: 4, Remove Stop Words: false) |  Recommendation Rate % (Lookback: 4, Remove Stop Words: true) |  Recommendation Rate % (Lookback: 5, Remove Stop Words: false) |  Recommendation Rate % (Lookback: 5, Remove Stop Words: true) |
 |----|------------------|----------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------|---------------------------------------------------------------|
 |  1 | 01org            | 35.1791                                                        | 33.9869                                                       | 43.1818                                                        | 42.9967                                                       |                                                                | 42.9967                                                       |
