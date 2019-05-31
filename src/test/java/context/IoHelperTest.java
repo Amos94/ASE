@@ -2,7 +2,6 @@ package context;
 
 import cc.kave.commons.utils.io.IReadingArchive;
 import cc.kave.commons.utils.io.ReadingArchive;
-import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -17,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import cc.kave.commons.utils.io.Directory;
 import cc.kave.commons.model.events.completionevents.Context;
+import utils.Configuration;
 
 
 import static org.junit.Assert.*;
@@ -33,8 +33,8 @@ public class IoHelperTest {
     @Test
     public void readFirstContext() {
 
-        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
-        try (IReadingArchive ra = new ReadingArchive(new File(TestHelper.TEST_CONTEXTS_DIR, firstZip))) {
+        String firstZip = IoHelper.findAllZips(Configuration.TEST_CONTEXTS_DIR).stream().findFirst().get();
+        try (IReadingArchive ra = new ReadingArchive(new File(Configuration.TEST_CONTEXTS_DIR, firstZip))) {
             assertTrue(ra.hasNext());
         }
 
@@ -43,7 +43,7 @@ public class IoHelperTest {
     @Test
     public void readAll() {
     	//public static List<context> readAll(String dir)
-    	String zipFile = TestHelper.TEST_CONTEXTS_DIR+"/01org/acat/src";
+    	String zipFile = Configuration.TEST_CONTEXTS_DIR+"/01org/acat/src";
     	List<Context> res;
     	LinkedList expected = new LinkedList();
     	res = IoHelper.readAll(zipFile);
@@ -53,7 +53,7 @@ public class IoHelperTest {
     @Test
     public void read() {
     	//public static List<context> read(String zipFile)
-        String firstZip = IoHelper.findAllZips(TestHelper.TEST_CONTEXTS_DIR).stream().findFirst().get();
+        String firstZip = IoHelper.findAllZips(Configuration.TEST_CONTEXTS_DIR).stream().findFirst().get();
     	List<Context> res;
     	LinkedList expected = new LinkedList();
     	res = IoHelper.read(firstZip);

@@ -21,6 +21,9 @@ public class IdentifyTestContexts {
 
     public IdentifyTestContexts() {
         this.ctxsDir = Configuration.CONTEXTS_DIR;
+        if (Configuration.isTestingModeOn()){
+            this.ctxsDir = Configuration.TEST_CONTEXTS_DIR;
+        }
         aggregatedContexts = new LinkedList<>();
         run();
     }

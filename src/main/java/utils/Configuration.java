@@ -13,6 +13,10 @@ public class Configuration {
     public static final String EVENTS_DIR = "Data/events";
     public static final String CONTEXTS_DIR = "Data/Contexts";
 
+    //location of test data
+    public static final String TEST_EVENTS_DIR = "src/test/java/testdata/TestEvents";
+    public static final String TEST_CONTEXTS_DIR = "src/test/java/testdata/TestContexts";
+
     // Location where the index should be stored
     public static final String INDEX_STORAGE = "IndexStorage";
 
@@ -60,6 +64,9 @@ public class Configuration {
     private static boolean USE_TEST_CONTEXTS = true;
 
     private static String DELIMITER = "*********************************************************";
+
+    //Is set while testing certain methods
+    private static boolean TESTING_MODE_ON = false;
 
 
     // Getter & Setter
@@ -126,5 +133,13 @@ public class Configuration {
 
     public static void setDELIMITER(String DELIMITER) {
         Configuration.DELIMITER = DELIMITER;
+    }
+
+    public static boolean isTestingModeOn() {
+        return TESTING_MODE_ON;
+    }
+
+    public static void setTestingModeOn(boolean testingModeOn) {
+        TESTING_MODE_ON = testingModeOn;
     }
 }

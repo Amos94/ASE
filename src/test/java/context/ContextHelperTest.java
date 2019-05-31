@@ -1,6 +1,5 @@
 package context;
 
-import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -40,21 +39,21 @@ public class ContextHelperTest {
 
     @Test
     public void processZip() {
-    	String zip = TestHelper.TEST_CONTEXTS_DIR;
+    	String zip = Configuration.TEST_CONTEXTS_DIR;
     	contextHelper.processZip(zip);
     	verify(contextHelper).processZip(zip);
     }
 
     @Test
     public void getSST() {
-    	ContextHelper test = new ContextHelper(TestHelper.TEST_CONTEXTS_DIR);
+    	ContextHelper test = new ContextHelper(Configuration.TEST_CONTEXTS_DIR);
     	Context conTest = new Context();
     	assertNotNull(test.getSST(conTest));
     }
 
     @Test
     public void getTypeShape() {
-    	ContextHelper test = new ContextHelper(TestHelper.TEST_CONTEXTS_DIR);
+    	ContextHelper test = new ContextHelper(Configuration.TEST_CONTEXTS_DIR);
     	Context conTest = new Context();
     	assertNotNull(test.getTypeShape(conTest));
     }
