@@ -1,5 +1,6 @@
 package index;
 
+import org.springframework.test.util.ReflectionTestUtils;
 import utils.Configuration;
 import org.apache.lucene.store.Directory;
 import org.junit.Before;
@@ -72,6 +73,10 @@ public class InvertedIndexTest {
         assertNotNull(dir);
     }
 
+    @Test
+    public void createDirectory(){
+        invertedIndex = new InvertedIndex("testDir", false);
+    }
 
     @Test
     public void startIndexing() {
@@ -79,8 +84,13 @@ public class InvertedIndexTest {
         invertedIndex.startIndexing();
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void isIndexed() {
+        InvertedIndex invertedIndex = new InvertedIndex(Configuration.INDEX_STORAGE);
+        ReflectionTestUtils.setField(invertedIndex, "USE_SQLITE", true);
+        assertFalse(invertedIndex.isIndexed(indexDocument));
+
+        ReflectionTestUtils.setField(invertedIndex, "USE_SQLITE", false);
         assertFalse(invertedIndex.isIndexed(indexDocument));
     }
 

@@ -31,4 +31,10 @@ public class CosineSimilarityTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArgumentException() {
+        CosineSimilarity cosSim = new CosineSimilarity();
+        cosSim.cosineSimilarity(null,null);
+    }
+
 }

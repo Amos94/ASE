@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import cc.kave.commons.model.ssts.ISST;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.typeshapes.ITypeShape;
+import utils.Configuration;
 
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
@@ -31,6 +32,8 @@ public class ContextHelperTest {
 	
     @Test
     public void run() {
+		ContextHelper cxtHelper = new ContextHelper(Configuration.CONTEXTS_DIR);
+		cxtHelper.run();
     	contextHelper.run();
     	verify(contextHelper).run();
     }
