@@ -107,6 +107,7 @@ Therefore an example run, without indexing would look like this:
 `java -jar aseproject-0.0.1-SNAPSHOT.jar false false true 3 -1`
 
 Which would then not reindex the database, not remove the stopwords (since no reindexing not needed anyway) but would do the evaluation with a loopback of 3 and all available recommendation zips.  
+
 For further documentation on how to run the jar, please consider the [full documentation](../blob/master/docs/README.md).
 
 
