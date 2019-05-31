@@ -13,6 +13,8 @@ public class ConfigurationTest {
         assertEquals("Data/events", Configuration.EVENTS_DIR);
         assertEquals("Data/Contexts", Configuration.CONTEXTS_DIR);
         assertEquals("IndexStorage", Configuration.INDEX_STORAGE);
+        assertEquals("src/test/java/testdata/TestEvents", Configuration.TEST_EVENTS_DIR);
+        assertEquals("src/test/java/testdata/TestContexts", Configuration.TEST_CONTEXTS_DIR);
     }
 
     @Test
@@ -109,5 +111,11 @@ public class ConfigurationTest {
     public void setDELIMITER() {
         Configuration.setDELIMITER("***");
         assertEquals("***", Configuration.getDELIMITER());
+    }
+
+    @Test
+    public void getTESTINGMODEON() {
+        Configuration.setTestingModeOn(false);
+        assertEquals(false, Configuration.isTestingModeOn());
     }
 }

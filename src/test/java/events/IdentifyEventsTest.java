@@ -2,7 +2,6 @@ package events;
 
 
 import cc.kave.commons.model.events.completionevents.CompletionEvent;
-import helper.TestHelper;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -35,24 +34,24 @@ public class IdentifyEventsTest {
     public void findAllUsers() {
     	List<String> result = new ArrayList<>();
     	//TODO not hardcode it
-    	result.add(TestHelper.TEST_EVENTS_DIR);
+    	result.add(Configuration.TEST_EVENTS_DIR);
 
-    	assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
+    	assertEquals(result.size(), IdentifyEvents.findAllUsers(Configuration.TEST_EVENTS_DIR).size());
     }
 
     @Test
     public void findAllUsersMaxEvMinusOne(){
         Configuration.setRecommendationZips(-1);
         List<String> result = new ArrayList<>();
-        result.add(TestHelper.TEST_EVENTS_DIR);
-        assertEquals(result.size(), IdentifyEvents.findAllUsers(TestHelper.TEST_EVENTS_DIR).size());
+        result.add(Configuration.TEST_EVENTS_DIR);
+        assertEquals(result.size(), IdentifyEvents.findAllUsers(Configuration.TEST_EVENTS_DIR).size());
 
     }
 
     //public static List<context> readAllEvents()
     @Test
     public void readAllEvents() {
-    	assertNotNull(IdentifyEvents.readAllEvents(TestHelper.TEST_EVENTS_DIR));
+    	assertNotNull(IdentifyEvents.readAllEvents(Configuration.TEST_EVENTS_DIR));
     }
 
     // public static List<context> process(IDEEvent event)
