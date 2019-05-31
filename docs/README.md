@@ -86,7 +86,7 @@ CONTEXTS_DIR | Data/Contexts | Folder for all context zips | Needs to be changed
 INDEX_STORAGE | IndexStorage | The location where the created index should be stored | Needs to be changed in the file
 MAX_CANDIDATES | 10 | Maximum number of candidates  | Needs to be changed in the file
 STOP_WORDS | default list | List of stop words that can be removed | Needs to be changed in the file
-RECOMMENDATION_ZIPS | -1 | How many projects (zips) should be taken into account (-1 = all), recommended to test against 1 project at time.  | Can be set initially
+RECOMMENDATION_ZIPS | -1 | How many projects (zips) should be taken into account (-1 = all in the case there are more than 1 zips in the directory), recommended to test against 1 project at time.  | Can be set initially
 REMOVE_STOP_WORDS | true | Should the stop words be removed or not | Can be set initially
 REINDEX_DATABASE | false | Should the database be reindexed (only needed in the first run, or when a new setting is evaluated) | Can be set initially
 EVALUATION | true | Should there be an evaluation of the events? => often used if you only want to reindex the db for experiments | Can be set initially
