@@ -41,26 +41,6 @@ public class IoHelperTest {
     }
 
     @Test
-    public void readAll() {
-    	//public static List<context> readAll(String dir)
-    	String zipFile = Configuration.TEST_CONTEXTS_DIR+"/01org/acat/src";
-    	List<Context> res;
-    	LinkedList expected = new LinkedList();
-    	res = IoHelper.readAll(zipFile);
-    	assertEquals(expected, res);
-    }
-
-    @Test
-    public void read() {
-    	//public static List<context> read(String zipFile)
-        String firstZip = IoHelper.findAllZips(Configuration.TEST_CONTEXTS_DIR).stream().findFirst().get();
-    	List<Context> res;
-    	LinkedList expected = new LinkedList();
-    	res = IoHelper.read(firstZip);
-    	assertEquals(expected, res);
-    }
-
-    @Test
     public void findAllZips() {
         Set<String> allZips = new Directory("src/test/java/data").findFiles(s -> {
             assert s != null;

@@ -23,15 +23,15 @@ public class ContextHelperTest {
 	@Mock private Context ctx;
 	@Mock private ISST sst;
 	@Mock private ITypeShape ts;
-	
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
     @Test
     public void run() {
-		ContextHelper cxtHelper = new ContextHelper(Configuration.CONTEXTS_DIR);
+		ContextHelper cxtHelper = new ContextHelper(Configuration.TEST_CONTEXTS_DIR);
 		cxtHelper.run();
     	contextHelper.run();
     	verify(contextHelper).run();
