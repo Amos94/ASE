@@ -51,10 +51,18 @@ Both ways will be described now. The goal is to reach a datastructure that looks
 
 ![Structure](docs/images/structure.png)
 
+##### Step 1.x - Quick Start:
+
+If you have not enough time to put everything together and you are fine with the event and context version from above, there is a preconfigured zip to download which has everything nicely combined.
+It can be found under: xxxx
+
+If it does not work, please reach out to @dpinezich.
+
 
 ##### Step 1.1a - Contexts, preindexed Database:
 
 Download the preindexed databases from:  https://gofile.io/?c=akdj6u
+
 If it does not work, please reach out to @dpinezich.
 
 ##### Step 1.1b - Contexts, from scratch:
@@ -78,4 +86,30 @@ You can get the Jar-file directly from GitHub in the mvn-repo branch: https://gi
 
 ##### Step 1.4 - Finalization:
 
+If everything is put together according to the presented image the program can be run, either indexing the whole table or directly run the evaluation.
 
+##### Step 2 - Run configuration:
+
+The presented Jar contains 5 Paramters which can be set at the beginning:
+
+The first parameter is: remove stopwords (bool)   
+The second parameter is: reindex the database (bool)  
+The third parameter is: do the evaluation (bool)  
+The fourth parameter is: the last n considered statements for the lookback (int)  
+The fifth parameter is: set number of recommendation zips (int) 
+
+There are three possible configurations:
+* no parameters
+* the first three parameters set
+* all parameters set
+
+Therefore an example run, without indexing would look like this:  
+`java -jar aseproject-0.0.1-SNAPSHOT.jar false false true 3 -1`
+
+Which would then not reindex the database, not remove the stopwords (since no reindexing not needed anyway) but would do the evaluation with a loopback of 3 and all available recommendation zips.  
+For further documentation on how to run the jar, please consider the [full documentation](../blob/master/docs/README.md).
+
+
+### License
+
+This project is to be known under Apache v2 license. Full license information can be found [here](../blob/master/LICENSE).

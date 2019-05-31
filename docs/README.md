@@ -41,11 +41,11 @@ The CI/CD management had one big challenge to face - the large amount of data us
 
 ![CICD Image](images/sem_cicd.png)
 
-Phase 1:
+**Phase 1:**
 
 During the first phase, we are focused on the code which needs to be runnable and the tests need to have no errors. Since we use GitHub as a source code repository we added Travis CI and coveralls just for the sole purpose to do this on each push. We also agreed to not push on the master branch during the project (and set the Github settings accordingly), this helped us to keep the quality in a good state at all times. The first phase ends when Travis has done its basic work and has the tests run. If this is completed and the code is reviewed by a peer, the PR (Pull Request) is ready to be merged to master (master branch).
 
-Phase 2: 
+**Phase 2:** 
 
 In Phase 2 there is a Jenkins instance configured (VM, basic Ubuntu 18.04, not as a docker container). That is connected with the git repository via ssh keys. Jenkins checks every 5 minutes if there is something new on the master branch. If this is the case, Jenkins pulls the new code and starts a “clean package” maven command on the local runner. If this succeeds, a sonarqube instance (docker container, same VM as Jenkins) is called to visualize the jacoco report (note: the jacoco report can also be used for this locally if the maven command “clean test” is run).
 
@@ -54,7 +54,7 @@ In Phase 2 there is a Jenkins instance configured (VM, basic Ubuntu 18.04, not a
 
 Now we have a clear view of how the state of the code looks like. We were pretty picky about the Bugs and Vulnerabilites and therefore tried to keep the A-Level at all times. 
 
-Phase 3: 
+**Phase 3:** 
 
 For the final step, Jenkins produces the jar file and stores it to the Jenkins local artifact storage as seen here:
 
@@ -66,7 +66,7 @@ but this is not yet enough for us, we also wanted to have a runnable, preconfigu
 
 This way, it was easier to do the experiments and evaluation, since we only had to replace the index storage if we wanted to for example test with a look back of 3, 4 or 5 and with or without stopwords. In our test environment, we only configured one such test server “prod” but it would be easy to add multiple instances (VMs, Docker Images) to have instances run in parallel for a larger experiment. 
 
-Maven Repository on Github: 
+**Maven Repository on Github:** 
 
 Since we have way more jar files created than we are proud of, we added: “mvn clean target” as a manual step. If this is run, the settings preconfigured in pom.xml are activated and matched with the user's local m2 settings for GitHub (this needs to be done before the target command is executed). After some more seconds we have a brand new artifact on GitHub as seen here:
 
@@ -99,11 +99,13 @@ This table concludes into 3 flavors of calling the jar and make it configurable,
 
 *Minconfig*
 
-This can simply be called by: ```java -jar aseproject-0.0.1-SNAPSHOT.jar```
+This can simply be called by:  
+```java -jar aseproject-0.0.1-SNAPSHOT.jar```
 
 *Mediumconfig*
 
-This can be called with three additional parameters: ```java -jar aseproject-0.0.1-SNAPSHOT.jar false true false```
+This can be called with three additional parameters:  
+```java -jar aseproject-0.0.1-SNAPSHOT.jar false true false```
 
 The first parameter is: remove stopwords (bool)
 The second parameter is: reindex the database (bool)
@@ -111,7 +113,8 @@ The third parameter is: do the evaluation (bool)
 
 *Maximumconfig*
 
-The last configuration has the most parameters and extends the mediumconfig: ```java -jar aseproject-0.0.1-SNAPSHOT.jar false true false 6 1```
+The last configuration has the most parameters and extends the mediumconfig:  
+```java -jar aseproject-0.0.1-SNAPSHOT.jar false true false 6 1```
 
 The first parameter is: remove stopwords (bool)
 The second parameter is: reindex the database (bool)
@@ -179,4 +182,5 @@ What made us happy was not only that we reimplemented the approach of the paper 
 
 After all, one can say that doing this project was not easy but with all the practices learned during the courses we were able to try out most of them on a real example. For future projects, we now have more experience which tools to apply in certain situations and which we might not apply anymore, same holds for patterns. Knowing “your” tools is a strong skill of each and every software developer and should not be underestimated.
 
-To conclude in a funny manner, a quote that I like and I relate with when I jump in a new project and I have to interact with new things is: "A fool with a tool, it's still a fool". :)
+To conclude in a funny manner, a quote that I like and I relate with when I jump in a new project and I have to interact with new things is: 
+>"A fool with a tool, it's still a fool". :)
